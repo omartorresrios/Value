@@ -47,21 +47,24 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     func setupViewControllers(completion: @escaping Callback) {
         
+        // Feed
+        let feedNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "ranking_unselected"), selectedImage: #imageLiteral(resourceName: "ranking_selected"), rootViewController: UserFeedController(collectionViewLayout: UICollectionViewFlowLayout()))
+        
         // Search
         let searchNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "search_unselected"), selectedImage: #imageLiteral(resourceName: "search_selected"), rootViewController: UserSearchController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         // Ranking
         let layout = UICollectionViewFlowLayout()
-        let userFeedController = UserFeedController(collectionViewLayout: layout)
+        let myProfileController = MyProfileController(collectionViewLayout: layout)
         
-        let userFeedNavController = UINavigationController(rootViewController: userFeedController)
+        let myProfileNavController = UINavigationController(rootViewController: myProfileController)
         
-        userFeedNavController.tabBarItem.image = #imageLiteral(resourceName: "ranking_unselected")
-        userFeedNavController.tabBarItem.selectedImage = #imageLiteral(resourceName: "ranking_selected")
+        myProfileNavController.tabBarItem.image = #imageLiteral(resourceName: "user_profile")
+        myProfileNavController.tabBarItem.selectedImage = #imageLiteral(resourceName: "user_profile")
         
         tabBar.tintColor = UIColor.mainBlue()
         
-        viewControllers = [searchNavController, userFeedNavController]
+        viewControllers = [feedNavController, searchNavController, myProfileNavController]
         
         completion(true)
         

@@ -30,6 +30,9 @@
 		A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A97218DFE040019EFF8 /* KeyChainAccess.swift */; };
 		A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A99218DFE730019EFF8 /* Constants.swift */; };
 		A0066A9C218E0B030019EFF8 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A9B218E0B030019EFF8 /* LoginController.swift */; };
+		A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B612192388C00AB6EB6 /* MyProfileController.swift */; };
+		A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B63219247D900AB6EB6 /* UserSearchCell.swift */; };
+		A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B662192953200AB6EB6 /* UserProfileController.swift */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,9 @@
 		A0066A97218DFE040019EFF8 /* KeyChainAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAccess.swift; sourceTree = "<group>"; };
 		A0066A99218DFE730019EFF8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A0066A9B218E0B030019EFF8 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		A0318B612192388C00AB6EB6 /* MyProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileController.swift; sourceTree = "<group>"; };
+		A0318B63219247D900AB6EB6 /* UserSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchCell.swift; sourceTree = "<group>"; };
+		A0318B662192953200AB6EB6 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
 		E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,9 +128,11 @@
 				A0066A66218CDDA80019EFF8 /* LaunchScreen.storyboard */,
 				A0066A69218CDDA80019EFF8 /* Info.plist */,
 				A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */,
-				A0066A82218D01770019EFF8 /* UserSearchController.swift */,
+				A0318B652192480800AB6EB6 /* Search */,
 				A0066A84218D01DF0019EFF8 /* UserFeedController.swift */,
 				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
+				A0318B612192388C00AB6EB6 /* MyProfileController.swift */,
+				A0318B662192953200AB6EB6 /* UserProfileController.swift */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -181,6 +189,15 @@
 				A0066A93218DFD7F0019EFF8 /* AuthService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		A0318B652192480800AB6EB6 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				A0066A82218D01770019EFF8 /* UserSearchController.swift */,
+				A0318B63219247D900AB6EB6 /* UserSearchCell.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		A62F485C0932D48F23A5C549 /* Pods */ = {
@@ -364,9 +381,12 @@
 				A0066A96218DFDD70019EFF8 /* HTTPHelper.swift in Sources */,
 				A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */,
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
+				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
 				A0066A7D218CE33C0019EFF8 /* NSData+Base64.m in Sources */,
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,
+				A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */,
+				A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
