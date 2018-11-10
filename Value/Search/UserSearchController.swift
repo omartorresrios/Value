@@ -79,7 +79,7 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
             Alamofire.request("\(BASE_URL)/all_users", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
                 switch response.result {
                 case .success(let JSON):
-                    print("THE JSON: \(JSON)")
+                    print("THE ALL USERS JSON: \(JSON)")
                     
 //                    let jsonArray = JSON as! NSDictionary
 //
@@ -129,7 +129,13 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
         print(user.fullname)
         
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
-//        userProfileController.userId = user.uid
+        userProfileController.userId = user.id
+        userProfileController.userFullname = user.fullname
+        userProfileController.userImageUrl = user.profileImageUrl
+        userProfileController.userEmail = user.email
+        userProfileController.userJobDescription = user.job_description
+        userProfileController.userPosition = user.position
+        userProfileController.userDepartment = user.department
         navigationController?.pushViewController(userProfileController, animated: true)
     }
     
