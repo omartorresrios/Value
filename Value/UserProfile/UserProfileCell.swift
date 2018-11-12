@@ -11,6 +11,7 @@ import UIKit
 protocol UserProfileHeaderDelegate {
     func didChangeToSenderView()
     func didChangeToReceiverView()
+    func didTapToWriteController()
 }
 
 class UserProfileCell: UICollectionViewCell {
@@ -100,9 +101,13 @@ class UserProfileCell: UICollectionViewCell {
         button.titleLabel?.font = UIFont(name: "SFUIDisplay-Semibold", size: 15)
         button.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
         button.layer.cornerRadius = 20
-//        button.addTarget(self, action: #selector(showWriteReviewController), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showWriteReviewController), for: .touchUpInside)
         return button
     }()
+    
+    @objc func showWriteReviewController() {
+        delegate?.didTapToWriteController()
+    }
     
     lazy var receiverButton: UIButton = {
         let button = UIButton(type: .system)
@@ -159,11 +164,6 @@ class UserProfileCell: UICollectionViewCell {
         
         addSubview(departmentLabel)
         departmentLabel.anchor(top: jobDescriptionLabel.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 4, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 0)
-        
-//        addSubview(emailLabel)
-//        emailLabel.anchor(top: fullnameLabel.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 4, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 0)
-        
-//        setupBottomToolbar()
         
     }
     

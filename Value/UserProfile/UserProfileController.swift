@@ -32,6 +32,17 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.reloadData()
     }
     
+    func didTapToWriteController() {
+        let writeReviewController = WriteReviewController()
+        
+        writeReviewController.userReceiverId = userId
+        writeReviewController.userReceiverFullname = userFullname
+        writeReviewController.userReceiverImageUrl = userImageUrl
+        
+        let navController = UINavigationController(rootViewController: writeReviewController)
+        present(navController, animated: true, completion: nil)
+    }
+    
     lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "back_button"), for: .normal)
@@ -47,7 +58,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = .white
-//        navigationController?.navigationBar.isHidden = true
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
         
         collectionView?.register(UserProfileCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView?.register(ReceiverReviewCell.self, forCellWithReuseIdentifier: receiverReviewCellId)
@@ -62,6 +74,10 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         let userFromUserSearch = User(uid: userId!, dictionary: dict)
         
         self.user = userFromUserSearch
+    }
+    
+    @objc func handleUpdateUserProfileFeed() {
+        collectionView?.reloadData()
     }
     
     @objc func backToRootVC() {
@@ -132,18 +148,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         } else {
             return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 187 + 4) // 4 for fix the excess space
         }
-    }
-    
-    @objc func showWriteReviewController() {
-        let layout = UICollectionViewFlowLayout()
-        let writeReviewController = WriteReviewController(collectionViewLayout: layout)
-        
-//        writeReviewController.userReceiverId = userId
-//        writeReviewController.userReceiverFullname = userFullname
-//        writeReviewController.userReceiverImageUrl = userImageUrl
-        
-        let navController = UINavigationController(rootViewController: writeReviewController)
-        present(navController, animated: true, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
