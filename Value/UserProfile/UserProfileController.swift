@@ -172,14 +172,14 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let review = receivedReviews[indexPath.item]
         
-        let aproximateWidthOfLabel = view.frame.width - 82
+        let aproximateWidthOfLabel = view.frame.width - 72
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
         let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15)]
         let fullnameEstimatedFrame = NSString(string: review.fromFullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
-        let emailEstimatedFrame = NSString(string: review.fromEmail).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        
         let bodyEstimatedFrame = NSString(string: review.body).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
         
-        return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + bodyEstimatedFrame.height + 82)
+        return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + bodyEstimatedFrame.height + 68)
         
     }
     
