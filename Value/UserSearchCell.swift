@@ -1,21 +1,22 @@
 //
-//  SenderReviewCell.swift
+//  UserSearchCell.swift
 //  Value
 //
-//  Created by Omar Torres on 11/9/18.
+//  Created by Omar Torres on 11/6/18.
 //  Copyright © 2018 OmarTorres. All rights reserved.
 //
 
 import UIKit
 
-class SenderReviewCell: UICollectionViewCell {
+class UserSearchCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .blue
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }

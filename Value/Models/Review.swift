@@ -10,27 +10,39 @@ import Foundation
 
 struct Review {
     
-    var id: String?
+    let id: Int
     
-    let user: User
-    let fromFullname: String
-    let content: String
-    let fromId: String
+    let fromId: Int
     let fromProfileImageUrl: String
-    let creationDate: Date
-    let isPositive: Bool
+    let fromFullname: String
+    let fromEmail: String
     
-    var hasLiked = false
+    let toId: Int
+    let toProfileImageUrl: String
+    let toFullname: String
+    let toEmail: String
     
-    init(user: User, dictionary: [String: Any]) {
-        self.user = user
-        self.fromFullname = dictionary["fromFullname"] as? String ?? ""
-        self.content = dictionary["content"] as? String ?? ""
-        self.fromId = dictionary["fromId"] as? String ?? ""
-        self.fromProfileImageUrl = dictionary["fromProfileImageUrl"] as? String ?? ""
-        self.isPositive = dictionary["isPositive"] as? Bool ?? false
+    let body: String
+    let creationDate: String
+    
+    init(reviewDictionary: [String: Any]) {
         
-        let secondsFrom1970 = dictionary["creationDate"] as? Double ?? 0
-        self.creationDate = Date(timeIntervalSince1970: secondsFrom1970)
+        self.id = reviewDictionary["id"] as? Int ?? 0
+        
+        var senderData = reviewDictionary["sender"] as! [String: Any]
+        self.fromId = senderData["id"] as? Int ?? 0
+        self.fromProfileImageUrl = senderData["avatar_url"] as? String ?? ""
+        self.fromFullname = senderData["fullname"] as? String ?? ""
+        self.fromEmail = senderData["email"] as? String ?? ""
+        
+        var receiverData = reviewDictionary["receiver"] as! [String: Any]
+        self.toId = receiverData["id"] as? Int ?? 0
+        self.toProfileImageUrl = receiverData["avatar_url"] as? String ?? ""
+        self.toFullname = receiverData["fullname"] as? String ?? ""
+        self.toEmail = senderData["email"] as? String ?? ""
+        
+        self.body = reviewDictionary["body"] as? String ?? ""
+        self.creationDate = reviewDictionary["created_at"] as? String ?? ""
+        
     }
 }

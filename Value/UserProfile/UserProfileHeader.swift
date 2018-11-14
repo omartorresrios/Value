@@ -14,7 +14,7 @@ protocol UserProfileHeaderDelegate {
     func didTapToWriteController()
 }
 
-class UserProfileCell: UICollectionViewCell {
+class UserProfileHeader: UICollectionViewCell {
 
     var delegate: UserProfileHeaderDelegate?
 
@@ -141,7 +141,7 @@ class UserProfileCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .green
+        backgroundColor = .cyan
         
         addSubview(profileImageView)
         profileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 16, paddingLeft: 16, paddingBottom: 0, paddingRight: 0, width: 80, height: 80)

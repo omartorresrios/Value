@@ -34,9 +34,8 @@
 		A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B63219247D900AB6EB6 /* UserSearchCell.swift */; };
 		A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B662192953200AB6EB6 /* UserProfileController.swift */; };
 		A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6821937A9500AB6EB6 /* WriteReviewController.swift */; };
-		A0318B6B21949A4E00AB6EB6 /* UserProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6A21949A4E00AB6EB6 /* UserProfileCell.swift */; };
-		A0318B6E21951A5C00AB6EB6 /* ReceiverReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6D21951A5C00AB6EB6 /* ReceiverReviewCell.swift */; };
-		A0318B702196336800AB6EB6 /* SenderReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6F2196336800AB6EB6 /* SenderReviewCell.swift */; };
+		A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */; };
+		A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */; };
 		A0318B752198E85600AB6EB6 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B742198E85600AB6EB6 /* DataService.swift */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
@@ -76,9 +75,8 @@
 		A0318B63219247D900AB6EB6 /* UserSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchCell.swift; sourceTree = "<group>"; };
 		A0318B662192953200AB6EB6 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		A0318B6821937A9500AB6EB6 /* WriteReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewController.swift; sourceTree = "<group>"; };
-		A0318B6A21949A4E00AB6EB6 /* UserProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileCell.swift; sourceTree = "<group>"; };
-		A0318B6D21951A5C00AB6EB6 /* ReceiverReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiverReviewCell.swift; sourceTree = "<group>"; };
-		A0318B6F2196336800AB6EB6 /* SenderReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenderReviewCell.swift; sourceTree = "<group>"; };
+		A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
+		A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		A0318B742198E85600AB6EB6 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
@@ -144,8 +142,6 @@
 				A0318B612192388C00AB6EB6 /* MyProfileController.swift */,
 				A0318B6C21949B7000AB6EB6 /* UserProfile */,
 				A0318B732197A48D00AB6EB6 /* WriteReview */,
-				A0318B6D21951A5C00AB6EB6 /* ReceiverReviewCell.swift */,
-				A0318B6F2196336800AB6EB6 /* SenderReviewCell.swift */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -218,7 +214,8 @@
 			isa = PBXGroup;
 			children = (
 				A0318B662192953200AB6EB6 /* UserProfileController.swift */,
-				A0318B6A21949A4E00AB6EB6 /* UserProfileCell.swift */,
+				A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */,
+				A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";
@@ -397,10 +394,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0066A9C218E0B030019EFF8 /* LoginController.swift in Sources */,
-				A0318B6E21951A5C00AB6EB6 /* ReceiverReviewCell.swift in Sources */,
+				A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */,
 				A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */,
 				A0066A7B218CE33C0019EFF8 /* NSString+Base64.m in Sources */,
-				A0318B6B21949A4E00AB6EB6 /* UserProfileCell.swift in Sources */,
+				A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */,
 				A0066A60218CDDA30019EFF8 /* ViewController.swift in Sources */,
 				A0066A8C218D3E2A0019EFF8 /* Reachability.swift in Sources */,
 				A0066A7C218CE33C0019EFF8 /* NSData+CommonCrypto.m in Sources */,
@@ -417,7 +414,6 @@
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
-				A0318B702196336800AB6EB6 /* SenderReviewCell.swift in Sources */,
 				A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */,
 				A0066A7D218CE33C0019EFF8 /* NSData+Base64.m in Sources */,
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,

@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import Alamofire
+import Locksmith
 
 class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
     var user: User?
+    var receivedReviews = [Review]()
+    var sentReviews = [Review]()
     
     var userId: Int?
     var userFullname: String?
@@ -52,8 +56,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }()
     
     let userProfileCellId = "userProfileCellId"
-    let receiverReviewCellId = "receiverReviewCellId"
-    let senderReviewCellId = "senderReviewCellId"
+    let reviewCellId = "reviewCellId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,16 +64,17 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
         
-        collectionView?.register(UserProfileCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerId")
-        collectionView?.register(ReceiverReviewCell.self, forCellWithReuseIdentifier: receiverReviewCellId)
-        collectionView?.register(SenderReviewCell.self, forCellWithReuseIdentifier: senderReviewCellId)
+        collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerId")
+        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
         
         fetchUser()
+        
+        getAllReviews()
         
     }
     
     func fetchUser() {
-        let dict = ["id": userId!, "fullname": userFullname!, "email": userEmail!, "job_description": userJobDescription, "position": userPosition, "department": userDepartment, "avatar_url": userImageUrl!] as [String : Any]
+        let dict = ["id": userId!, "fullname": userFullname!, "email": userEmail!, "job_description": userJobDescription!, "position": userPosition!, "department": userDepartment!, "avatar_url": userImageUrl!] as [String : Any]
         let userFromUserSearch = User(uid: userId!, dictionary: dict)
         
         self.user = userFromUserSearch
@@ -84,11 +88,68 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         _ = navigationController?.popToRootViewController(animated: true)
     }
     
+    func getAllReviews() {
+        // Retreieve Auth_Token from Keychain
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+            
+            let authToken = userToken["authenticationToken"] as! String
+            
+            print("Token: \(userToken)")
+            
+            // Set Authorization header
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            print("THE HEADER: \(header)")
+            
+            Alamofire.request("\(BASE_URL)/\(userId!)/received_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+                switch response.result {
+                case .success(let JSON):
+                    
+                    print("THE USER RECEIVED REVIEWS: \(JSON)")
+                    
+                    let jsonArray = JSON as! NSArray
+                    
+                    jsonArray.forEach({ (value) in
+                        guard let reviewDictionary = value as? [String: Any] else { return }
+                        print("reviewDictionary: \(reviewDictionary)")
+                        let newReview = Review(reviewDictionary: reviewDictionary)
+                        self.receivedReviews.append(newReview)
+                        self.collectionView?.reloadData()
+                    })
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
+            Alamofire.request("\(BASE_URL)/\(userId!)/sent_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+                switch response.result {
+                case .success(let JSON):
+                    
+                    print("THE USER SENT REVIEWS: \(JSON)")
+                    
+                    let jsonArray = JSON as! NSArray
+                    
+                    jsonArray.forEach({ (value) in
+                        guard let reviewDictionary = value as? [String: Any] else { return }
+                        print("reviewDictionary: \(reviewDictionary)")
+                        let newReview = Review(reviewDictionary: reviewDictionary)
+                        self.sentReviews.append(newReview)
+                        self.collectionView?.reloadData()
+                    })
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if isReceiverView {
-            return 10
+            return receivedReviews.count
         } else {
-            return 2
+            return sentReviews.count
         }
     }
     
@@ -98,22 +159,32 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if isReceiverView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: receiverReviewCellId, for: indexPath) as! ReceiverReviewCell
-            //            cell.post = posts[indexPath.item]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
+            cell.review = receivedReviews[indexPath.item]
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: senderReviewCellId, for: indexPath) as! SenderReviewCell
-            //            cell.post = posts[indexPath.item]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
+            cell.review = sentReviews[indexPath.item]
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 300)
+        let review = receivedReviews[indexPath.item]
+        
+        let aproximateWidthOfLabel = view.frame.width - 82
+        let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
+        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15)]
+        let fullnameEstimatedFrame = NSString(string: review.fromFullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        let emailEstimatedFrame = NSString(string: review.fromEmail).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        let bodyEstimatedFrame = NSString(string: review.body).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        
+        return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + bodyEstimatedFrame.height + 82)
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileCell
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
         
         header.user = self.user
         header.delegate = self
