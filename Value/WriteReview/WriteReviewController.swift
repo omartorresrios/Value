@@ -37,10 +37,13 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
     }()
     
     let userReceiverFullnameLabel: UILabel = {
-        let ul = UILabel()
-        ul.translatesAutoresizingMaskIntoConstraints = false
-        ul.font = UIFont(name: "SFUIDisplay-Medium", size: 14)
-        return ul
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+        label.font = UIFont(name: "SFUIDisplay-Semibold", size: 14)
+        label.textAlignment = .left
+        return label
     }()
     
     var userReceiverDataViewContainer: UIView = {
@@ -71,7 +74,7 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
     
     let writeReviewTextView: UITextView = {
         let tv = UITextView()
-        tv.font = UIFont.systemFont(ofSize: 15)//UIFont(name: "SFUIDisplay-Regular", size: 20)
+        tv.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         tv.autocorrectionType = .no
         tv.textContainerInset = UIEdgeInsetsMake(10, 10, 5, 0)
         return tv

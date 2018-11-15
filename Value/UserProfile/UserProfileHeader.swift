@@ -44,51 +44,55 @@ class UserProfileHeader: UICollectionViewCell {
     
     let fullnameLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .red
+//        label.backgroundColor = .red
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)//UIFont(name: "SFUIDisplay-Semibold", size: 10)
+        label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+        label.font = UIFont(name: "SFUIDisplay-Bold", size: 20)
         label.textAlignment = .left
         return label
     }()
     
     let emailLabel: UILabel = {
         let label = UILabel()
-//        label.textColor = .gray
-        label.backgroundColor = .red
+        label.textColor = .gray
+//        label.backgroundColor = .red
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)//UIFont(name: "SFUIDisplay-Semibold", size: 8)
+        label.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         label.textAlignment = .left
         return label
     }()
     
     let positionLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .red
+//        label.backgroundColor = .red
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)//UIFont(name: "SFUIDisplay-Semibold", size: 10)
+        label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+        label.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         label.textAlignment = .left
         return label
     }()
     
     let jobDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .red
+//        label.backgroundColor = .red
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)//UIFont(name: "SFUIDisplay-Semibold", size: 10)
+        label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+        label.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         label.textAlignment = .left
         return label
     }()
     
     let departmentLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .red
+//        label.backgroundColor = .red
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)//UIFont(name: "SFUIDisplay-Semibold", size: 10)
+        label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+        label.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         label.textAlignment = .left
         return label
     }()
@@ -96,10 +100,11 @@ class UserProfileHeader: UICollectionViewCell {
     lazy var writeReviewButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Dejar reseña", for: .normal)
-        button.backgroundColor = UIColor.mainBlue()
-        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.clear
+        button.setTitleColor(UIColor.mainBlue(), for: .normal)
         button.titleLabel?.font = UIFont(name: "SFUIDisplay-Semibold", size: 15)
-        button.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
+        button.layer.borderColor = UIColor.mainBlue().cgColor
+        button.layer.borderWidth = 1
         button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(showWriteReviewController), for: .touchUpInside)
         return button
@@ -141,7 +146,7 @@ class UserProfileHeader: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .cyan
+        backgroundColor = .white
         
         addSubview(profileImageView)
         profileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 16, paddingLeft: 16, paddingBottom: 0, paddingRight: 0, width: 80, height: 80)

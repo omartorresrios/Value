@@ -19,6 +19,7 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
         let sb = UISearchBar()
         sb.placeholder = "Busca"
         sb.barTintColor = .gray
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font = UIFont(name: "SFUIDisplay-Regular", size: 13)
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230)
         sb.delegate = self
         return sb
@@ -152,7 +153,14 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 66)
+        return CGSize(width: view.frame.width, height: 56)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
 }

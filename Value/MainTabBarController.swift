@@ -48,7 +48,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     func setupViewControllers(completion: @escaping Callback) {
         
         // Feed
-        let feedNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "ranking_unselected"), selectedImage: #imageLiteral(resourceName: "ranking_selected"), rootViewController: UserFeedController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let homeNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "ranking_unselected"), selectedImage: #imageLiteral(resourceName: "ranking_selected"), rootViewController: HomeController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         // Search
         let searchNavController = templateNavController(unselectedImage: #imageLiteral(resourceName: "search_unselected"), selectedImage: #imageLiteral(resourceName: "search_selected"), rootViewController: UserSearchController(collectionViewLayout: UICollectionViewFlowLayout()))
@@ -64,7 +64,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         tabBar.tintColor = UIColor.mainBlue()
         
-        viewControllers = [feedNavController, searchNavController, myProfileNavController]
+        viewControllers = [homeNavController, searchNavController, myProfileNavController]
         
         completion(true)
         

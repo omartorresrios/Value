@@ -12,10 +12,14 @@ class UserSearchCell: UICollectionViewCell {
     
     var user: User? {
         didSet {
-            let attributedText = NSMutableAttributedString(string: user?.fullname ?? "", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
+            
+            guard let fullnameFont = UIFont(name: "SFUIDisplay-Semibold", size: 13) else { return }
+            guard let emailFont = UIFont(name: "SFUIDisplay-Regular", size: 13) else { return }
+            
+            let attributedText = NSMutableAttributedString(string: user?.fullname ?? "", attributes: [NSAttributedStringKey.font: fullnameFont, NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 22, green: 22, blue: 22)])
             
             let userEmail = user?.email ?? ""
-            attributedText.append(NSAttributedString(string: "\n\(userEmail)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 155, green: 161, blue: 171)]))
+            attributedText.append(NSAttributedString(string: "\n\(userEmail)", attributes: [NSAttributedStringKey.font: emailFont, NSAttributedStringKey.foregroundColor: UIColor.gray]))
             
             userNameEmailLabel.attributedText = attributedText
             
@@ -28,7 +32,8 @@ class UserSearchCell: UICollectionViewCell {
     let profileImageView: CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .yellow
+        iv.backgroundColor = .red
+        iv.layer.cornerRadius = 40 / 2
         iv.clipsToBounds = true
         return iv
     }()
@@ -36,27 +41,20 @@ class UserSearchCell: UICollectionViewCell {
     let userNameEmailLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
-        label.text = "Fullname"
-        label.font = UIFont.boldSystemFont(ofSize: 14)
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        backgroundColor = .white
         addSubview(profileImageView)
         addSubview(userNameEmailLabel)
         
-        profileImageView.anchor(top: nil, left: leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 50, height: 50)
-        profileImageView.layer.cornerRadius = 50 / 2
+        profileImageView.anchor(top: nil, left: leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        userNameEmailLabel.anchor(top: topAnchor, left: profileImageView.rightAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-        let separatorView = UIView()
-        separatorView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        addSubview(separatorView)
-        separatorView.anchor(top: nil, left: userNameEmailLabel.leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0.5)
+        userNameEmailLabel.anchor(top: nil, left: profileImageView.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 12, width: 0, height: 0)
+        userNameEmailLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
         
     }
     
