@@ -14,6 +14,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
 
     let homeReviewCell = "homeReviewCell"
     var reviews = [Review]()
+    var reviewSelected: Review!
+    var isFrom: Bool!
     
     let logoutButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -91,6 +93,68 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
+    @objc func showFromUserProfile(sender: UIGestureRecognizer) {
+        isFrom = true
+        let position = sender.location(in: collectionView)
+        guard let index = collectionView?.indexPathForItem(at: position) else {
+            print("Error, label not in collectionView")
+            return
+        }
+        
+        let review = reviews[index.item]
+        reviewSelected = review
+        
+        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
+        let userId = userIdFromKeyChain["id"] as! Int
+        
+        if review.fromId != userId {
+            showUserProfile()
+        }
+    }
+    
+    @objc func showToUserProfile(sender: UIGestureRecognizer) {
+        isFrom = false
+        let position = sender.location(in: collectionView)
+        guard let index = collectionView?.indexPathForItem(at: position) else {
+            print("Error, label not in collectionView")
+            return
+        }
+        
+        let review = reviews[index.item]
+        reviewSelected = review
+        
+        guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
+        let userId = userIdToKeyChain["id"] as! Int
+        
+        if review.toId != userId {
+            showUserProfile()
+        }
+    }
+    
+    func showUserProfile() {
+        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        if isFrom == true {
+            userProfileController.userId = reviewSelected.fromId
+            userProfileController.userFullname = reviewSelected.fromFullname
+            userProfileController.userImageUrl = reviewSelected.fromProfileImageUrl
+            userProfileController.userEmail = reviewSelected.fromEmail
+            userProfileController.userJobDescription = reviewSelected.fromJobDescription
+            userProfileController.userPosition = reviewSelected.fromPosition
+            userProfileController.userDepartment = reviewSelected.fromDepartment
+        } else {
+            userProfileController.userId = reviewSelected.toId
+            userProfileController.userFullname = reviewSelected.toFullname
+            userProfileController.userImageUrl = reviewSelected.toProfileImageUrl
+            userProfileController.userEmail = reviewSelected.toEmail
+            userProfileController.userJobDescription = reviewSelected.toJobDescription
+            userProfileController.userPosition = reviewSelected.toPosition
+            userProfileController.userDepartment = reviewSelected.toDepartment
+        }
+        
+        navigationController?.pushViewController(userProfileController, animated: true)
+    }
+    
     @objc func handleLogout() {
         clearLoggedinFlagInUserDefaults()
         clearAPITokensFromKeyChain()
@@ -130,6 +194,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeReviewCell, for: indexPath) as! HomeReviewCell
         cell.review = reviews[indexPath.item]
+        
+        cell.receiverFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showToUserProfile(sender:))))
+        cell.receiverProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showToUserProfile(sender:))))
+        cell.receiverFullnameLabel.isUserInteractionEnabled = true
+        cell.receiverProfileImageView.isUserInteractionEnabled = true
+        
+        cell.senderFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showFromUserProfile(sender:))))
+        cell.senderProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showFromUserProfile(sender:))))
+        cell.senderFullnameLabel.isUserInteractionEnabled = true
+        cell.senderProfileImageView.isUserInteractionEnabled = true
+        
         return cell
     }
     
