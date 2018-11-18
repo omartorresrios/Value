@@ -83,7 +83,13 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     @objc func handleUpdateUserProfileFeed() {
-        collectionView?.reloadData()
+        handleRefresh()
+    }
+    
+    @objc func handleRefresh() {
+        print("Handling refresh..")
+        receivedReviews.removeAll()
+        getAllReviews()
     }
     
     @objc func backToRootVC() {
@@ -253,20 +259,27 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let review = receivedReviews[indexPath.item]
-        
+    func calculateElementsSize(review: Review) -> CGSize {
         let aproximateWidthOfLabel = view.frame.width - 72
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
         let fromFullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Semibold", size: 13)]
         let bodyAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-
+        
         let fullnameEstimatedFrame = NSString(string: review.fromFullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fromFullnameAttributes as [NSAttributedStringKey : Any], context: nil)
         
         let bodyEstimatedFrame = NSString(string: review.body).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: bodyAttributes as [NSAttributedStringKey : Any], context: nil)
         
         return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + bodyEstimatedFrame.height + 78)
-        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if isReceiverView {
+            let receivedReview = receivedReviews[indexPath.item]
+            return calculateElementsSize(review: receivedReview)
+        } else {
+            let sentReview = sentReviews[indexPath.item]
+            return calculateElementsSize(review: sentReview)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

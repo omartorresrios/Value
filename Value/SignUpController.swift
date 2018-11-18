@@ -79,7 +79,7 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
         guard let username = fullnameTextField.text, !username.isEmpty else { return }
         guard let password = passwordTextField.text, !password.isEmpty else { return }
         
-        guard let fcmToken = FIRInstanceID.instanceID().token() else { return }
+        guard let fcmToken = Messaging.messaging().fcmToken else { return }
         
         let parameters = ["fullname": username, "email": email, "fcm_token": fcmToken, "password": password]
         

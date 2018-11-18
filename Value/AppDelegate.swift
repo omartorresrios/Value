@@ -13,8 +13,8 @@ import Firebase
 let reachability = Reachability()
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, FIRMessagingDelegate, UNUserNotificationCenterDelegate {
-    func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
+    func applicationReceivedRemoteMessage(_ remoteMessage: MessagingRemoteMessage) {
         
     }
     
@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FIRMessagingDelegate, UNU
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        FIRApp.configure()
+        FirebaseApp.configure()
         
 //        print("Firebase registration token: ", FIRInstanceID.instanceID().token()!)
         
@@ -75,14 +75,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FIRMessagingDelegate, UNU
         completionHandler(.alert)
     }
     
-    func messaging(_ messaging: FIRMessaging, didReceiveRegistrationToken fcmToken: String) {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
     }
     
     private func attemtRegisterForNotifications(application: UIApplication) {
         print("Attempting to register APNS")
         
-        FIRMessaging.messaging().remoteMessageDelegate = self
+        Messaging.messaging().delegate = self
         
         UNUserNotificationCenter.current().delegate = self
         
