@@ -71,7 +71,6 @@
 		A045B521219CEEFE002B16FA /* SF-Pro-Display-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B503219CEEFE002B16FA /* SF-Pro-Display-BoldItalic.otf */; };
 		A045B524219D0A45002B16FA /* SFCompactDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B522219D0A44002B16FA /* SFCompactDisplay-Regular.otf */; };
 		A045B525219D0A45002B16FA /* SFCompactText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B523219D0A44002B16FA /* SFCompactText-Regular.otf */; };
-		A045B527219D0D47002B16FA /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B526219D0D46002B16FA /* SF-Pro-Display-Regular.otf */; };
 		A045B53B219D1BF4002B16FA /* SFCompactDisplay-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B528219D1BE6002B16FA /* SFCompactDisplay-Medium.otf */; };
 		A045B53C219D1BF4002B16FA /* SFCompactDisplay-Ultralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B529219D1BE7002B16FA /* SFCompactDisplay-Ultralight.otf */; };
 		A045B53D219D1BF4002B16FA /* SFCompactText-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B52A219D1BE8002B16FA /* SFCompactText-Medium.otf */; };
@@ -97,6 +96,8 @@
 		A045B557219DCD2B002B16FA /* SF-UI-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B551219DCD29002B16FA /* SF-UI-Display-Thin.otf */; };
 		A045B558219DCD2B002B16FA /* SF-UI-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B552219DCD2A002B16FA /* SF-UI-Display-Semibold.otf */; };
 		A045B559219DCD2B002B16FA /* SF-UI-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B553219DCD2A002B16FA /* SF-UI-Display-Regular.otf */; };
+		A045B55E219F5F30002B16FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A045B55D219F5F30002B16FA /* GoogleService-Info.plist */; };
+		A045B56021A05D35002B16FA /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B55F21A05D35002B16FA /* SignUpController.swift */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
 
@@ -198,6 +199,9 @@
 		A045B551219DCD29002B16FA /* SF-UI-Display-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Thin.otf"; sourceTree = "<group>"; };
 		A045B552219DCD2A002B16FA /* SF-UI-Display-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Semibold.otf"; sourceTree = "<group>"; };
 		A045B553219DCD2A002B16FA /* SF-UI-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-UI-Display-Regular.otf"; sourceTree = "<group>"; };
+		A045B55C219F53D4002B16FA /* Value.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Value.entitlements; sourceTree = "<group>"; };
+		A045B55D219F5F30002B16FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A045B55F21A05D35002B16FA /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
 		E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.debug.xcconfig"; sourceTree = "<group>"; };
@@ -244,12 +248,14 @@
 		A0066A5C218CDDA30019EFF8 /* Value */ = {
 			isa = PBXGroup;
 			children = (
+				A045B55C219F53D4002B16FA /* Value.entitlements */,
 				A0066A92218DFD730019EFF8 /* Services */,
 				A0066A8D218D414F0019EFF8 /* Models */,
 				A0066A86218D03F80019EFF8 /* Utils */,
 				A0066A71218CE3020019EFF8 /* AESCrypt */,
 				A0066A6F218CDFD20019EFF8 /* Supporting files */,
 				A0066A5D218CDDA30019EFF8 /* AppDelegate.swift */,
+				A045B55D219F5F30002B16FA /* GoogleService-Info.plist */,
 				A0066A5F218CDDA30019EFF8 /* ViewController.swift */,
 				A0066A61218CDDA30019EFF8 /* Main.storyboard */,
 				A0066A64218CDDA80019EFF8 /* Assets.xcassets */,
@@ -263,6 +269,7 @@
 				A045B4E4219CC01A002B16FA /* Home */,
 				A0318B6C21949B7000AB6EB6 /* UserProfile */,
 				A0318B732197A48D00AB6EB6 /* WriteReview */,
+				A045B55F21A05D35002B16FA /* SignUpController.swift */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -468,6 +475,11 @@
 				TargetAttributes = {
 					A0066A59218CDDA30019EFF8 = {
 						CreatedOnToolsVersion = 9.4.1;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -500,7 +512,6 @@
 				A045B513219CEEFE002B16FA /* SF-Pro-Text-RegularItalic.otf in Resources */,
 				A045B557219DCD2B002B16FA /* SF-UI-Display-Thin.otf in Resources */,
 				A045B521219CEEFE002B16FA /* SF-Pro-Display-BoldItalic.otf in Resources */,
-				A045B527219D0D47002B16FA /* SF-Pro-Display-Regular.otf in Resources */,
 				A045B544219D1BF4002B16FA /* SFCompactText-BoldItalic.otf in Resources */,
 				A045B508219CEEFE002B16FA /* SF-Pro-Display-Black.otf in Resources */,
 				A045B555219DCD2B002B16FA /* SF-UI-Display-Light.otf in Resources */,
@@ -514,6 +525,7 @@
 				A045B54A219D1BF4002B16FA /* SFCompactText-Semibold.otf in Resources */,
 				A045B54C219D1BF4002B16FA /* SFCompactDisplay-Bold.otf in Resources */,
 				A045B51D219CEEFE002B16FA /* SF-Pro-Text-Medium.otf in Resources */,
+				A045B55E219F5F30002B16FA /* GoogleService-Info.plist in Resources */,
 				A045B524219D0A45002B16FA /* SFCompactDisplay-Regular.otf in Resources */,
 				A045B516219CEEFE002B16FA /* SF-Pro-Display-Regular.otf in Resources */,
 				A045B559219DCD2B002B16FA /* SF-UI-Display-Regular.otf in Resources */,
@@ -622,6 +634,7 @@
 				"${BUILT_PRODUCTS_DIR}/JDStatusBarNotification/JDStatusBarNotification.framework",
 				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
 				"${BUILT_PRODUCTS_DIR}/Mixpanel-swift/Mixpanel.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -634,6 +647,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JDStatusBarNotification.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mixpanel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -668,6 +682,7 @@
 				A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */,
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
 				A045B4E1219CA538002B16FA /* HomeReviewCell.swift in Sources */,
+				A045B56021A05D35002B16FA /* SignUpController.swift in Sources */,
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
 				A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */,
@@ -819,6 +834,7 @@
 			baseConfigurationReference = E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Value/Value.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W7KDN9ZT24;
 				INFOPLIST_FILE = Value/Info.plist;
@@ -839,6 +855,7 @@
 			baseConfigurationReference = E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Value/Value.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W7KDN9ZT24;
 				INFOPLIST_FILE = Value/Info.plist;

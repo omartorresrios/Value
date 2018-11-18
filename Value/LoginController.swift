@@ -68,6 +68,25 @@ class LoginController: UIViewController {
         return label
     }()
     
+    let dontHaveAccountButton: UIButton = {
+        let button = UIButton(type: .system)
+        
+        let attributedTitle = NSMutableAttributedString(string: "Don't have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        
+        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)
+            ]))
+        
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        
+        button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func handleShowSignUp() {
+        let signUpController = SignUpController()
+        navigationController?.pushViewController(signUpController, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,7 +105,12 @@ class LoginController: UIViewController {
         // Initialize functions
         setupInputFields()
         
-        // Reachability for checking internet connection
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        singleTap.numberOfTapsRequired = 1
+        view.addGestureRecognizer(singleTap)
+        
+        view.addSubview(dontHaveAccountButton)
+        dontHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
         
     }
     
@@ -154,6 +178,10 @@ class LoginController: UIViewController {
         print("currentUserEmail recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserEmail")!)")
         print("currentUserAvatar recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserAvatar")!)")
         
+    }
+    
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
     
     @objc func handleLogin() {
