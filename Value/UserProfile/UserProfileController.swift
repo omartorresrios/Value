@@ -17,6 +17,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     var sentReviews = [Review]()
     var reviewSelected: Review!
     var isFrom: Bool!
+    var isInfoUpdated: Bool! = false
     
     var userId: Int?
     var userFullname: String?
@@ -25,6 +26,14 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     var userJobDescription: String?
     var userPosition: String?
     var userDepartment: String?
+    
+    var userIdUpdated: String?
+    var userFullnameUpdated: String?
+    var userEmailUpdated: String?
+    var userPositionUpdated: String?
+    var userJobDescriptionUpdated: String?
+    var userDepartmentUpdated: String?
+    var userProfileImageUpdated: String?
     
     var isReceiverView = true
     
@@ -73,15 +82,24 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo), name: EditProfileController.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
         
-        fetchUser()
-        
         getAllReviews()
         
+    }
+    var editProfileController = EditProfileController()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        fetchUser()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
+        NotificationCenter.default.removeObserver(self, name: EditProfileController.updateUserHeaderInfo, object: nil)
     }
     
     func fetchUser() {
@@ -95,12 +113,25 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         handleRefreshReviews()
     }
     
-    @objc func handleUpdateUserHeaderInfo() {
-        handleRefreshHeader()
-    }
-    
-    @objc func handleRefreshHeader() {
+    @objc func handleUpdateUserHeaderInfo(notification: Notification) {
+        isInfoUpdated = true
         
+        user?.id = 0
+        user?.fullname = ""
+        user?.email = ""
+        user?.position = ""
+        user?.job_description = ""
+        user?.department = ""
+        user?.profileImageUrl = ""
+        
+        userFullnameUpdated = (notification.userInfo?["fullname"] as! String)
+        userEmailUpdated = (notification.userInfo?["email"] as! String)
+        userJobDescriptionUpdated = notification.userInfo?["job_description"] as? String ?? ""
+        userPositionUpdated = notification.userInfo?["position"] as? String ?? ""
+        userDepartmentUpdated = notification.userInfo?["department"] as? String ?? ""
+        userProfileImageUpdated = notification.userInfo?["avatar_url"] as? String ?? ""
+        
+        collectionView?.reloadData()
     }
     
     @objc func handleRefreshReviews() {
@@ -298,39 +329,50 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
+
+        header.backgroundColor = .yellow
+        if isInfoUpdated {
+            header.fullnameLabel.text = userFullnameUpdated
+            header.emailLabel.text = userEmailUpdated
+            header.positionLabel.text = userPositionUpdated
+            header.jobDescriptionLabel.text = userJobDescriptionUpdated
+            header.departmentLabel.text = userDepartmentUpdated
+            header.profileImageView.loadImage(urlString: userProfileImageUpdated ?? "")
+        } else {
+            header.user = self.user
+        }
         
-        header.user = self.user
         header.delegate = self
-        
+
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let user = self.user!
-        
+
         let aproximateWidthOfLabel = view.frame.width - 16 - 16
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
-        
+
         // for job_description
         let jobAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
         let jobDescEstimatedFrame = NSString(string: user.job_description).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: jobAttributes as [NSAttributedStringKey : Any], context: nil)
-        
+
         // for fullname
         let fullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Bold", size: 20)]
         let fullnameEstimatedFrame = NSString(string: user.fullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fullnameAttributes as [NSAttributedStringKey : Any], context: nil)
-        
+
         // for email
         let emailAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
         let emailEstimatedFrame = NSString(string: user.email).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: emailAttributes as [NSAttributedStringKey : Any], context: nil)
-        
+
         // for position
         let positionAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
         let positionEstimatedFrame = NSString(string: user.position).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: positionAttributes as [NSAttributedStringKey : Any], context: nil)
-        
+
         // for department
         let departmentAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
         let departmentEstimatedFrame = NSString(string: user.department).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: departmentAttributes as [NSAttributedStringKey : Any], context: nil)
-        
+
         if user.job_description != "" {
             return CGSize(width: view.frame.width, height: jobDescEstimatedFrame.height + fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 191)
         } else {

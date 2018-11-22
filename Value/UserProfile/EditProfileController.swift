@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import Alamofire
 import Locksmith
 
 class EditProfileController: UIViewController, UITextViewDelegate {
-
+    
     var activeTextView: UITextView!
     var viewWasMoved: Bool = false
-    static let updateUserHeaderInfo = NSNotification.Name(rawValue: "UpdateUserHeaderInfo")
+    static let updateUserHeaderInfo = Notification.Name("UpdateUserHeaderInfo")
     
     let userProfileViewContainer: UIView = {
         let view = UIView()
@@ -162,18 +163,38 @@ class EditProfileController: UIViewController, UITextViewDelegate {
             let authToken = userToken["authenticationToken"] as! String
             print("the current user token: \(authToken)")
             
-            let position = textview1.text
-            let job_description = textview2.text
-            let department = textview3.text
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            let parameters = ["position": textview1.text, "job_description": textview2.text, "department": textview3.text]
             
             guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
             let userId = userIdFromKeyChain["id"] as! Int
             
-            DataService.instance.updateInfo(authToken: authToken, userId: userId, position: position ?? "", job_description: job_description ?? "", department: department ?? "") { (success) in
-                if success {
-                    print("user info updated!")
-                    NotificationCenter.default.post(name: EditProfileController.updateUserHeaderInfo, object: nil)
+            let url = URL(string: "\(BASE_URL)/\(userId)/edit")!
+            
+            Alamofire.request(url, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON { response in
+                switch response.result {
+                case .success(let JSON):
+                    print("response user info: ", response)
+                    
+                    guard let userDictionary = JSON as? [String: Any] else { return }
+                    
+                    let id = userDictionary["id"] as! Int
+                    let fullname = userDictionary["fullname"] as! String
+                    let email = userDictionary["email"] as! String
+                    let job_description = userDictionary["job_description"] as? String ?? ""
+                    let position = userDictionary["position"] as? String ?? ""
+                    let department = userDictionary["department"] as? String ?? ""
+                    let avatar_url = userDictionary["avatar_url"] as? String ?? ""
+                    
+                    NotificationCenter.default.post(name: EditProfileController.updateUserHeaderInfo, object: nil, userInfo:["id": id, "fullname": fullname, "email": email, "job_description": job_description, "position": position, "department": department, "avatar_url": avatar_url])
+                    
                     self.dismiss(animated: true, completion: nil)
+                case .failure(let error):
+                    
+                    print("Failed to edit user info:", error)
+                    
+                    return
                 }
             }
         
