@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Locksmith
 
 protocol UserProfileHeaderDelegate {
     func didChangeToSenderView()
     func didChangeToReceiverView()
     func didTapToWriteController()
+    func didTapToEditProfileController()
 }
 
 class UserProfileHeader: UICollectionViewCell {
@@ -29,7 +31,30 @@ class UserProfileHeader: UICollectionViewCell {
             positionLabel.text = user?.position
             departmentLabel.text = user?.department
             
+            setupEditWriteButton()
+            
             setupBottomToolbar()
+        }
+    }
+    
+    func setupEditWriteButton() {
+        guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
+        let currentUserId = userIdToKeyChain["id"] as! Int
+        
+        guard let userId = user?.id else { return }
+        
+        if currentUserId == userId {
+            writeReviewButton.setTitle("Editar perfil", for: .normal)
+        } else {
+            writeReviewButton.setTitle("Dejar reseña", for: .normal)
+        }
+    }
+    
+    @objc func handleShowWriteEditProfile() {
+        if writeReviewButton.titleLabel?.text == "Dejar reseña" {
+            delegate?.didTapToWriteController()
+        } else {
+            delegate?.didTapToEditProfileController()
         }
     }
     
@@ -44,7 +69,6 @@ class UserProfileHeader: UICollectionViewCell {
     
     let fullnameLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .red
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
@@ -56,7 +80,6 @@ class UserProfileHeader: UICollectionViewCell {
     let emailLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
-//        label.backgroundColor = .red
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
@@ -66,7 +89,6 @@ class UserProfileHeader: UICollectionViewCell {
     
     let positionLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .red
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
@@ -77,7 +99,6 @@ class UserProfileHeader: UICollectionViewCell {
     
     let jobDescriptionLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .red
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
@@ -88,7 +109,6 @@ class UserProfileHeader: UICollectionViewCell {
     
     let departmentLabel: UILabel = {
         let label = UILabel()
-//        label.backgroundColor = .red
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
@@ -106,13 +126,15 @@ class UserProfileHeader: UICollectionViewCell {
         button.layer.borderColor = UIColor.mainBlue().cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 20
-        button.addTarget(self, action: #selector(showWriteReviewController), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleShowWriteEditProfile), for: .touchUpInside)
         return button
     }()
     
-    @objc func showWriteReviewController() {
-        delegate?.didTapToWriteController()
+    fileprivate func setupEditWriteStyle() {
+        
     }
+    
+    
     
     lazy var receiverButton: UIButton = {
         let button = UIButton(type: .system)

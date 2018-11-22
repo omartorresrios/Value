@@ -35,4 +35,27 @@ class DataService {
             }
         }
     }
+    
+    func updateInfo(authToken: String, userId: Int, position: String, job_description: String, department: String, completion: @escaping (Bool) -> ()) {
+        // Set Authorization header
+        let header = ["Authorization": "Token token=\(authToken)"]
+        
+        let parameters = ["position": position, "job_description": job_description, "department": department]
+        
+        let url = URL(string: "\(BASE_URL)/\(userId)/edit")!
+        
+        Alamofire.request(url, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON { response in
+            switch response.result {
+            case .success:
+                print("response user info: ", response)
+                completion(true)
+                
+            case .failure(let error):
+                completion(false)
+                print("Failed to edit user info:", error)
+                
+                return
+            }
+        }
+    }
 }

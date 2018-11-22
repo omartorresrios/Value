@@ -104,12 +104,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let review = reviews[index.item]
         reviewSelected = review
         
-        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-        let userId = userIdFromKeyChain["id"] as! Int
+        showUserProfile()
         
-        if review.fromId != userId {
-            showUserProfile()
-        }
     }
     
     @objc func showToUserProfile(sender: UIGestureRecognizer) {
@@ -123,12 +119,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let review = reviews[index.item]
         reviewSelected = review
         
-        guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-        let userId = userIdToKeyChain["id"] as! Int
-        
-        if review.toId != userId {
-            showUserProfile()
-        }
+        showUserProfile()
+
     }
     
     func showUserProfile() {

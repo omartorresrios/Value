@@ -49,6 +49,13 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         present(navController, animated: true, completion: nil)
     }
     
+    func didTapToEditProfileController() {
+        let editProfileController = EditProfileController()
+        
+        let navController = UINavigationController(rootViewController: editProfileController)
+        present(navController, animated: true, completion: nil)
+    }
+    
     lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "back_button"), for: .normal)
@@ -65,6 +72,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.backgroundColor = .white
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo), name: EditProfileController.updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
@@ -83,11 +92,19 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     @objc func handleUpdateUserProfileFeed() {
-        handleRefresh()
+        handleRefreshReviews()
     }
     
-    @objc func handleRefresh() {
-        print("Handling refresh..")
+    @objc func handleUpdateUserHeaderInfo() {
+        handleRefreshHeader()
+    }
+    
+    @objc func handleRefreshHeader() {
+        
+    }
+    
+    @objc func handleRefreshReviews() {
+        print("Handling refresh reviews")
         receivedReviews.removeAll()
         getAllReviews()
     }
@@ -167,7 +184,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
         let loggedUserId = userIdFromKeyChain["id"] as! Int
         
-        if tappedReview.fromId != loggedUserId && tappedReview.fromId != userId {
+        if tappedReview.fromId != userId {
             showUserProfile()
         }
     }
@@ -183,10 +200,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         let tappedReview = sentReviews[index.item]
         reviewSelected = tappedReview
         
-        guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-        let loggedUserId = userIdToKeyChain["id"] as! Int
-        
-        if tappedReview.toId != loggedUserId && tappedReview.toId != userId {
+        if tappedReview.toId != userId {
             showUserProfile()
         }
     }

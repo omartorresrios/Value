@@ -98,6 +98,8 @@
 		A045B559219DCD2B002B16FA /* SF-UI-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B553219DCD2A002B16FA /* SF-UI-Display-Regular.otf */; };
 		A045B55E219F5F30002B16FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A045B55D219F5F30002B16FA /* GoogleService-Info.plist */; };
 		A045B56021A05D35002B16FA /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B55F21A05D35002B16FA /* SignUpController.swift */; };
+		A045B56221A1DA63002B16FA /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B56121A1DA62002B16FA /* EditProfileController.swift */; };
+		A045B56421A1E35F002B16FA /* EditProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B56321A1E35E002B16FA /* EditProfileCell.swift */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
 
@@ -202,6 +204,8 @@
 		A045B55C219F53D4002B16FA /* Value.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Value.entitlements; sourceTree = "<group>"; };
 		A045B55D219F5F30002B16FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A045B55F21A05D35002B16FA /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
+		A045B56121A1DA62002B16FA /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
+		A045B56321A1E35E002B16FA /* EditProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCell.swift; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
 		E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.debug.xcconfig"; sourceTree = "<group>"; };
@@ -345,6 +349,8 @@
 				A0318B662192953200AB6EB6 /* UserProfileController.swift */,
 				A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */,
 				A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */,
+				A045B56121A1DA62002B16FA /* EditProfileController.swift */,
+				A045B56321A1E35E002B16FA /* EditProfileCell.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";
@@ -645,6 +651,7 @@
 				A0066A85218D01DF0019EFF8 /* UserFeedController.swift in Sources */,
 				A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */,
 				A0066A91218D41760019EFF8 /* User.swift in Sources */,
+				A045B56221A1DA63002B16FA /* EditProfileController.swift in Sources */,
 				A0066A88218D04080019EFF8 /* Extensions.swift in Sources */,
 				A0066A7A218CE33C0019EFF8 /* AESCrypt.m in Sources */,
 				A0066A8F218D41610019EFF8 /* Review.swift in Sources */,
@@ -659,6 +666,7 @@
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
 				A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */,
+				A045B56421A1E35F002B16FA /* EditProfileCell.swift in Sources */,
 				A0066A7D218CE33C0019EFF8 /* NSData+Base64.m in Sources */,
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,
 				A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */,
