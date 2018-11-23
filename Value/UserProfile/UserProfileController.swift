@@ -12,7 +12,7 @@ import Locksmith
 
 class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
-    var user: User?
+    var user = [User]()
     var receivedReviews = [Review]()
     var sentReviews = [Review]()
     var reviewSelected: Review!
@@ -84,17 +84,12 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
         
-        collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerId")
-        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
         
+        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: "headerId")
+        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
+        fetchUser()
         getAllReviews()
         
-    }
-    var editProfileController = EditProfileController()
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        fetchUser()
     }
     
     deinit {
@@ -103,10 +98,34 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func fetchUser() {
-        let dict = ["id": userId!, "fullname": userFullname!, "email": userEmail!, "job_description": userJobDescription!, "position": userPosition!, "department": userDepartment!, "avatar_url": userImageUrl!] as [String : Any]
-        let userFromUserSearch = User(uid: userId!, dictionary: dict)
-        
-        self.user = userFromUserSearch
+        // Retreieve Auth_Token from Keychain
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+            
+            let authToken = userToken["authenticationToken"] as! String
+            
+            print("Token: \(userToken)")
+            
+            // Set Authorization header
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            print("THE HEADER: \(header)")
+            
+            Alamofire.request("\(BASE_URL)/\(userId!)/profile", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+                switch response.result {
+                case .success(let JSON):
+                    
+                    guard let userDictionary = JSON as? [String: Any] else { return }
+                    print("userDictionary: \(userDictionary)")
+                    
+                    let newUser = User(uid: self.userId!, dictionary: userDictionary)
+                    self.user.append(newUser)
+                    self.collectionView?.reloadData()
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     }
     
     @objc func handleUpdateUserProfileFeed() {
@@ -114,24 +133,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     @objc func handleUpdateUserHeaderInfo(notification: Notification) {
-        isInfoUpdated = true
-        
-        user?.id = 0
-        user?.fullname = ""
-        user?.email = ""
-        user?.position = ""
-        user?.job_description = ""
-        user?.department = ""
-        user?.profileImageUrl = ""
-        
-        userFullnameUpdated = (notification.userInfo?["fullname"] as! String)
-        userEmailUpdated = (notification.userInfo?["email"] as! String)
-        userJobDescriptionUpdated = notification.userInfo?["job_description"] as? String ?? ""
-        userPositionUpdated = notification.userInfo?["position"] as? String ?? ""
-        userDepartmentUpdated = notification.userInfo?["department"] as? String ?? ""
-        userProfileImageUpdated = notification.userInfo?["avatar_url"] as? String ?? ""
-        
-        collectionView?.reloadData()
+        user.removeAll()
+        fetchUser()
     }
     
     @objc func handleRefreshReviews() {
@@ -261,47 +264,65 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if isReceiverView {
-            return receivedReviews.count
+        if section == 0 {
+            return user.count
         } else {
-            return sentReviews.count
+            if isReceiverView {
+                return receivedReviews.count
+            } else {
+                return sentReviews.count
+            }
         }
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if isReceiverView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
-            cell.review = receivedReviews[indexPath.item]
+        
+        if indexPath.section == 0 {
+            let header = collectionView.dequeueReusableCell(withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
             
-            cell.senderFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedFromUserProfile(sender:))))
-            cell.senderProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedFromUserProfile(sender:))))
+            header.backgroundColor = .yellow
             
-            cell.senderFullnameLabel.isUserInteractionEnabled = true
-            cell.senderProfileImageView.isUserInteractionEnabled = true
+            header.user = self.user[indexPath.item]
             
-            cell.receiverFullnameLabel.isUserInteractionEnabled = false
-            cell.receiverProfileImageView.isUserInteractionEnabled = false
+            header.delegate = self
             
-            return cell
+            return header
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
-            cell.review = sentReviews[indexPath.item]
-            
-            cell.receiverFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToUserProfile(sender:))))
-            cell.receiverProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToUserProfile(sender:))))
-            
-            cell.receiverFullnameLabel.isUserInteractionEnabled = true
-            cell.receiverProfileImageView.isUserInteractionEnabled = true
-            
-            cell.senderFullnameLabel.isUserInteractionEnabled = false
-            cell.senderProfileImageView.isUserInteractionEnabled = false
-            
-            return cell
+            if isReceiverView {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
+                cell.review = receivedReviews[indexPath.item]
+                
+                cell.senderFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedFromUserProfile(sender:))))
+                cell.senderProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedFromUserProfile(sender:))))
+                
+                cell.senderFullnameLabel.isUserInteractionEnabled = true
+                cell.senderProfileImageView.isUserInteractionEnabled = true
+                
+                cell.receiverFullnameLabel.isUserInteractionEnabled = false
+                cell.receiverProfileImageView.isUserInteractionEnabled = false
+                
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
+                cell.review = sentReviews[indexPath.item]
+                
+                cell.receiverFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToUserProfile(sender:))))
+                cell.receiverProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToUserProfile(sender:))))
+                
+                cell.receiverFullnameLabel.isUserInteractionEnabled = true
+                cell.receiverProfileImageView.isUserInteractionEnabled = true
+                
+                cell.senderFullnameLabel.isUserInteractionEnabled = false
+                cell.senderProfileImageView.isUserInteractionEnabled = false
+                
+                return cell
+            }
         }
+        
     }
     
     func calculateElementsSize(review: Review) -> CGSize {
@@ -318,66 +339,48 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if isReceiverView {
-            let receivedReview = receivedReviews[indexPath.item]
-            return calculateElementsSize(review: receivedReview)
+        
+        if indexPath.section == 0 {
+            let user = self.user[indexPath.item]
+            
+            let aproximateWidthOfLabel = view.frame.width - 16 - 16
+            let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
+            
+            // for job_description
+            let jobAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
+            let jobDescEstimatedFrame = NSString(string: user.job_description).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: jobAttributes as [NSAttributedStringKey : Any], context: nil)
+            
+            // for fullname
+            let fullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Bold", size: 20)]
+            let fullnameEstimatedFrame = NSString(string: user.fullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fullnameAttributes as [NSAttributedStringKey : Any], context: nil)
+            
+            // for email
+            let emailAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
+            let emailEstimatedFrame = NSString(string: user.email).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: emailAttributes as [NSAttributedStringKey : Any], context: nil)
+            
+            // for position
+            let positionAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
+            let positionEstimatedFrame = NSString(string: user.position).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: positionAttributes as [NSAttributedStringKey : Any], context: nil)
+            
+            // for department
+            let departmentAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
+            let departmentEstimatedFrame = NSString(string: user.department).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: departmentAttributes as [NSAttributedStringKey : Any], context: nil)
+            
+            if user.job_description != "" {
+                return CGSize(width: view.frame.width, height: jobDescEstimatedFrame.height + fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 191)
+            } else {
+                return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 187 + 4) // 4 for fix the excess space
+            }
         } else {
-            let sentReview = sentReviews[indexPath.item]
-            return calculateElementsSize(review: sentReview)
-        }
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
-
-        header.backgroundColor = .yellow
-        if isInfoUpdated {
-            header.fullnameLabel.text = userFullnameUpdated
-            header.emailLabel.text = userEmailUpdated
-            header.positionLabel.text = userPositionUpdated
-            header.jobDescriptionLabel.text = userJobDescriptionUpdated
-            header.departmentLabel.text = userDepartmentUpdated
-            header.profileImageView.loadImage(urlString: userProfileImageUpdated ?? "")
-        } else {
-            header.user = self.user
+            if isReceiverView {
+                let receivedReview = receivedReviews[indexPath.item]
+                return calculateElementsSize(review: receivedReview)
+            } else {
+                let sentReview = sentReviews[indexPath.item]
+                return calculateElementsSize(review: sentReview)
+            }
         }
         
-        header.delegate = self
-
-        return header
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let user = self.user!
-
-        let aproximateWidthOfLabel = view.frame.width - 16 - 16
-        let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
-
-        // for job_description
-        let jobAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-        let jobDescEstimatedFrame = NSString(string: user.job_description).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: jobAttributes as [NSAttributedStringKey : Any], context: nil)
-
-        // for fullname
-        let fullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Bold", size: 20)]
-        let fullnameEstimatedFrame = NSString(string: user.fullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fullnameAttributes as [NSAttributedStringKey : Any], context: nil)
-
-        // for email
-        let emailAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-        let emailEstimatedFrame = NSString(string: user.email).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: emailAttributes as [NSAttributedStringKey : Any], context: nil)
-
-        // for position
-        let positionAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-        let positionEstimatedFrame = NSString(string: user.position).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: positionAttributes as [NSAttributedStringKey : Any], context: nil)
-
-        // for department
-        let departmentAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-        let departmentEstimatedFrame = NSString(string: user.department).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: departmentAttributes as [NSAttributedStringKey : Any], context: nil)
-
-        if user.job_description != "" {
-            return CGSize(width: view.frame.width, height: jobDescEstimatedFrame.height + fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 191)
-        } else {
-            return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 187 + 4) // 4 for fix the excess space
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

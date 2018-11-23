@@ -12,12 +12,7 @@
 		A0066A63218CDDA30019EFF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0066A61218CDDA30019EFF8 /* Main.storyboard */; };
 		A0066A65218CDDA80019EFF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0066A64218CDDA80019EFF8 /* Assets.xcassets */; };
 		A0066A68218CDDA80019EFF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0066A66218CDDA80019EFF8 /* LaunchScreen.storyboard */; };
-		A0066A7A218CE33C0019EFF8 /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = A0066A72218CE33C0019EFF8 /* AESCrypt.m */; };
-		A0066A7B218CE33C0019EFF8 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A0066A76218CE33C0019EFF8 /* NSString+Base64.m */; };
-		A0066A7C218CE33C0019EFF8 /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = A0066A77218CE33C0019EFF8 /* NSData+CommonCrypto.m */; };
-		A0066A7D218CE33C0019EFF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A0066A79218CE33C0019EFF8 /* NSData+Base64.m */; };
 		A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */; };
-		A0066A81218D011A0019EFF8 /* friends.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A0066A80218D01190019EFF8 /* friends.jpg */; };
 		A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A82218D01770019EFF8 /* UserSearchController.swift */; };
 		A0066A85218D01DF0019EFF8 /* UserFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A84218D01DF0019EFF8 /* UserFeedController.swift */; };
 		A0066A88218D04080019EFF8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A87218D04080019EFF8 /* Extensions.swift */; };
@@ -99,6 +94,11 @@
 		A045B55E219F5F30002B16FA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A045B55D219F5F30002B16FA /* GoogleService-Info.plist */; };
 		A045B56021A05D35002B16FA /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B55F21A05D35002B16FA /* SignUpController.swift */; };
 		A045B56221A1DA63002B16FA /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B56121A1DA62002B16FA /* EditProfileController.swift */; };
+		A045B57721A78756002B16FA /* NSData+CommonCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = A045B57021A78755002B16FA /* NSData+CommonCrypto.m */; };
+		A045B57821A78756002B16FA /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A045B57121A78755002B16FA /* NSString+Base64.m */; };
+		A045B57921A78756002B16FA /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = A045B57321A78755002B16FA /* AESCrypt.m */; };
+		A045B57A21A78756002B16FA /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A045B57521A78756002B16FA /* NSData+Base64.m */; };
+		A045B57C21A787AD002B16FA /* friends.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A045B57B21A787AC002B16FA /* friends.jpg */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
 
@@ -111,16 +111,7 @@
 		A0066A67218CDDA80019EFF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0066A69218CDDA80019EFF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0066A70218CE0810019EFF8 /* Value-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Value-Bridging-Header.h"; sourceTree = "<group>"; };
-		A0066A72218CE33C0019EFF8 /* AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AESCrypt.m; sourceTree = "<group>"; };
-		A0066A73218CE33C0019EFF8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		A0066A74218CE33C0019EFF8 /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
-		A0066A75218CE33C0019EFF8 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
-		A0066A76218CE33C0019EFF8 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
-		A0066A77218CE33C0019EFF8 /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
-		A0066A78218CE33C0019EFF8 /* AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypt.h; sourceTree = "<group>"; };
-		A0066A79218CE33C0019EFF8 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		A0066A80218D01190019EFF8 /* friends.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = friends.jpg; sourceTree = "<group>"; };
 		A0066A82218D01770019EFF8 /* UserSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchController.swift; sourceTree = "<group>"; };
 		A0066A84218D01DF0019EFF8 /* UserFeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedController.swift; sourceTree = "<group>"; };
 		A0066A87218D04080019EFF8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -204,6 +195,15 @@
 		A045B55D219F5F30002B16FA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A045B55F21A05D35002B16FA /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		A045B56121A1DA62002B16FA /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
+		A045B56F21A78755002B16FA /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		A045B57021A78755002B16FA /* NSData+CommonCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CommonCrypto.m"; sourceTree = "<group>"; };
+		A045B57121A78755002B16FA /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		A045B57221A78755002B16FA /* AESCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypt.h; sourceTree = "<group>"; };
+		A045B57321A78755002B16FA /* AESCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AESCrypt.m; sourceTree = "<group>"; };
+		A045B57421A78756002B16FA /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		A045B57521A78756002B16FA /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		A045B57621A78756002B16FA /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
+		A045B57B21A787AC002B16FA /* friends.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = friends.jpg; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
 		E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.debug.xcconfig"; sourceTree = "<group>"; };
@@ -250,11 +250,11 @@
 		A0066A5C218CDDA30019EFF8 /* Value */ = {
 			isa = PBXGroup;
 			children = (
+				A045B56E21A7872C002B16FA /* AESCrypt */,
 				A045B55C219F53D4002B16FA /* Value.entitlements */,
 				A0066A92218DFD730019EFF8 /* Services */,
 				A0066A8D218D414F0019EFF8 /* Models */,
 				A0066A86218D03F80019EFF8 /* Utils */,
-				A0066A71218CE3020019EFF8 /* AESCrypt */,
 				A0066A6F218CDFD20019EFF8 /* Supporting files */,
 				A0066A5D218CDDA30019EFF8 /* AppDelegate.swift */,
 				A045B55D219F5F30002B16FA /* GoogleService-Info.plist */,
@@ -279,29 +279,14 @@
 		A0066A6F218CDFD20019EFF8 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				A045B57B21A787AC002B16FA /* friends.jpg */,
 				A045B4E5219CEEAE002B16FA /* Fonts */,
-				A0066A80218D01190019EFF8 /* friends.jpg */,
 				A0066A70218CE0810019EFF8 /* Value-Bridging-Header.h */,
 				A0066A95218DFDD70019EFF8 /* HTTPHelper.swift */,
 				A0066A97218DFE040019EFF8 /* KeyChainAccess.swift */,
 				A0066A99218DFE730019EFF8 /* Constants.swift */,
 			);
 			path = "Supporting files";
-			sourceTree = "<group>";
-		};
-		A0066A71218CE3020019EFF8 /* AESCrypt */ = {
-			isa = PBXGroup;
-			children = (
-				A0066A78218CE33C0019EFF8 /* AESCrypt.h */,
-				A0066A72218CE33C0019EFF8 /* AESCrypt.m */,
-				A0066A73218CE33C0019EFF8 /* NSData+Base64.h */,
-				A0066A79218CE33C0019EFF8 /* NSData+Base64.m */,
-				A0066A74218CE33C0019EFF8 /* NSData+CommonCrypto.h */,
-				A0066A77218CE33C0019EFF8 /* NSData+CommonCrypto.m */,
-				A0066A75218CE33C0019EFF8 /* NSString+Base64.h */,
-				A0066A76218CE33C0019EFF8 /* NSString+Base64.m */,
-			);
-			path = AESCrypt;
 			sourceTree = "<group>";
 		};
 		A0066A86218D03F80019EFF8 /* Utils */ = {
@@ -434,6 +419,21 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		A045B56E21A7872C002B16FA /* AESCrypt */ = {
+			isa = PBXGroup;
+			children = (
+				A045B57221A78755002B16FA /* AESCrypt.h */,
+				A045B57321A78755002B16FA /* AESCrypt.m */,
+				A045B56F21A78755002B16FA /* NSData+Base64.h */,
+				A045B57521A78756002B16FA /* NSData+Base64.m */,
+				A045B57621A78756002B16FA /* NSData+CommonCrypto.h */,
+				A045B57021A78755002B16FA /* NSData+CommonCrypto.m */,
+				A045B57421A78756002B16FA /* NSString+Base64.h */,
+				A045B57121A78755002B16FA /* NSString+Base64.m */,
+			);
+			path = AESCrypt;
+			sourceTree = "<group>";
+		};
 		A62F485C0932D48F23A5C549 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -547,7 +547,6 @@
 				A045B514219CEEFE002B16FA /* SF-Pro-Text-Bold.otf in Resources */,
 				A045B53C219D1BF4002B16FA /* SFCompactDisplay-Ultralight.otf in Resources */,
 				A045B50C219CEEFE002B16FA /* SF-Pro-Display-LightItalic.otf in Resources */,
-				A0066A81218D011A0019EFF8 /* friends.jpg in Resources */,
 				A045B554219DCD2B002B16FA /* SF-UI-Display-Medium.otf in Resources */,
 				A045B51F219CEEFE002B16FA /* SF-Pro-Text-Semibold.otf in Resources */,
 				A045B53D219D1BF4002B16FA /* SFCompactText-Medium.otf in Resources */,
@@ -556,6 +555,7 @@
 				A045B51B219CEEFE002B16FA /* SF-Pro-Display-Bold.otf in Resources */,
 				A045B520219CEEFE002B16FA /* SF-Pro-Display-Heavy.otf in Resources */,
 				A045B506219CEEFE002B16FA /* SF-Pro-Text-Heavy.otf in Resources */,
+				A045B57C21A787AD002B16FA /* friends.jpg in Resources */,
 				A045B548219D1BF4002B16FA /* SFCompactText-SemiboldItalic.otf in Resources */,
 				A045B542219D1BF4002B16FA /* SFCompactText-RegularItalic.otf in Resources */,
 				A045B50D219CEEFE002B16FA /* SF-Pro-Text-BoldItalic.otf in Resources */,
@@ -611,7 +611,6 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/JDStatusBarNotification/JDStatusBarNotification.framework",
 				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
-				"${BUILT_PRODUCTS_DIR}/Mixpanel-swift/Mixpanel.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -622,7 +621,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JDStatusBarNotification.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mixpanel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,30 +638,30 @@
 				A0066A9C218E0B030019EFF8 /* LoginController.swift in Sources */,
 				A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */,
 				A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */,
-				A0066A7B218CE33C0019EFF8 /* NSString+Base64.m in Sources */,
 				A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */,
 				A0066A60218CDDA30019EFF8 /* ViewController.swift in Sources */,
 				A0066A8C218D3E2A0019EFF8 /* Reachability.swift in Sources */,
-				A0066A7C218CE33C0019EFF8 /* NSData+CommonCrypto.m in Sources */,
 				A0066A85218D01DF0019EFF8 /* UserFeedController.swift in Sources */,
 				A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */,
 				A0066A91218D41760019EFF8 /* User.swift in Sources */,
 				A045B56221A1DA63002B16FA /* EditProfileController.swift in Sources */,
 				A0066A88218D04080019EFF8 /* Extensions.swift in Sources */,
-				A0066A7A218CE33C0019EFF8 /* AESCrypt.m in Sources */,
+				A045B57721A78756002B16FA /* NSData+CommonCrypto.m in Sources */,
 				A0066A8F218D41610019EFF8 /* Review.swift in Sources */,
 				A0318B752198E85600AB6EB6 /* DataService.swift in Sources */,
 				A0066A8A218D3DAE0019EFF8 /* CustomImageView.swift in Sources */,
+				A045B57921A78756002B16FA /* AESCrypt.m in Sources */,
 				A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */,
+				A045B57A21A78756002B16FA /* NSData+Base64.m in Sources */,
 				A0066A96218DFDD70019EFF8 /* HTTPHelper.swift in Sources */,
 				A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */,
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
 				A045B4E1219CA538002B16FA /* HomeReviewCell.swift in Sources */,
+				A045B57821A78756002B16FA /* NSString+Base64.m in Sources */,
 				A045B56021A05D35002B16FA /* SignUpController.swift in Sources */,
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
 				A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */,
-				A0066A7D218CE33C0019EFF8 /* NSData+Base64.m in Sources */,
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,
 				A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */,
 				A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */,
