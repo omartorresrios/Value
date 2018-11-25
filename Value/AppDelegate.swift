@@ -9,6 +9,7 @@
 import UIKit
 import UserNotifications
 import Firebase
+import Locksmith
 
 let reachability = Reachability()
 
@@ -37,34 +38,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
+        let myProfileController = MyProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        
         let userInfo = response.notification.request.content.userInfo
         
-        let senderId = userInfo["sender_id"] as? String ?? ""
-        let senderFullname = userInfo["sender_fullname"] as? String ?? ""
-        let senderEmail = userInfo["sender_email"] as? String ?? ""
-        let senderJobDesc = userInfo["sender_job_description"] as? String ?? ""
-        let senderPosition = userInfo["sender_position"] as? String ?? ""
-        let senderDepartment = userInfo["sender_department"] as? String ?? ""
-        let senderAvatarUrl = userInfo["sender_avatar_url"] as? String ?? ""
+        let review_id = userInfo["review_id"] as? String ?? ""
+        let sender_fullname = userInfo["sender_fullname"] as? String ?? ""
         
-        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
-        
-        userProfileController.userId = Int(senderId)
-        userProfileController.userFullname = senderFullname
-        userProfileController.userImageUrl = senderAvatarUrl
-        userProfileController.userEmail = senderEmail
-        userProfileController.userJobDescription = senderJobDesc
-        userProfileController.userPosition = senderPosition
-        userProfileController.userDepartment = senderDepartment
+        myProfileController.notificationReviewId = Int(review_id)
+        myProfileController.senderFullname = sender_fullname
+        myProfileController.isComingFromNotification = true
         
         if let mainTabBarController = self.window?.rootViewController as? MainTabBarController {
             
-            mainTabBarController.selectedIndex = 0
+            mainTabBarController.selectedIndex = 2
             
             mainTabBarController.presentedViewController?.dismiss(animated: true, completion: nil)
             
-            if let homeNavController = mainTabBarController.viewControllers?.first as? UINavigationController {
-                homeNavController.pushViewController(userProfileController, animated: true)
+            if let homeNavController = mainTabBarController.viewControllers?.last as? UINavigationController {
+                homeNavController.pushViewController(myProfileController, animated: true)
             }
         }
         

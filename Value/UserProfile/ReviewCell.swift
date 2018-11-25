@@ -75,6 +75,21 @@ class ReviewCell: UICollectionViewCell {
         return label
     }()
     
+    override var isSelected: Bool{
+        didSet{
+            if self.isSelected
+            {
+                super.isSelected = true
+                self.contentView.backgroundColor = UIColor.mainGreen()
+            }
+            else
+            {
+                super.isSelected = false
+                self.contentView.backgroundColor = .white
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white

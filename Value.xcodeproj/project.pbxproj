@@ -267,7 +267,6 @@
 				A0318B652192480800AB6EB6 /* Search */,
 				A0066A84218D01DF0019EFF8 /* UserFeedController.swift */,
 				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
-				A0318B612192388C00AB6EB6 /* MyProfileController.swift */,
 				A045B4E4219CC01A002B16FA /* Home */,
 				A0318B6C21949B7000AB6EB6 /* UserProfile */,
 				A0318B732197A48D00AB6EB6 /* WriteReview */,
@@ -330,6 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				A0318B662192953200AB6EB6 /* UserProfileController.swift */,
+				A0318B612192388C00AB6EB6 /* MyProfileController.swift */,
 				A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */,
 				A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */,
 				A045B56121A1DA62002B16FA /* EditProfileController.swift */,
