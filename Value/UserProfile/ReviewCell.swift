@@ -48,6 +48,7 @@ class ReviewCell: UICollectionViewCell {
     let senderFullnameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
+        label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
         label.font = UIFont(name: "SFUIDisplay-Semibold", size: 13)
@@ -58,6 +59,8 @@ class ReviewCell: UICollectionViewCell {
     let receiverFullnameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
+        label.sizeToFit()
+        label.backgroundColor = .red
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
         label.font = UIFont(name: "SFUIDisplay-Semibold", size: 13)
@@ -75,21 +78,6 @@ class ReviewCell: UICollectionViewCell {
         return label
     }()
     
-    override var isSelected: Bool{
-        didSet{
-            if self.isSelected
-            {
-                super.isSelected = true
-                self.contentView.backgroundColor = UIColor.mainGreen()
-            }
-            else
-            {
-                super.isSelected = false
-                self.contentView.backgroundColor = .white
-            }
-        }
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -98,7 +86,8 @@ class ReviewCell: UICollectionViewCell {
         senderProfileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         
         addSubview(senderFullnameLabel)
-        senderFullnameLabel.anchor(top: senderProfileImageView.topAnchor, left: senderProfileImageView.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 12, width: 0, height: 0)
+        senderFullnameLabel.anchor(top: senderProfileImageView.topAnchor, left: senderProfileImageView.rightAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        senderFullnameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: self.frame.width - 72).isActive = true
         
         addSubview(messageLabel)
         messageLabel.anchor(top: senderFullnameLabel.bottomAnchor, left: senderFullnameLabel.leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 2, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 0, height: 0)
@@ -107,8 +96,9 @@ class ReviewCell: UICollectionViewCell {
         receiverProfileImageView.anchor(top: messageLabel.bottomAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 12, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 40, height: 40)
         
         addSubview(receiverFullnameLabel)
-        receiverFullnameLabel.anchor(top: nil, left: leftAnchor, bottom: nil, right: receiverProfileImageView.leftAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
+        receiverFullnameLabel.anchor(top: nil, left: nil, bottom: nil, right: receiverProfileImageView.leftAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
         receiverFullnameLabel.centerYAnchor.constraint(equalTo: receiverProfileImageView.centerYAnchor).isActive = true
+        receiverFullnameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: self.frame.width - 72).isActive = true
         
         let separatorView = UIView()
         separatorView.backgroundColor = UIColor(white: 0, alpha: 0.5)

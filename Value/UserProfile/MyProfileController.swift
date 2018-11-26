@@ -55,11 +55,10 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         super.viewDidLoad()
         collectionView?.backgroundColor = .brown
         
-        print("notificationReviewId: ", notificationReviewId)
-        print("isComingFromNotification: ", isComingFromNotification)
-        
         guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-        loggedUserId = userIdFromKeyChain["id"] as! Int
+        loggedUserId = userIdFromKeyChain["id"] as? Int
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: "headerId")
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
@@ -82,6 +81,15 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         getAllSentReviews { (success) in
             print("Sent reviews loaded")
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: EditProfileController.updateUserHeaderInfo, object: nil)
+    }
+    
+    @objc func handleUpdateUserHeaderInfo(notification: Notification) {
+        user.removeAll()
+        fetchUser()
     }
     
     func fetchUser() {
@@ -282,9 +290,11 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
                         if self.indexPointed == indexPath.item {
                             self.reviewNotificationPaintedCounter += 1
                             UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseOut, animations: {
+                                cell.contentView.backgroundColor = UIColor.mainGreen()
                                 cell.isSelected = true
                             }, completion: { (finished) in
                                 UIView.animate(withDuration: 2.0, delay: 0, options: .curveEaseIn, animations: {
+                                    cell.contentView.backgroundColor = .white
                                     cell.isSelected = false
                                 }, completion: nil)
                             })
@@ -321,7 +331,7 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
             }
         }
     }
-    
+        
     func calculateElementsSize(review: Review) -> CGSize {
         let aproximateWidthOfLabel = view.frame.width - 72
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)

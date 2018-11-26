@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A5D218CDDA30019EFF8 /* AppDelegate.swift */; };
-		A0066A60218CDDA30019EFF8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A5F218CDDA30019EFF8 /* ViewController.swift */; };
 		A0066A63218CDDA30019EFF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0066A61218CDDA30019EFF8 /* Main.storyboard */; };
 		A0066A65218CDDA80019EFF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0066A64218CDDA80019EFF8 /* Assets.xcassets */; };
 		A0066A68218CDDA80019EFF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0066A66218CDDA80019EFF8 /* LaunchScreen.storyboard */; };
@@ -105,7 +104,6 @@
 /* Begin PBXFileReference section */
 		A0066A5A218CDDA30019EFF8 /* Value.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Value.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0066A5D218CDDA30019EFF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A0066A5F218CDDA30019EFF8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A0066A62218CDDA30019EFF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A0066A64218CDDA80019EFF8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A0066A67218CDDA80019EFF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -258,7 +256,6 @@
 				A0066A6F218CDFD20019EFF8 /* Supporting files */,
 				A0066A5D218CDDA30019EFF8 /* AppDelegate.swift */,
 				A045B55D219F5F30002B16FA /* GoogleService-Info.plist */,
-				A0066A5F218CDDA30019EFF8 /* ViewController.swift */,
 				A0066A61218CDDA30019EFF8 /* Main.storyboard */,
 				A0066A64218CDDA80019EFF8 /* Assets.xcassets */,
 				A0066A66218CDDA80019EFF8 /* LaunchScreen.storyboard */,
@@ -639,7 +636,6 @@
 				A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */,
 				A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */,
 				A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */,
-				A0066A60218CDDA30019EFF8 /* ViewController.swift in Sources */,
 				A0066A8C218D3E2A0019EFF8 /* Reachability.swift in Sources */,
 				A0066A85218D01DF0019EFF8 /* UserFeedController.swift in Sources */,
 				A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */,

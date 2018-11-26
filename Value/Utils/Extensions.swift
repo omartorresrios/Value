@@ -58,6 +58,11 @@ extension UIView {
         }
     }
     
+    func clearSubviews() {
+        for subview in self.subviews {
+            subview.removeFromSuperview();
+        }
+    }
 }
 
 extension Date {
