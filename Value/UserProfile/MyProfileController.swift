@@ -201,7 +201,7 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         }
     }
     
-    @objc func tappedFromUserProfile(sender: UIGestureRecognizer) {
+    @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
         let position = sender.location(in: collectionView)
         guard let index = collectionView?.indexPathForItem(at: position) else {
@@ -212,12 +212,53 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         let tappedReview = receivedReviews[index.item]
         reviewSelected = tappedReview
         
-        if tappedReview.fromId != loggedUserId {
-            showUserProfile()
+        if let cell = collectionView?.cellForItem(at: index) as? ReviewCell {
+            let tintView = UIView()
+            if sender.state == .began {
+                tintView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+                tintView.frame = CGRect(x: 0, y: 0, width: cell.senderProfileImageView.frame.width, height: cell.senderProfileImageView.frame.height)
+                cell.senderProfileImageView.addSubview(tintView)
+            } else if sender.state == .changed {
+                cell.senderProfileImageView.clearSubviews()
+            } else if sender.state == .ended {
+                cell.senderProfileImageView.clearSubviews()
+                if tappedReview.fromId != loggedUserId {
+                    showUserProfile()
+                }
+            }
+        } else {
+            print("SO SORRY")
         }
     }
     
-    @objc func tappedToUserProfile(sender: UIGestureRecognizer) {
+    @objc func senderFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
+        isFrom = true
+        let position = sender.location(in: collectionView)
+        guard let index = collectionView?.indexPathForItem(at: position) else {
+            print("Error, label not in collectionView")
+            return
+        }
+        
+        let tappedReview = receivedReviews[index.item]
+        reviewSelected = tappedReview
+        
+        if let cell = collectionView?.cellForItem(at: index) as? ReviewCell {
+            if sender.state == .began {
+                cell.senderFullnameLabel.textColor = .red
+            } else if sender.state == .changed {
+                cell.senderFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+            } else if sender.state == .ended {
+                cell.senderFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+                if tappedReview.fromId != loggedUserId {
+                    showUserProfile()
+                }
+            }
+        } else {
+            print("SO SORRY")
+        }
+    }
+    
+    @objc func receiverProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
         let position = sender.location(in: collectionView)
         guard let index = collectionView?.indexPathForItem(at: position) else {
@@ -228,8 +269,49 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         let tappedReview = sentReviews[index.item]
         reviewSelected = tappedReview
         
-        if tappedReview.toId != loggedUserId {
-            showUserProfile()
+        if let cell = collectionView?.cellForItem(at: index) as? ReviewCell {
+            let tintView = UIView()
+            if sender.state == .began {
+                tintView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+                tintView.frame = CGRect(x: 0, y: 0, width: cell.receiverProfileImageView.frame.width, height: cell.receiverProfileImageView.frame.height)
+                cell.receiverProfileImageView.addSubview(tintView)
+            } else if sender.state == .changed {
+                cell.receiverProfileImageView.clearSubviews()
+            } else if sender.state == .ended {
+                cell.receiverProfileImageView.clearSubviews()
+                if tappedReview.toId != loggedUserId {
+                    showUserProfile()
+                }
+            }
+        } else {
+            print("SO SORRY")
+        }
+    }
+    
+    @objc func receiverFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
+        isFrom = false
+        let position = sender.location(in: collectionView)
+        guard let index = collectionView?.indexPathForItem(at: position) else {
+            print("Error, label not in collectionView")
+            return
+        }
+        
+        let tappedReview = sentReviews[index.item]
+        reviewSelected = tappedReview
+        
+        if let cell = collectionView?.cellForItem(at: index) as? ReviewCell {
+            if sender.state == .began {
+                cell.receiverFullnameLabel.textColor = .red
+            } else if sender.state == .changed {
+                cell.receiverFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+            } else if sender.state == .ended {
+                cell.receiverFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
+                if tappedReview.toId != loggedUserId {
+                    showUserProfile()
+                }
+            }
+        } else {
+            print("SO SORRY")
         }
     }
     
@@ -304,11 +386,15 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
                 
                 cell.review = receivedReviews[indexPath.item]
                 
-                cell.senderFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedFromUserProfile(sender:))))
-                cell.senderProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedFromUserProfile(sender:))))
-                
-                cell.senderFullnameLabel.isUserInteractionEnabled = true
+                let senderProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(senderProfileImageHighlightWhentapped(_:)))
+                senderProfileImageTap.minimumPressDuration = 0
+                cell.senderProfileImageView.addGestureRecognizer(senderProfileImageTap)
                 cell.senderProfileImageView.isUserInteractionEnabled = true
+                
+                let senderFullnameTap = UILongPressGestureRecognizer(target: self, action: #selector(senderFullnameHighlightWhentapped(_:)))
+                senderFullnameTap.minimumPressDuration = 0
+                cell.senderFullnameLabel.addGestureRecognizer(senderFullnameTap)
+                cell.senderFullnameLabel.isUserInteractionEnabled = true
                 
                 cell.receiverFullnameLabel.isUserInteractionEnabled = false
                 cell.receiverProfileImageView.isUserInteractionEnabled = false
@@ -318,11 +404,15 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
                 cell.review = sentReviews[indexPath.item]
                 
-                cell.receiverFullnameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToUserProfile(sender:))))
-                cell.receiverProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToUserProfile(sender:))))
-                
-                cell.receiverFullnameLabel.isUserInteractionEnabled = true
+                let receiverProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(receiverProfileImageHighlightWhentapped(_:)))
+                receiverProfileImageTap.minimumPressDuration = 0
+                cell.receiverProfileImageView.addGestureRecognizer(receiverProfileImageTap)
                 cell.receiverProfileImageView.isUserInteractionEnabled = true
+                
+                let receiverFullnameTap = UILongPressGestureRecognizer(target: self, action: #selector(receiverFullnameHighlightWhentapped(_:)))
+                receiverFullnameTap.minimumPressDuration = 0
+                cell.receiverFullnameLabel.addGestureRecognizer(receiverFullnameTap)
+                cell.receiverFullnameLabel.isUserInteractionEnabled = true
                 
                 cell.senderFullnameLabel.isUserInteractionEnabled = false
                 cell.senderProfileImageView.isUserInteractionEnabled = false
