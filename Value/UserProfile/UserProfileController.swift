@@ -22,18 +22,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     var userId: Int?
     var userFullname: String?
     var userImageUrl: String?
-    var userEmail: String?
-    var userJobDescription: String?
-    var userPosition: String?
-    var userDepartment: String?
-    
-    var userIdUpdated: String?
-    var userFullnameUpdated: String?
-    var userEmailUpdated: String?
-    var userPositionUpdated: String?
-    var userJobDescriptionUpdated: String?
-    var userDepartmentUpdated: String?
-    var userProfileImageUpdated: String?
     
     var isReceiverView = true
     
@@ -98,38 +86,17 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func fetchUser() {
-        // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
-            
-            let authToken = userToken["authenticationToken"] as! String
-            
-            print("Token: \(userToken)")
-            
-            // Set Authorization header
-            let header = ["Authorization": "Token token=\(authToken)"]
-            
-            print("THE HEADER: \(header)")
-            
-            Alamofire.request("\(BASE_URL)/\(userId!)/profile", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let JSON):
-                    
-                    guard let userDictionary = JSON as? [String: Any] else { return }
-                    print("userDictionary: \(userDictionary)")
-                    
-                    let newUser = User(uid: self.userId!, dictionary: userDictionary)
-                    self.user.append(newUser)
-                    self.collectionView?.reloadData()
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
+        ApiService.shared.fetchUserProfileInfo(userId: userId!) { (user) in
+            self.user.append(user)
+            self.userFullname = user.fullname
+            self.userImageUrl = user.profileImageUrl
+            self.collectionView?.reloadData()
         }
     }
     
     @objc func handleUpdateUserProfileFeed() {
-        handleRefreshReviews()
+        receivedReviews.removeAll()
+        getAllReviews()
     }
     
     @objc func handleUpdateUserHeaderInfo(notification: Notification) {
@@ -137,71 +104,22 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         fetchUser()
     }
     
-    @objc func handleRefreshReviews() {
-        print("Handling refresh reviews")
-        receivedReviews.removeAll()
-        getAllReviews()
-    }
-    
     @objc func backToRootVC() {
         _ = navigationController?.popToRootViewController(animated: true)
     }
     
     func getAllReviews() {
-        // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
-            
-            let authToken = userToken["authenticationToken"] as! String
-            
-            print("Token: \(userToken)")
-            
-            // Set Authorization header
-            let header = ["Authorization": "Token token=\(authToken)"]
-            
-            print("THE HEADER: \(header)")
-            
-            Alamofire.request("\(BASE_URL)/\(userId!)/received_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let JSON):
-                    
-                    print("THE USER RECEIVED REVIEWS: \(JSON)")
-                    
-                    let jsonArray = JSON as! NSArray
-                    
-                    jsonArray.forEach({ (value) in
-                        guard let reviewDictionary = value as? [String: Any] else { return }
-                        print("reviewDictionary: \(reviewDictionary)")
-                        let newReview = Review(reviewDictionary: reviewDictionary)
-                        self.receivedReviews.append(newReview)
-                        self.collectionView?.reloadData()
-                    })
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            
-            Alamofire.request("\(BASE_URL)/\(userId!)/sent_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let JSON):
-                    
-                    print("THE USER SENT REVIEWS: \(JSON)")
-                    
-                    let jsonArray = JSON as! NSArray
-                    
-                    jsonArray.forEach({ (value) in
-                        guard let reviewDictionary = value as? [String: Any] else { return }
-                        print("reviewDictionary: \(reviewDictionary)")
-                        let newReview = Review(reviewDictionary: reviewDictionary)
-                        self.sentReviews.append(newReview)
-                        self.collectionView?.reloadData()
-                    })
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
+        
+        ApiService.shared.fetchUserReceivedReviews(userId: userId!) { (review) in
+            self.receivedReviews.append(review)
+            self.collectionView?.reloadData()
         }
+        
+        ApiService.shared.fetchUserSentReviews(userId: userId!) { (review) in
+            self.sentReviews.append(review)
+            self.collectionView?.reloadData()
+        }
+        
     }
     
     @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
@@ -323,20 +241,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         if isFrom {
             userProfileController.userId = reviewSelected.fromId
-            userProfileController.userFullname = reviewSelected.fromFullname
-            userProfileController.userImageUrl = reviewSelected.fromProfileImageUrl
-            userProfileController.userEmail = reviewSelected.fromEmail
-            userProfileController.userJobDescription = reviewSelected.fromJobDescription
-            userProfileController.userPosition = reviewSelected.fromPosition
-            userProfileController.userDepartment = reviewSelected.fromDepartment
         } else {
             userProfileController.userId = reviewSelected.toId
-            userProfileController.userFullname = reviewSelected.toFullname
-            userProfileController.userImageUrl = reviewSelected.toProfileImageUrl
-            userProfileController.userEmail = reviewSelected.toEmail
-            userProfileController.userJobDescription = reviewSelected.toJobDescription
-            userProfileController.userPosition = reviewSelected.toPosition
-            userProfileController.userDepartment = reviewSelected.toDepartment
         }
         
         navigationController?.pushViewController(userProfileController, animated: true)

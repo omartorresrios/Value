@@ -206,20 +206,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         if isFrom == true {
             userProfileController.userId = reviewSelected.fromId
-            userProfileController.userFullname = reviewSelected.fromFullname
-            userProfileController.userImageUrl = reviewSelected.fromProfileImageUrl
-            userProfileController.userEmail = reviewSelected.fromEmail
-            userProfileController.userJobDescription = reviewSelected.fromJobDescription
-            userProfileController.userPosition = reviewSelected.fromPosition
-            userProfileController.userDepartment = reviewSelected.fromDepartment
         } else {
             userProfileController.userId = reviewSelected.toId
-            userProfileController.userFullname = reviewSelected.toFullname
-            userProfileController.userImageUrl = reviewSelected.toProfileImageUrl
-            userProfileController.userEmail = reviewSelected.toEmail
-            userProfileController.userJobDescription = reviewSelected.toJobDescription
-            userProfileController.userPosition = reviewSelected.toPosition
-            userProfileController.userDepartment = reviewSelected.toDepartment
         }
         
         navigationController?.pushViewController(userProfileController, animated: true)

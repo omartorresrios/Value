@@ -31,6 +31,7 @@
 		A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */; };
 		A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */; };
 		A0318B752198E85600AB6EB6 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B742198E85600AB6EB6 /* DataService.swift */; };
+		A036309721B0799E000C9520 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036309621B0799E000C9520 /* ApiService.swift */; };
 		A045B4E1219CA538002B16FA /* HomeReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E0219CA538002B16FA /* HomeReviewCell.swift */; };
 		A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E2219CBFF4002B16FA /* HomeController.swift */; };
 		A045B504219CEEFE002B16FA /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B4E6219CEEF3002B16FA /* SF-Pro-Text-Regular.otf */; };
@@ -129,6 +130,7 @@
 		A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		A0318B742198E85600AB6EB6 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		A036309621B0799E000C9520 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		A045B4E0219CA538002B16FA /* HomeReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReviewCell.swift; sourceTree = "<group>"; };
 		A045B4E2219CBFF4002B16FA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A045B4E6219CEEF3002B16FA /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 			children = (
 				A0066A93218DFD7F0019EFF8 /* AuthService.swift */,
 				A0318B742198E85600AB6EB6 /* DataService.swift */,
+				A036309621B0799E000C9520 /* ApiService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -658,6 +661,7 @@
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
 				A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */,
+				A036309721B0799E000C9520 /* ApiService.swift in Sources */,
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,
 				A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */,
 				A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */,
