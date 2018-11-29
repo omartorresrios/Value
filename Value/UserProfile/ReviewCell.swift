@@ -49,6 +49,7 @@ class ReviewCell: UICollectionViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.sizeToFit()
+        label.backgroundColor = .red
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
         label.font = UIFont(name: "SFUIDisplay-Semibold", size: 13)
@@ -80,7 +81,6 @@ class ReviewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
         
         addSubview(senderProfileImageView)
         senderProfileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)

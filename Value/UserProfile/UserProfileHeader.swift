@@ -138,7 +138,10 @@ class UserProfileHeader: UICollectionViewCell {
     
     lazy var receiverButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "ranking_unselected"), for: .normal)
+//        button.setImage(#imageLiteral(resourceName: "ranking_unselected"), for: .normal)
+        button.setTitle("Recibidos", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        
         button.addTarget(self, action: #selector(handleChangeToReceiverView), for: .touchUpInside)
         return button
     }()
@@ -152,7 +155,10 @@ class UserProfileHeader: UICollectionViewCell {
     
     lazy var senderButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "ranking_selected"), for: .normal)
+//        button.setImage(#imageLiteral(resourceName: "ranking_selected"), for: .normal)
+        
+        button.setTitleColor(.black, for: .normal)
+        button.setTitle("Enviados", for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.addTarget(self, action: #selector(handleChangeToSenderView), for: .touchUpInside)
         return button
@@ -203,7 +209,7 @@ class UserProfileHeader: UICollectionViewCell {
         bottomDividerView.backgroundColor = UIColor.lightGray
         
         let stackView = UIStackView(arrangedSubviews: [receiverButton, senderButton])
-        
+        stackView.backgroundColor = .red
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         

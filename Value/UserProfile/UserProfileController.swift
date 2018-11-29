@@ -73,8 +73,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         return button
     }()
     
-    let userProfileCellId = "userProfileCellId"
     let reviewCellId = "reviewCellId"
+    let headerId = "headerId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,9 +84,9 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
         
-        
-        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: "headerId")
+        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: headerId)
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
+        
         fetchUser()
         getAllReviews()
         
@@ -361,8 +361,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            let header = collectionView.dequeueReusableCell(withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
-            header.backgroundColor = .yellow
+            let header = collectionView.dequeueReusableCell(withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
             header.user = self.user[indexPath.item]
             header.delegate = self
             return header
