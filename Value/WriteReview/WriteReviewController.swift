@@ -26,6 +26,13 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    let scrollView: UIScrollView = {
+        let v = UIScrollView()
+        v.backgroundColor = .green
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
     let userReceiverProfileImageView: CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
@@ -74,6 +81,7 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
     
     let writeReviewTextView: UITextView = {
         let tv = UITextView()
+//        tv.backgroundColor = .blue
         tv.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         tv.autocorrectionType = .no
         tv.textContainerInset = UIEdgeInsetsMake(10, 10, 5, 0)
@@ -86,11 +94,12 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
         return view
     }()
     
+    var navBarHeight: CGFloat!
+    var writeTextViewHeightConstraint: NSLayoutConstraint!
     static let updateUserProfileFeedNotificationName = NSNotification.Name(rawValue: "UpdateUserProfileFeed")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
         setupNavBarElements()
         setupViews()
     }
@@ -120,22 +129,54 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
         self.navigationItem.titleView = titleView
     }
     
+    @objc func appMovedToForeGround(notification: NSNotification){
+        writeReviewTextView.becomeFirstResponder()
+    }
+    
     func setupViews() {
-        let navBarHeight = (navigationController?.navigationBar.frame.size.height)!
+        view.backgroundColor = .white
         
-        view.addSubview(writeReviewTextView)
-        writeReviewTextView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: navBarHeight + 20, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 100)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToForeGround(notification:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        
+        navBarHeight = (navigationController?.navigationBar.frame.size.height)! + 20
+        
+        view.addSubview(scrollView)
+        scrollView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: navBarHeight, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        
+        scrollView.addSubview(writeReviewTextView)
+        writeReviewTextView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: view.frame.width, height: 0)
+
+        writeTextViewHeightConstraint = writeReviewTextView.heightAnchor.constraint(equalToConstant: view.frame.height - navBarHeight)
+        writeTextViewHeightConstraint.isActive = true
+        
+
         writeReviewTextView.text = "Placeholder"
         writeReviewTextView.textColor = UIColor.lightGray
-        
+
         self.writeReviewTextView.delegate = self
-        
+
         writeReviewTextView.becomeFirstResponder()
         writeReviewTextView.selectedTextRange = writeReviewTextView.textRange(from: writeReviewTextView.beginningOfDocument, to: writeReviewTextView.beginningOfDocument)
         
-        view.addSubview(valueView)
-        valueView.anchor(top: writeReviewTextView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
+//        view.addSubview(valueView)
+//        valueView.anchor(top: writeReviewTextView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            self.scrollView.contentInset = contentInsets
+            self.scrollView.scrollIndicatorInsets = contentInsets
+            writeTextViewHeightConstraint.constant = (view.frame.height - navBarHeight) - keyboardSize.height
+            writeReviewTextView.layoutIfNeeded()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     @objc func exitWriteReviewController() {

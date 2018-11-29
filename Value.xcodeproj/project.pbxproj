@@ -31,7 +31,6 @@
 		A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */; };
 		A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */; };
 		A0318B752198E85600AB6EB6 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B742198E85600AB6EB6 /* DataService.swift */; };
-		A036309321AE3E76000C9520 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036309221AE3E76000C9520 /* MenuBar.swift */; };
 		A045B4E1219CA538002B16FA /* HomeReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E0219CA538002B16FA /* HomeReviewCell.swift */; };
 		A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E2219CBFF4002B16FA /* HomeController.swift */; };
 		A045B504219CEEFE002B16FA /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B4E6219CEEF3002B16FA /* SF-Pro-Text-Regular.otf */; };
@@ -130,7 +129,6 @@
 		A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		A0318B742198E85600AB6EB6 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
-		A036309221AE3E76000C9520 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		A045B4E0219CA538002B16FA /* HomeReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReviewCell.swift; sourceTree = "<group>"; };
 		A045B4E2219CBFF4002B16FA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A045B4E6219CEEF3002B16FA /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
@@ -293,7 +291,6 @@
 				A0066A87218D04080019EFF8 /* Extensions.swift */,
 				A0066A89218D3DAE0019EFF8 /* CustomImageView.swift */,
 				A0066A8B218D3E2A0019EFF8 /* Reachability.swift */,
-				A036309221AE3E76000C9520 /* MenuBar.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -649,7 +646,6 @@
 				A0066A8F218D41610019EFF8 /* Review.swift in Sources */,
 				A0318B752198E85600AB6EB6 /* DataService.swift in Sources */,
 				A0066A8A218D3DAE0019EFF8 /* CustomImageView.swift in Sources */,
-				A036309321AE3E76000C9520 /* MenuBar.swift in Sources */,
 				A045B57921A78756002B16FA /* AESCrypt.m in Sources */,
 				A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */,
 				A045B57A21A78756002B16FA /* NSData+Base64.m in Sources */,
