@@ -95,111 +95,35 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
-        let position = sender.location(in: collectionView)
-        guard let index = collectionView?.indexPathForItem(at: position) else {
-            print("Error, label not in collectionView")
-            return
-        }
-        
-        let tappedReview = reviews[index.item]
-        reviewSelected = tappedReview
-        
-        if let cell = collectionView?.cellForItem(at: index) as? HomeReviewCell {
-            let tintView = UIView()
-            if sender.state == .began {
-                tintView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-                tintView.frame = CGRect(x: 0, y: 0, width: cell.senderProfileImageView.frame.width, height: cell.senderProfileImageView.frame.height)
-                cell.senderProfileImageView.addSubview(tintView)
-            } else if sender.state == .changed {
-                cell.senderProfileImageView.clearSubviews()
-            } else if sender.state == .ended {
-                cell.senderProfileImageView.clearSubviews()
-                showUserProfile()
-            }
-        } else {
-            print("SO SORRY")
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: true, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: true) { (review) in
+            self.reviewSelected = review
+            self.showUserProfile()
         }
     }
     
     @objc func senderFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
-        let position = sender.location(in: collectionView)
-        guard let index = collectionView?.indexPathForItem(at: position) else {
-            print("Error, label not in collectionView")
-            return
-        }
-        
-        let tappedReview = reviews[index.item]
-        reviewSelected = tappedReview
-        
-        if let cell = collectionView?.cellForItem(at: index) as? HomeReviewCell {
-            if sender.state == .began {
-                cell.senderFullnameLabel.textColor = .red
-            } else if sender.state == .changed {
-                cell.senderFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
-            } else if sender.state == .ended {
-                cell.senderFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
-                showUserProfile()
-            }
-        } else {
-            print("SO SORRY")
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: true, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: false) { (review) in
+            self.reviewSelected = review
+            self.showUserProfile()
         }
     }
     
     @objc func receiverProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
-        let position = sender.location(in: collectionView)
-        guard let index = collectionView?.indexPathForItem(at: position) else {
-            print("Error, label not in collectionView")
-            return
-        }
-        
-        let tappedReview = reviews[index.item]
-        reviewSelected = tappedReview
-        
-        if let cell = collectionView?.cellForItem(at: index) as? HomeReviewCell {
-            let tintView = UIView()
-            if sender.state == .began {
-                tintView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-                tintView.frame = CGRect(x: 0, y: 0, width: cell.receiverProfileImageView.frame.width, height: cell.receiverProfileImageView.frame.height)
-                cell.receiverProfileImageView.addSubview(tintView)
-            } else if sender.state == .changed {
-                cell.receiverProfileImageView.clearSubviews()
-            } else if sender.state == .ended {
-                cell.receiverProfileImageView.clearSubviews()
-                showUserProfile()
-            }
-        } else {
-            print("SO SORRY")
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: false, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: true) { (review) in
+            self.reviewSelected = review
+            self.showUserProfile()
         }
     }
     
     @objc func receiverFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
-        let position = sender.location(in: collectionView)
-        guard let index = collectionView?.indexPathForItem(at: position) else {
-            print("Error, label not in collectionView")
-            return
-        }
-        
-        let tappedReview = reviews[index.item]
-        reviewSelected = tappedReview
-        
-        if let cell = collectionView?.cellForItem(at: index) as? HomeReviewCell {
-            if sender.state == .began {
-                cell.receiverFullnameLabel.textColor = .red
-            } else if sender.state == .changed {
-                cell.receiverFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
-            } else if sender.state == .ended {
-                cell.receiverFullnameLabel.textColor = UIColor.rgb(red: 22, green: 22, blue: 22)
-                showUserProfile()
-            }
-        } else {
-            print("SO SORRY")
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: false, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: false) { (review) in
+            self.reviewSelected = review
+            self.showUserProfile()
         }
     }
-    
-    
     
     func showUserProfile() {
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())

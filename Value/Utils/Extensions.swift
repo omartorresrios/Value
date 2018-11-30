@@ -102,9 +102,8 @@ extension Date {
     }
 }
 
-extension UIButton
+extension UIButton {
     
-{
     func setUpLayer(sampleButton: UIButton?) {
         sampleButton!.setTitle("GET STARTED", for: UIControlState.normal)
         sampleButton?.tintColor =  UIColor.white
