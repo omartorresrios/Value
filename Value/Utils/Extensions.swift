@@ -118,3 +118,10 @@ extension UIButton {
     }
     
 }
+
+extension UIGestureRecognizer {
+    func cancel() {
+        isEnabled = false
+        isEnabled = true
+    }
+}

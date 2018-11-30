@@ -41,6 +41,7 @@ class Helpers {
                     }
                     
                 } else if sender.state == .changed {
+                    sender.cancel()
                     if isUserProfileImage {
                         cell.senderProfileImageView.clearSubviews()
                     } else {
@@ -96,6 +97,7 @@ class Helpers {
                     }
                     
                 } else if sender.state == .changed {
+                    sender.cancel()
                     if isUserProfileImage {
                         cell.receiverProfileImageView.clearSubviews()
                     } else {
