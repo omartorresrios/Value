@@ -119,4 +119,49 @@ class ApiService: NSObject {
             }
         }
     }
+    
+    func fetchAllReviews(completion: @escaping (Review) -> ()) {
+        // Retreieve Auth_Token from Keychain
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+            
+            let authToken = userToken["authenticationToken"] as! String
+            
+            print("the current user token: \(userToken)")
+            
+            // Set Authorization header
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            let url = URL(string: "\(BASE_URL)/all_reviews")!
+            
+            Alamofire.request(url, headers: header).responseJSON { response in
+                
+                print("request: \(response.request!)") // original URL request
+                print("response: \(response.response!)") // URL response
+                print("response data: \(response.data!)") // server data
+                print("result: \(response.result)") // result of response serialization
+                
+                switch response.result {
+                case .success(let JSON):
+                    print("THE ALL REVIEWS JSON: \(JSON)")
+                    
+                    let dataArray = JSON as! NSArray
+                    
+                    dataArray.forEach({ (value) in
+                        guard let reviewDictionary = value as? [String: Any] else { return }
+                        print("this is reviewDictionary: \(reviewDictionary)")
+                        
+                        let newReview = Review(reviewDictionary: reviewDictionary)
+                        
+                        completion(newReview)
+                        
+                    })
+                    
+                    
+                case .failure(let error):
+                    print(error)
+                }
+                
+            }
+        }
+    }
 }
