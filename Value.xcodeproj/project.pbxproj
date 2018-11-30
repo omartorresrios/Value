@@ -13,7 +13,6 @@
 		A0066A68218CDDA80019EFF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0066A66218CDDA80019EFF8 /* LaunchScreen.storyboard */; };
 		A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */; };
 		A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A82218D01770019EFF8 /* UserSearchController.swift */; };
-		A0066A85218D01DF0019EFF8 /* UserFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A84218D01DF0019EFF8 /* UserFeedController.swift */; };
 		A0066A88218D04080019EFF8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A87218D04080019EFF8 /* Extensions.swift */; };
 		A0066A8A218D3DAE0019EFF8 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A89218D3DAE0019EFF8 /* CustomImageView.swift */; };
 		A0066A8C218D3E2A0019EFF8 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A8B218D3E2A0019EFF8 /* Reachability.swift */; };
@@ -33,7 +32,6 @@
 		A0318B752198E85600AB6EB6 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B742198E85600AB6EB6 /* DataService.swift */; };
 		A036309721B0799E000C9520 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036309621B0799E000C9520 /* ApiService.swift */; };
 		A036309921B0B84D000C9520 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036309821B0B84C000C9520 /* Helpers.swift */; };
-		A045B4E1219CA538002B16FA /* HomeReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E0219CA538002B16FA /* HomeReviewCell.swift */; };
 		A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E2219CBFF4002B16FA /* HomeController.swift */; };
 		A045B504219CEEFE002B16FA /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B4E6219CEEF3002B16FA /* SF-Pro-Text-Regular.otf */; };
 		A045B505219CEEFE002B16FA /* SF-Pro-Text-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A045B4E7219CEEF4002B16FA /* SF-Pro-Text-HeavyItalic.otf */; };
@@ -113,7 +111,6 @@
 		A0066A70218CE0810019EFF8 /* Value-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Value-Bridging-Header.h"; sourceTree = "<group>"; };
 		A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A0066A82218D01770019EFF8 /* UserSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchController.swift; sourceTree = "<group>"; };
-		A0066A84218D01DF0019EFF8 /* UserFeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedController.swift; sourceTree = "<group>"; };
 		A0066A87218D04080019EFF8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A0066A89218D3DAE0019EFF8 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		A0066A8B218D3E2A0019EFF8 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -133,7 +130,6 @@
 		A0318B742198E85600AB6EB6 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		A036309621B0799E000C9520 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		A036309821B0B84C000C9520 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		A045B4E0219CA538002B16FA /* HomeReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReviewCell.swift; sourceTree = "<group>"; };
 		A045B4E2219CBFF4002B16FA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A045B4E6219CEEF3002B16FA /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		A045B4E7219CEEF4002B16FA /* SF-Pro-Text-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-HeavyItalic.otf"; sourceTree = "<group>"; };
@@ -266,7 +262,6 @@
 				A0066A69218CDDA80019EFF8 /* Info.plist */,
 				A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */,
 				A0318B652192480800AB6EB6 /* Search */,
-				A0066A84218D01DF0019EFF8 /* UserFeedController.swift */,
 				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
 				A045B4E4219CC01A002B16FA /* Home */,
 				A0318B6C21949B7000AB6EB6 /* UserProfile */,
@@ -352,7 +347,6 @@
 			isa = PBXGroup;
 			children = (
 				A045B4E2219CBFF4002B16FA /* HomeController.swift */,
-				A045B4E0219CA538002B16FA /* HomeReviewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -643,7 +637,6 @@
 				A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */,
 				A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */,
 				A0066A8C218D3E2A0019EFF8 /* Reachability.swift in Sources */,
-				A0066A85218D01DF0019EFF8 /* UserFeedController.swift in Sources */,
 				A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */,
 				A0066A91218D41760019EFF8 /* User.swift in Sources */,
 				A045B56221A1DA63002B16FA /* EditProfileController.swift in Sources */,
@@ -658,7 +651,6 @@
 				A0066A96218DFDD70019EFF8 /* HTTPHelper.swift in Sources */,
 				A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */,
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
-				A045B4E1219CA538002B16FA /* HomeReviewCell.swift in Sources */,
 				A045B57821A78756002B16FA /* NSString+Base64.m in Sources */,
 				A045B56021A05D35002B16FA /* SignUpController.swift in Sources */,
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,

@@ -61,7 +61,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         return button
     }()
     
-    let homeReviewCell = "homeReviewCell"
+    let reviewCell = "reviewCell"
     let headerId = "headerId"
     
     override func viewDidLoad() {
@@ -73,7 +73,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: headerId)
-        collectionView?.register(HomeReviewCell.self, forCellWithReuseIdentifier: homeReviewCell)
+        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCell)
         
         fetchUser()
         getAllReviews()
@@ -191,7 +191,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             return header
         } else {
             if isReceiverView {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeReviewCell, for: indexPath) as! HomeReviewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCell, for: indexPath) as! ReviewCell
                 cell.review = receivedReviews[indexPath.item]
                 
                 let senderProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(senderProfileImageHighlightWhentapped(_:)))
@@ -209,7 +209,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
                 
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeReviewCell, for: indexPath) as! HomeReviewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCell, for: indexPath) as! ReviewCell
                 cell.review = sentReviews[indexPath.item]
                 
                 let receiverProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(receiverProfileImageHighlightWhentapped(_:)))
@@ -231,66 +231,18 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
     }
     
-    func calculateElementsSize(review: Review) -> CGSize {
-        
-        
-        
-        let aproximateWidthOfLabel = view.frame.width - 72
-        let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
-        
-        let fromFullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Semibold", size: 13)]
-        let fullnameEstimatedFrame = NSString(string: review.fromFullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fromFullnameAttributes as [NSAttributedStringKey : Any], context: nil)
-        
-        let fromEmailAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 13)]
-        let emailEstimatedFrame = NSString(string: review.fromEmail).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fromEmailAttributes as [NSAttributedStringKey : Any], context: nil)
-        
-        let bodyAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-        let bodyEstimatedFrame = NSString(string: review.body).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: bodyAttributes as [NSAttributedStringKey : Any], context: nil)
-        
-        return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + bodyEstimatedFrame.height + 80)
-        
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if indexPath.section == 0 {
             let user = self.user[indexPath.item]
-            
-            let aproximateWidthOfLabel = view.frame.width - 16 - 16
-            let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
-            
-            // for job_description
-            let jobAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-            let jobDescEstimatedFrame = NSString(string: user.job_description).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: jobAttributes as [NSAttributedStringKey : Any], context: nil)
-            
-            // for fullname
-            let fullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Bold", size: 20)]
-            let fullnameEstimatedFrame = NSString(string: user.fullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fullnameAttributes as [NSAttributedStringKey : Any], context: nil)
-            
-            // for email
-            let emailAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-            let emailEstimatedFrame = NSString(string: user.email).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: emailAttributes as [NSAttributedStringKey : Any], context: nil)
-            
-            // for position
-            let positionAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-            let positionEstimatedFrame = NSString(string: user.position).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: positionAttributes as [NSAttributedStringKey : Any], context: nil)
-            
-            // for department
-            let departmentAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-            let departmentEstimatedFrame = NSString(string: user.department).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: departmentAttributes as [NSAttributedStringKey : Any], context: nil)
-            
-            if user.job_description != "" {
-                return CGSize(width: view.frame.width, height: jobDescEstimatedFrame.height + fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 191)
-            } else {
-                return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 187 + 4) // 4 for fix the excess space
-            }
+            return Helpers.shared.calculateHeaderSize(user: user, view: view)
         } else {
             if isReceiverView {
                 let receivedReview = receivedReviews[indexPath.item]
-                return calculateElementsSize(review: receivedReview)
+                return Helpers.shared.calculateCellSize(review: receivedReview, view: view)
             } else {
                 let sentReview = sentReviews[indexPath.item]
-                return calculateElementsSize(review: sentReview)
+                return Helpers.shared.calculateCellSize(review: sentReview, view: view)
             }
         }
         
