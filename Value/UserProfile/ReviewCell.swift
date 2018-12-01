@@ -12,6 +12,9 @@ class ReviewCell: UICollectionViewCell {
     
     var review: Review? {
         didSet {
+            
+            valueLabel.text = review?.value
+            
             guard let senderProfileImageUrl = review?.fromProfileImageUrl else { return }
             senderProfileImageView.loadImage(urlString: senderProfileImageUrl)
             
@@ -27,6 +30,17 @@ class ReviewCell: UICollectionViewCell {
             receiverFullnameLabel.text = review?.toFullname
         }
     }
+    
+    let valueLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.sizeToFit()
+        label.textColor = UIColor.rgb(red: 54, green: 139, blue: 85)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "SFUIDisplay-Bold", size: 15)
+        label.textAlignment = .left
+        return label
+    }()
     
     let receiverProfileImageView: CustomImageView = {
         let iv = CustomImageView()
@@ -111,8 +125,12 @@ class ReviewCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .white
         
+        addSubview(valueLabel)
+        valueLabel.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        valueLabel.widthAnchor.constraint(lessThanOrEqualToConstant: self.frame.width - 24).isActive = true
+        
         addSubview(senderProfileImageView)
-        senderProfileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
+        senderProfileImageView.anchor(top: valueLabel.bottomAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         
         addSubview(senderFullnameLabel)
         senderFullnameLabel.anchor(top: senderProfileImageView.topAnchor, left: senderProfileImageView.rightAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)

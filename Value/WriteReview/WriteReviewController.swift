@@ -9,7 +9,22 @@
 import UIKit
 import Locksmith
 
-class WriteReviewController: UIViewController, UITextViewDelegate {
+class WriteReviewController: UIViewController, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return myPickerData.count
+    }
+    
+    func pickerView( _ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return myPickerData[row]
+    }
+    
+    func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        valuesTextField.text = myPickerData[row]
+    }
     
     var userReceiverId: Int?
     
@@ -81,17 +96,25 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
     
     let writeReviewTextView: UITextView = {
         let tv = UITextView()
-//        tv.backgroundColor = .blue
         tv.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
         tv.autocorrectionType = .no
         tv.textContainerInset = UIEdgeInsetsMake(10, 10, 5, 0)
         return tv
     }()
     
-    let valueView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        return view
+    let picker: UIPickerView = {
+        let p = UIPickerView()
+        return p
+    }()
+    
+    let myPickerData = [String](arrayLiteral: "Peter", "Jane", "Paul", "Mary", "Kevin", "Lucy")
+    
+    let valuesTextField: UITextField = {
+        let tf = UITextField()
+        tf.font = UIFont(name: "SFUIDisplay-Regular", size: 14)
+        tf.placeholder = "Valor"
+        tf.backgroundColor = .white
+        return tf
     }()
     
     var navBarHeight: CGFloat!
@@ -100,6 +123,10 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        picker.delegate = self
+        valuesTextField.inputView = picker
+        
         setupNavBarElements()
         setupViews()
     }
@@ -137,7 +164,7 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
         view.backgroundColor = .white
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToForeGround(notification:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         
         navBarHeight = (navigationController?.navigationBar.frame.size.height)! + 20
@@ -145,12 +172,15 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
         view.addSubview(scrollView)
         scrollView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: navBarHeight, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         
-        scrollView.addSubview(writeReviewTextView)
-        writeReviewTextView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: view.frame.width, height: 0)
-
-        writeTextViewHeightConstraint = writeReviewTextView.heightAnchor.constraint(equalToConstant: view.frame.height - navBarHeight)
-        writeTextViewHeightConstraint.isActive = true
+        scrollView.addSubview(valuesTextField)
+        valuesTextField.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: nil, right: scrollView.rightAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 0, paddingRight: 8, width: view.frame.width - 16, height: 40)
         
+        scrollView.addSubview(writeReviewTextView)
+        writeReviewTextView.anchor(top: valuesTextField.bottomAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 0, paddingRight: 8, width: view.frame.width - 16, height: 0)
+
+        writeTextViewHeightConstraint = writeReviewTextView.heightAnchor.constraint(equalToConstant: view.frame.height - navBarHeight - 56)
+        writeTextViewHeightConstraint.isActive = true
+
 
         writeReviewTextView.text = "Placeholder"
         writeReviewTextView.textColor = UIColor.lightGray
@@ -159,9 +189,6 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
 
         writeReviewTextView.becomeFirstResponder()
         writeReviewTextView.selectedTextRange = writeReviewTextView.textRange(from: writeReviewTextView.beginningOfDocument, to: writeReviewTextView.beginningOfDocument)
-        
-//        view.addSubview(valueView)
-//        valueView.anchor(top: writeReviewTextView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -169,7 +196,7 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
             let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
             self.scrollView.contentInset = contentInsets
             self.scrollView.scrollIndicatorInsets = contentInsets
-            writeTextViewHeightConstraint.constant = (view.frame.height - navBarHeight) - keyboardSize.height
+            writeTextViewHeightConstraint.constant = (view.frame.height - navBarHeight - 56) - keyboardSize.height
             writeReviewTextView.layoutIfNeeded()
         }
     }
@@ -189,7 +216,7 @@ class WriteReviewController: UIViewController, UITextViewDelegate {
             let authToken = userToken["authenticationToken"] as! String
             print("the current user token: \(authToken)")
             
-            DataService.instance.sendReview(authToken: authToken, userId: userReceiverId!, reviewText: writeReviewTextView.text) { (success) in
+            ApiService.shared.sendReview(authToken: authToken, userId: userReceiverId!, reviewText: writeReviewTextView.text, value: valuesTextField.text!) { (success) in
                 if success {
                     print("Review sended!")
                     NotificationCenter.default.post(name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)

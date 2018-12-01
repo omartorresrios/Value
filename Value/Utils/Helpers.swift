@@ -138,6 +138,9 @@ class Helpers {
         let aproximateWidthOfLabel = view.frame.width - 72
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
         
+        let valueAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Bold", size: 15)]
+        let valueEstimatedFrame = NSString(string: review.value).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: valueAttributes as [NSAttributedStringKey : Any], context: nil)
+        
         let fromFullnameAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Semibold", size: 13)]
         let fullnameEstimatedFrame = NSString(string: review.fromFullname).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: fromFullnameAttributes as [NSAttributedStringKey : Any], context: nil)
         
@@ -147,7 +150,7 @@ class Helpers {
         let bodyAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
         let bodyEstimatedFrame = NSString(string: review.body).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: bodyAttributes as [NSAttributedStringKey : Any], context: nil)
         
-        return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + bodyEstimatedFrame.height + 80)
+        return CGSize(width: view.frame.width, height: valueEstimatedFrame.height + fullnameEstimatedFrame.height + emailEstimatedFrame.height + bodyEstimatedFrame.height + 92)
         
     }
     
@@ -173,7 +176,7 @@ class Helpers {
         
         // for department
         let departmentAttributes = [NSAttributedStringKey.font: UIFont(name: "SFUIDisplay-Regular", size: 14)]
-        let departmentEstimatedFrame = NSString(string: user.department).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: departmentAttributes as [NSAttributedStringKey : Any], context: nil)
+        let departmentEstimatedFrame = NSString(string: user.departmentName).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: departmentAttributes as [NSAttributedStringKey : Any], context: nil)
         
         if user.job_description != "" {
             return CGSize(width: view.frame.width, height: jobDescEstimatedFrame.height + fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 191)
