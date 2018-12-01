@@ -29,7 +29,6 @@
 		A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6821937A9500AB6EB6 /* WriteReviewController.swift */; };
 		A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */; };
 		A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */; };
-		A0318B752198E85600AB6EB6 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B742198E85600AB6EB6 /* DataService.swift */; };
 		A036309721B0799E000C9520 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036309621B0799E000C9520 /* ApiService.swift */; };
 		A036309921B0B84D000C9520 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A036309821B0B84C000C9520 /* Helpers.swift */; };
 		A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A045B4E2219CBFF4002B16FA /* HomeController.swift */; };
@@ -127,7 +126,6 @@
 		A0318B6821937A9500AB6EB6 /* WriteReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewController.swift; sourceTree = "<group>"; };
 		A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
-		A0318B742198E85600AB6EB6 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		A036309621B0799E000C9520 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		A036309821B0B84C000C9520 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		A045B4E2219CBFF4002B16FA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -308,7 +306,6 @@
 			isa = PBXGroup;
 			children = (
 				A0066A93218DFD7F0019EFF8 /* AuthService.swift */,
-				A0318B742198E85600AB6EB6 /* DataService.swift */,
 				A036309621B0799E000C9520 /* ApiService.swift */,
 			);
 			path = Services;
@@ -643,7 +640,6 @@
 				A0066A88218D04080019EFF8 /* Extensions.swift in Sources */,
 				A045B57721A78756002B16FA /* NSData+CommonCrypto.m in Sources */,
 				A0066A8F218D41610019EFF8 /* Review.swift in Sources */,
-				A0318B752198E85600AB6EB6 /* DataService.swift in Sources */,
 				A0066A8A218D3DAE0019EFF8 /* CustomImageView.swift in Sources */,
 				A045B57921A78756002B16FA /* AESCrypt.m in Sources */,
 				A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */,

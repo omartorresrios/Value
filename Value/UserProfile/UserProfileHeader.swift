@@ -29,7 +29,7 @@ class UserProfileHeader: UICollectionViewCell {
             jobDescriptionLabel.text = user?.job_description
             emailLabel.text = user?.email
             positionLabel.text = user?.position
-            departmentLabel.text = user?.department
+            departmentLabel.text = user?.departmentName
             
             setupEditWriteButton()
             

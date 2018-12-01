@@ -133,10 +133,6 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
         userProfileController.userId = user.id
         userProfileController.userFullname = user.fullname
         userProfileController.userImageUrl = user.profileImageUrl
-//        userProfileController.userEmail = user.email
-//        userProfileController.userJobDescription = user.job_description
-//        userProfileController.userPosition = user.position
-//        userProfileController.userDepartment = user.department
         navigationController?.pushViewController(userProfileController, animated: true)
     }
     

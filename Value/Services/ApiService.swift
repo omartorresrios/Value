@@ -14,6 +14,8 @@ class ApiService: NSObject {
     
     static let shared = ApiService()
     
+    static let updateUserHeaderInfo = Notification.Name("UpdateUserHeaderInfo")
+    
     func fetchUserProfileInfo(userId: Int, completion: @escaping (User) -> ()) {
         // Retreieve Auth_Token from Keychain
         if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
@@ -161,6 +163,60 @@ class ApiService: NSObject {
                     print(error)
                 }
                 
+            }
+        }
+    }
+    
+    func sendReview(authToken: String, userId: Int, reviewText: String, value: String, completion: @escaping (Bool) -> ()) {
+        // Set Authorization header
+        let header = ["Authorization": "Token token=\(authToken)"]
+        
+        let parameters = ["body": reviewText, "value": value]
+        
+        let url = URL(string: "\(BASE_URL)/\(userId)/write_review")!
+        
+        Alamofire.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON { response in
+            switch response.result {
+            case .success:
+                print("response review: ", response)
+                completion(true)
+                
+            case .failure(let error):
+                completion(false)
+                print("Failed to sign in with email:", error)
+                
+                return
+            }
+        }
+    }
+    
+    func updateInfo(position: String, job_description: String, completion: @escaping (Bool) -> ()) {
+       
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+            
+            let authToken = userToken["authenticationToken"] as! String
+            print("the current user token: \(authToken)")
+            
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            let parameters = ["position": position, "job_description": job_description]
+            
+            guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
+            let userId = userIdFromKeyChain["id"] as! Int
+            
+            let url = URL(string: "\(BASE_URL)/\(userId)/edit")!
+            
+            Alamofire.request(url, method: .patch, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON { response in
+                switch response.result {
+                case .success(let JSON):
+                    print("response user info: ", JSON)
+                    NotificationCenter.default.post(name: ApiService.updateUserHeaderInfo, object: nil, userInfo: nil)
+                    completion(true)
+                case .failure(let error):
+                    completion(false)
+                    print("Failed to edit user info:", error)
+                    return
+                }
             }
         }
     }

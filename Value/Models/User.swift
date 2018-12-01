@@ -15,7 +15,10 @@ struct User {
     var email: String
     var job_description: String
     var position: String
-    var department: String
+    var companyId: Int
+    var companyName: String
+    var departmentId: Int
+    var departmentName: String
     var profileImageUrl: String
     
     init(uid: Int, dictionary: [String: Any]) {
@@ -24,7 +27,15 @@ struct User {
         self.email = dictionary["email"] as? String ?? ""
         self.job_description = dictionary["job_description"] as? String ?? ""
         self.position = dictionary["position"] as? String ?? ""
-        self.department = dictionary["department"] as? String ?? ""
+        
+        var companyData = dictionary["company"] as! [String: Any]
+        self.companyId = companyData["id"] as? Int ?? 0
+        self.companyName = companyData["name"] as? String ?? ""
+        
+        var departmentData = dictionary["department"] as! [String: Any]
+        self.departmentId = departmentData["id"] as? Int ?? 0
+        self.departmentName = departmentData["name"] as? String ?? ""
+        
         self.profileImageUrl = dictionary["avatarUrl"]  as? String ?? ""
     }
 }

@@ -29,6 +29,7 @@ struct Review {
     let toDepartment: String
     
     let body: String
+    let value: String
     let creationDate: String
     
     init(reviewDictionary: [String: Any]) {
@@ -54,6 +55,7 @@ struct Review {
         self.toDepartment = receiverData["department"] as? String ?? ""
         
         self.body = reviewDictionary["body"] as? String ?? ""
+        self.value = reviewDictionary["value"] as? String ?? ""
         self.creationDate = reviewDictionary["created_at"] as? String ?? ""
         
     }

@@ -58,7 +58,7 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
         loggedUserId = userIdFromKeyChain["id"] as? Int
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: ApiService.updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: "headerId")
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
@@ -82,7 +82,7 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: EditProfileController.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.removeObserver(self, name: ApiService.updateUserHeaderInfo, object: nil)
     }
     
     @objc func handleUpdateUserHeaderInfo(notification: Notification) {

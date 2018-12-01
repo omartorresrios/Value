@@ -70,7 +70,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: EditProfileController.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: ApiService.updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: headerId)
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCell)
@@ -82,7 +82,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
-        NotificationCenter.default.removeObserver(self, name: EditProfileController.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.removeObserver(self, name: ApiService.updateUserHeaderInfo, object: nil)
     }
     
     func fetchUser() {
