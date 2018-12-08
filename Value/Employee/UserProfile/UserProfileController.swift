@@ -68,7 +68,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         super.viewDidLoad()
         collectionView?.backgroundColor = .white
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: ApiService.updateUserProfileFeedNotificationName, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: ApiService.updateUserHeaderInfo, object: nil)
         
@@ -81,7 +81,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
+        NotificationCenter.default.removeObserver(self, name: ApiService.updateUserProfileFeedNotificationName, object: nil)
         NotificationCenter.default.removeObserver(self, name: ApiService.updateUserHeaderInfo, object: nil)
     }
     
@@ -109,7 +109,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func getAllReviews() {
-        
         ApiService.shared.fetchUserReceivedReviews(userId: userId!) { (review) in
             self.receivedReviews.append(review)
             self.collectionView?.reloadData()
@@ -119,7 +118,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             self.sentReviews.append(review)
             self.collectionView?.reloadData()
         }
-        
     }
     
     @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
@@ -187,6 +185,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         if indexPath.section == 0 {
             let header = collectionView.dequeueReusableCell(withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
             header.user = self.user[indexPath.item]
+            header.backgroundColor = .yellow
             header.delegate = self
             return header
         } else {

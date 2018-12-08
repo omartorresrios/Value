@@ -184,8 +184,5 @@ class Helpers {
             return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 187 + 4) // 4 for fix the excess space
         }
         
-        
     }
-    
-    
 }

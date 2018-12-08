@@ -15,6 +15,7 @@ class ApiService: NSObject {
     static let shared = ApiService()
     
     static let updateUserHeaderInfo = Notification.Name("UpdateUserHeaderInfo")
+    static let updateUserProfileFeedNotificationName = Notification.Name("UpdateUserHeaderInfo")
     
     func fetchUserProfileInfo(userId: Int, completion: @escaping (User) -> ()) {
         // Retreieve Auth_Token from Keychain
@@ -179,6 +180,7 @@ class ApiService: NSObject {
             switch response.result {
             case .success:
                 print("response review: ", response)
+                NotificationCenter.default.post(name: ApiService.updateUserProfileFeedNotificationName, object: nil)
                 completion(true)
                 
             case .failure(let error):

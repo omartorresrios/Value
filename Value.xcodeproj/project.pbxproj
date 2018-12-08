@@ -97,6 +97,9 @@
 		A045B57921A78756002B16FA /* AESCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = A045B57321A78755002B16FA /* AESCrypt.m */; };
 		A045B57A21A78756002B16FA /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A045B57521A78756002B16FA /* NSData+Base64.m */; };
 		A045B57C21A787AD002B16FA /* friends.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A045B57B21A787AC002B16FA /* friends.jpg */; };
+		A074587121BB2B8000D3E483 /* AdminSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587021BB2B7F00D3E483 /* AdminSideMenu.swift */; };
+		A074587321BB2EA000D3E483 /* AdminSideMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587221BB2EA000D3E483 /* AdminSideMenuCell.swift */; };
+		A074587621BB5F7E00D3E483 /* Metric1.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587521BB5F7E00D3E483 /* Metric1.swift */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
 
@@ -200,6 +203,9 @@
 		A045B57521A78756002B16FA /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		A045B57621A78756002B16FA /* NSData+CommonCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CommonCrypto.h"; sourceTree = "<group>"; };
 		A045B57B21A787AC002B16FA /* friends.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = friends.jpg; sourceTree = "<group>"; };
+		A074587021BB2B7F00D3E483 /* AdminSideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSideMenu.swift; sourceTree = "<group>"; };
+		A074587221BB2EA000D3E483 /* AdminSideMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSideMenuCell.swift; sourceTree = "<group>"; };
+		A074587521BB5F7E00D3E483 /* Metric1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metric1.swift; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
 		E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.debug.xcconfig"; sourceTree = "<group>"; };
@@ -258,13 +264,8 @@
 				A0066A64218CDDA80019EFF8 /* Assets.xcassets */,
 				A0066A66218CDDA80019EFF8 /* LaunchScreen.storyboard */,
 				A0066A69218CDDA80019EFF8 /* Info.plist */,
-				A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */,
-				A0318B652192480800AB6EB6 /* Search */,
-				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
-				A045B4E4219CC01A002B16FA /* Home */,
-				A0318B6C21949B7000AB6EB6 /* UserProfile */,
-				A0318B732197A48D00AB6EB6 /* WriteReview */,
-				A045B55F21A05D35002B16FA /* SignUpController.swift */,
+				A074587821BC384200D3E483 /* Admin */,
+				A074587721BC383300D3E483 /* Employee */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -426,6 +427,38 @@
 				A045B57121A78755002B16FA /* NSString+Base64.m */,
 			);
 			path = AESCrypt;
+			sourceTree = "<group>";
+		};
+		A074587421BB2EAA00D3E483 /* AdminSideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A074587021BB2B7F00D3E483 /* AdminSideMenu.swift */,
+				A074587221BB2EA000D3E483 /* AdminSideMenuCell.swift */,
+				A074587521BB5F7E00D3E483 /* Metric1.swift */,
+			);
+			path = AdminSideMenu;
+			sourceTree = "<group>";
+		};
+		A074587721BC383300D3E483 /* Employee */ = {
+			isa = PBXGroup;
+			children = (
+				A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */,
+				A0318B652192480800AB6EB6 /* Search */,
+				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
+				A045B4E4219CC01A002B16FA /* Home */,
+				A0318B6C21949B7000AB6EB6 /* UserProfile */,
+				A0318B732197A48D00AB6EB6 /* WriteReview */,
+				A045B55F21A05D35002B16FA /* SignUpController.swift */,
+			);
+			path = Employee;
+			sourceTree = "<group>";
+		};
+		A074587821BC384200D3E483 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				A074587421BB2EAA00D3E483 /* AdminSideMenu */,
+			);
+			path = Admin;
 			sourceTree = "<group>";
 		};
 		A62F485C0932D48F23A5C549 /* Pods */ = {
@@ -630,6 +663,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0066A9C218E0B030019EFF8 /* LoginController.swift in Sources */,
+				A074587321BB2EA000D3E483 /* AdminSideMenuCell.swift in Sources */,
 				A0318B6E21951A5C00AB6EB6 /* ReviewCell.swift in Sources */,
 				A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */,
 				A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */,
@@ -642,9 +676,11 @@
 				A0066A8F218D41610019EFF8 /* Review.swift in Sources */,
 				A0066A8A218D3DAE0019EFF8 /* CustomImageView.swift in Sources */,
 				A045B57921A78756002B16FA /* AESCrypt.m in Sources */,
+				A074587621BB5F7E00D3E483 /* Metric1.swift in Sources */,
 				A045B4E3219CBFF4002B16FA /* HomeController.swift in Sources */,
 				A045B57A21A78756002B16FA /* NSData+Base64.m in Sources */,
 				A0066A96218DFDD70019EFF8 /* HTTPHelper.swift in Sources */,
+				A074587121BB2B8000D3E483 /* AdminSideMenu.swift in Sources */,
 				A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */,
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
 				A045B57821A78756002B16FA /* NSString+Base64.m in Sources */,

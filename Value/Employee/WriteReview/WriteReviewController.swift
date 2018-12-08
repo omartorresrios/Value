@@ -119,7 +119,6 @@ class WriteReviewController: UIViewController, UITextViewDelegate, UIPickerViewD
     
     var navBarHeight: CGFloat!
     var writeTextViewHeightConstraint: NSLayoutConstraint!
-    static let updateUserProfileFeedNotificationName = NSNotification.Name(rawValue: "UpdateUserProfileFeed")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -219,7 +218,6 @@ class WriteReviewController: UIViewController, UITextViewDelegate, UIPickerViewD
             ApiService.shared.sendReview(authToken: authToken, userId: userReceiverId!, reviewText: writeReviewTextView.text, value: valuesTextField.text!) { (success) in
                 if success {
                     print("Review sended!")
-                    NotificationCenter.default.post(name: WriteReviewController.updateUserProfileFeedNotificationName, object: nil)
                     self.dismiss(animated: true, completion: nil)
                 }
             }

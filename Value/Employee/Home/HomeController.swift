@@ -23,16 +23,39 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return button
     }()
     
+    let sideMenuButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("menu", for: .normal)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "logout", style: .done, target: self, action: #selector(handleLogout))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "menu", style: .done, target: self, action: #selector(handleMenu))
         
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCell)
         
         getAllReviews()
         
+    }
+    
+    lazy var adminSideMenu: AdminSideMenu = {
+        let launcher = AdminSideMenu()
+        launcher.homeController = self
+        return launcher
+    }()
+    
+    @objc func handleMenu() {
+        adminSideMenu.showSideMenu()
+    }
+    
+    func showControllerforMetric(metric: Metric) {
+        let vc = Metric1(collectionViewLayout: UICollectionViewFlowLayout())
+        vc.navigationItem.title = metric.name.rawValue
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func getAllReviews() {
