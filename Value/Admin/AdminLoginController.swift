@@ -1,8 +1,8 @@
 //
-//  LoginController.swift
+//  AdminLoginController.swift
 //  Value
 //
-//  Created by Omar Torres on 11/3/18.
+//  Created by Omar Torres on 12/8/18.
 //  Copyright © 2018 OmarTorres. All rights reserved.
 //
 
@@ -10,11 +10,11 @@ import UIKit
 import Alamofire
 import Locksmith
 
-class LoginController: UIViewController {
+class AdminLoginController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Inicia sesión"
+        label.text = "Inicia sesión (Admin)"
         label.font = UIFont(name: "SFUIDisplay-Regular", size: 17)
         return label
     }()
@@ -68,55 +68,12 @@ class LoginController: UIViewController {
         return label
     }()
     
-    let dontHaveAccountButton: UIButton = {
-        let button = UIButton(type: .system)
-        
-        let attributedTitle = NSMutableAttributedString(string: "Don't have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        
-        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)
-            ]))
-        
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        
-        button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
-        return button
-    }()
-    
-    let loginAdminButton: UIButton = {
-        let button = UIButton(type: .system)
-        
-        let attributedTitle = NSMutableAttributedString(string: "Are you an admin?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        
-        attributedTitle.append(NSAttributedString(string: "Login here", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)
-            ]))
-        
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        
-        button.addTarget(self, action: #selector(handleShowLoginAdmin), for: .touchUpInside)
-        return button
-    }()
-    
-    @objc func handleShowSignUp() {
-        let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController, animated: true)
-    }
-    
-    @objc func handleShowLoginAdmin() {
-        let adminLoginController = AdminLoginController()
-        navigationController?.pushViewController(adminLoginController, animated: true)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         // General properties of the view
         view.backgroundColor = .white
-        
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        
-        navigationController?.navigationBar.isHidden = true
-        UIApplication.shared.isStatusBarHidden = true
         
         // Others configurations
         emailTextField.becomeFirstResponder()
@@ -128,17 +85,9 @@ class LoginController: UIViewController {
         singleTap.numberOfTapsRequired = 1
         view.addGestureRecognizer(singleTap)
         
-        view.addSubview(dontHaveAccountButton)
-        dontHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
-        
-        view.addSubview(loginAdminButton)
-        loginAdminButton.anchor(top: nil, left: view.leftAnchor, bottom: dontHaveAccountButton.topAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 8, paddingRight: 0, width: 0, height: 50)
-        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        UIApplication.shared.isStatusBarHidden = false
-    }
+    
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -148,7 +97,7 @@ class LoginController: UIViewController {
         messageLabel.text = ""
         loader.stopAnimating()
         
-        let isFormValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.characters.count ?? 0 > 0
+        let isFormValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.count ?? 0 > 0
         
         if isFormValid {
             loginButton.isEnabled = true
@@ -162,43 +111,43 @@ class LoginController: UIViewController {
     func updateUserLoggedInFlag() {
         // Update the NSUserDefaults flag
         let defaults = UserDefaults.standard
-        defaults.set("loggedIn", forKey: "userLoggedIn")
+        defaults.set("AdminLoggedIn", forKey: "adminLoggedIn")
         defaults.synchronize()
     }
     
     func saveApiTokenInKeychain(tokenString: String, idInt: Int, nameString: String, emailString: String, avatarString: String) {
         // save API AuthToken in Keychain
         do {
-            try Locksmith.saveData(data: ["authenticationToken": tokenString], forUserAccount: "AuthToken")
+            try Locksmith.saveData(data: ["adminAuthenticationToken": tokenString], forUserAccount: "AdminAuthToken")
         } catch {
             
         }
         do {
-            try Locksmith.saveData(data: ["id": idInt], forUserAccount: "currentUserId")
+            try Locksmith.saveData(data: ["id": idInt], forUserAccount: "currentAdminId")
         } catch {
             
         }
         do {
-            try Locksmith.saveData(data: ["name": nameString], forUserAccount: "currentUserName")
+            try Locksmith.saveData(data: ["name": nameString], forUserAccount: "currentAdminName")
         } catch {
             
         }
         do {
-            try Locksmith.saveData(data: ["email": emailString], forUserAccount: "currentUserEmail")
+            try Locksmith.saveData(data: ["email": emailString], forUserAccount: "currentAdminEmail")
         } catch {
             
         }
         do {
-            try Locksmith.saveData(data: ["avatar": avatarString], forUserAccount: "currentUserAvatar")
+            try Locksmith.saveData(data: ["avatar": avatarString], forUserAccount: "currentAdminAvatar")
         } catch {
             
         }
         
-        print("AuthToken recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "AuthToken")!)")
-        print("currentUserId recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserId")!)")
-        print("currentUserName recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserName")!)")
-        print("currentUserEmail recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserEmail")!)")
-        print("currentUserAvatar recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserAvatar")!)")
+        print("AdminAuthToken recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "AdminAuthToken")!)")
+        print("currentAdminId recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminId")!)")
+        print("currentAdminName recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminName")!)")
+        print("currentAdminEmail recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminEmail")!)")
+        print("currentAdminAvatar recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminAvatar")!)")
         
     }
     
@@ -232,24 +181,38 @@ class LoginController: UIViewController {
                     case .success:
                         
                         self.updateUserLoggedInFlag()
+                        //                        print("THE USER DATA: ", response)
                         
                         if let JSON = response.result.value as? NSDictionary {
-                            let authToken = JSON["authentication_token"] as! String
-                            let userId = JSON["id"] as! Int
-                            let userName = JSON["fullname"] as! String
-                            let userEmail = JSON["email"] as! String
-                            let avatarUrl = JSON["avatar_url"] as? String ?? ""
+                            let adminAuthToken = JSON["authentication_token"] as! String
+                            let adminId = JSON["id"] as! Int
+                            let adminName = JSON["fullname"] as! String
+                            let adminEmail = JSON["email"] as! String
+                            let adminAvatarUrl = JSON["avatar_url"] as? String ?? ""
+                            let adminIsAdminCondition = JSON["is_admin"] as! Int
                             print("userJSON: \(JSON)")
                             
-                            self.saveApiTokenInKeychain(tokenString: authToken, idInt: userId, nameString: userName, emailString: userEmail, avatarString: avatarUrl)
+                            if adminIsAdminCondition == 1 {
+                                self.saveApiTokenInKeychain(tokenString: adminAuthToken, idInt: adminId, nameString: adminName, emailString: adminEmail, avatarString: adminAvatarUrl)
+                                
+                                print("adminAuthToken: \(adminAuthToken)")
+                                print("adminId: \(adminId)")
+                                
+                                let adminMainViewController = AdminMainViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                                let navController = UINavigationController(rootViewController: adminMainViewController)
+                                
+                                UIApplication.shared.keyWindow?.rootViewController = navController
+                                
+                                self.dismiss(animated: true, completion: nil)
+                            } else {
+                                self.loader.stopAnimating()
+                                self.messageLabel.text = "So Sorry!!!!! you are not the admin."
+                                
+                            }
                             
-                            print("authToken: \(authToken)")
-                            print("userId: \(userId)")
                         }
                         
-                        UIApplication.shared.keyWindow?.rootViewController = MainTabBarController()
                         
-                        self.dismiss(animated: true, completion: nil)
                         
                     case .failure(let error):
                         
@@ -270,7 +233,6 @@ class LoginController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             self.loader.stopAnimating()
         }
-        
     }
     
     func goBackView() {
@@ -278,9 +240,6 @@ class LoginController: UIViewController {
     }
     
     fileprivate func setupInputFields() {
-        
-        
-        
         view.addSubview(titleLabel)
         
         titleLabel.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 35, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)

@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
 //        print("Firebase registration token: ", FIRInstanceID.instanceID().token()!)
         
         window = UIWindow()
-        window?.rootViewController = MainTabBarController()
+        window?.rootViewController = MainViewController()
         
         attemtRegisterForNotifications(application: application)
         

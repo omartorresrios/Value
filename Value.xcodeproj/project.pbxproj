@@ -100,6 +100,9 @@
 		A074587121BB2B8000D3E483 /* AdminSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587021BB2B7F00D3E483 /* AdminSideMenu.swift */; };
 		A074587321BB2EA000D3E483 /* AdminSideMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587221BB2EA000D3E483 /* AdminSideMenuCell.swift */; };
 		A074587621BB5F7E00D3E483 /* Metric1.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587521BB5F7E00D3E483 /* Metric1.swift */; };
+		A074587A21BC3F2B00D3E483 /* AdminLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587921BC3F2B00D3E483 /* AdminLoginController.swift */; };
+		A074587C21BC5A0500D3E483 /* AdminMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587B21BC5A0500D3E483 /* AdminMainViewController.swift */; };
+		A074587E21BC82BE00D3E483 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074587D21BC82BE00D3E483 /* MainViewController.swift */; };
 		F296AA838FC7ED9CF2E078F2 /* Pods_Value.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B39DDA6699FBD0D8B584936D /* Pods_Value.framework */; };
 /* End PBXBuildFile section */
 
@@ -206,6 +209,9 @@
 		A074587021BB2B7F00D3E483 /* AdminSideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSideMenu.swift; sourceTree = "<group>"; };
 		A074587221BB2EA000D3E483 /* AdminSideMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSideMenuCell.swift; sourceTree = "<group>"; };
 		A074587521BB5F7E00D3E483 /* Metric1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metric1.swift; sourceTree = "<group>"; };
+		A074587921BC3F2B00D3E483 /* AdminLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminLoginController.swift; sourceTree = "<group>"; };
+		A074587B21BC5A0500D3E483 /* AdminMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMainViewController.swift; sourceTree = "<group>"; };
+		A074587D21BC82BE00D3E483 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		B39DDA6699FBD0D8B584936D /* Pods_Value.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Value.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A13A9EA47C7CE9CC8C8CF1 /* Pods-Value.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.release.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.release.xcconfig"; sourceTree = "<group>"; };
 		E9CD99A0CED2961A54737003 /* Pods-Value.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Value.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Value/Pods-Value.debug.xcconfig"; sourceTree = "<group>"; };
@@ -266,6 +272,7 @@
 				A0066A69218CDDA80019EFF8 /* Info.plist */,
 				A074587821BC384200D3E483 /* Admin */,
 				A074587721BC383300D3E483 /* Employee */,
+				A074587D21BC82BE00D3E483 /* MainViewController.swift */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -457,6 +464,8 @@
 			isa = PBXGroup;
 			children = (
 				A074587421BB2EAA00D3E483 /* AdminSideMenu */,
+				A074587921BC3F2B00D3E483 /* AdminLoginController.swift */,
+				A074587B21BC5A0500D3E483 /* AdminMainViewController.swift */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -669,6 +678,7 @@
 				A0318B6B21949A4E00AB6EB6 /* UserProfileHeader.swift in Sources */,
 				A0066A8C218D3E2A0019EFF8 /* Reachability.swift in Sources */,
 				A0066A7F218D002D0019EFF8 /* MainTabBarController.swift in Sources */,
+				A074587E21BC82BE00D3E483 /* MainViewController.swift in Sources */,
 				A0066A91218D41760019EFF8 /* User.swift in Sources */,
 				A045B56221A1DA63002B16FA /* EditProfileController.swift in Sources */,
 				A0066A88218D04080019EFF8 /* Extensions.swift in Sources */,
@@ -689,9 +699,11 @@
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
 				A0318B6921937A9500AB6EB6 /* WriteReviewController.swift in Sources */,
 				A036309921B0B84D000C9520 /* Helpers.swift in Sources */,
+				A074587A21BC3F2B00D3E483 /* AdminLoginController.swift in Sources */,
 				A036309721B0799E000C9520 /* ApiService.swift in Sources */,
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,
 				A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */,
+				A074587C21BC5A0500D3E483 /* AdminMainViewController.swift in Sources */,
 				A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

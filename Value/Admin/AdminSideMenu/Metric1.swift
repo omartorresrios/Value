@@ -8,12 +8,12 @@
 
 import UIKit
 
-class Metric1: UICollectionViewController {
+class Metric1: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.backgroundColor = .red
+        view.backgroundColor = .red
         
     }
 }

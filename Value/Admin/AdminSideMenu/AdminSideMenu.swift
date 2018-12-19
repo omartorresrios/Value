@@ -63,7 +63,7 @@ class AdminSideMenu: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
                 self.collectionView.frame = CGRect(x: 0, y: 0, width: 0, height: window.frame.height)
             }
             if isFromCell {
-                self.homeController?.showControllerforMetric(metric: metric!)
+                self.adminMainController?.showControllerforMetric(metric: metric!)
             }
             
         }, completion: nil)
@@ -101,7 +101,7 @@ class AdminSideMenu: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
         return 0
     }
     
-    var homeController: HomeController?
+    var adminMainController: AdminMainViewController?
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let metric = metrics[indexPath.item]

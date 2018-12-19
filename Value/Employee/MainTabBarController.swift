@@ -23,16 +23,16 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
-        let defaults = UserDefaults.standard
-        if defaults.object(forKey: "userLoggedIn") == nil {
-            
-            DispatchQueue.main.async {
-                let loginController = LoginController()
-                let navController = UINavigationController(rootViewController: loginController)
-                self.present(navController, animated: true, completion: nil)
-            }
-            return
-        }
+//        let defaults = UserDefaults.standard
+//        if defaults.object(forKey: "userLoggedIn") == nil {
+//            
+//            DispatchQueue.main.async {
+//                let loginController = LoginController()
+//                let navController = UINavigationController(rootViewController: loginController)
+//                self.present(navController, animated: true, completion: nil)
+//            }
+//            return
+//        }
         
         setupViewControllers { (success) in
             print("setup success")
