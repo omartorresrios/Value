@@ -19,23 +19,9 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        
         tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
-        
         return tf
     }()
-    
-    @objc func handleTextInputChange() {
-        let isFormValid = emailTextField.text?.isEmpty == false && fullnameTextField.text?.isEmpty == false && passwordTextField.text?.isEmpty == false
-        
-        if isFormValid {
-            signUpButton.isEnabled = true
-            signUpButton.backgroundColor = UIColor.rgb(red: 17, green: 154, blue: 237)
-        } else {
-            signUpButton.isEnabled = false
-            signUpButton.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
-        }
-    }
     
     let fullnameTextField: UITextField = {
         let tf = UITextField()
@@ -74,114 +60,49 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
         return button
     }()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        setupInputFields()
+    }
+    
+    func setupView() {
+        view.backgroundColor = .white
+        view.addSubview(alreadyHaveAccountButton)
+        alreadyHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
+    }
+    
+    fileprivate func setupInputFields() {
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, fullnameTextField, passwordTextField, signUpButton])
+        stackView.distribution = .fillEqually
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        
+        view.addSubview(stackView)
+        stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 200)
+    }
+    
+    @objc func handleTextInputChange() {
+        let isFormValid = emailTextField.text?.isEmpty == false && fullnameTextField.text?.isEmpty == false && passwordTextField.text?.isEmpty == false
+        if isFormValid {
+            signUpButton.isEnabled = true
+            signUpButton.backgroundColor = UIColor.rgb(red: 17, green: 154, blue: 237)
+        } else {
+            signUpButton.isEnabled = false
+            signUpButton.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
+        }
+    }
+    
     @objc func handleSignUp() {
-        guard let email = emailTextField.text, !email.isEmpty else { return }
-        guard let username = fullnameTextField.text, !username.isEmpty else { return }
-        guard let password = passwordTextField.text, !password.isEmpty else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
         
-        guard let fcmToken = Messaging.messaging().fcmToken else { return }
-        
-        let parameters = ["fullname": username, "email": email, "fcm_token": fcmToken, "password": password]
-        
-        let url = "\(BASE_URL)/users/signup"
-        
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        
-        if emailTest.evaluate(with: email) == true { // Valid email
-            
-            Alamofire.request(url, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
-                switch response.result {
-                case .success:
-                    
-                    self.updateUserLoggedInFlag()
-                    //                        print("THE USER DATA: ", response)
-                    
-                    if let JSON = response.result.value as? NSDictionary {
-                        let authToken = JSON["authentication_token"] as! String
-                        let userId = JSON["id"] as! Int
-                        let userName = JSON["fullname"] as! String
-                        let userEmail = JSON["email"] as! String
-                        let avatarUrl = JSON["avatar_url"] as? String ?? ""
-                        print("userJSON: \(JSON)")
-                        
-                        self.saveApiTokenInKeychain(tokenString: authToken, idInt: userId, nameString: userName, emailString: userEmail, avatarString: avatarUrl)
-                        
-                        print("authToken: \(authToken)")
-                        print("userId: \(userId)")
-                    }
-                    
-                    guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
-                    
-                    mainTabBarController.setupViewControllers(completion: { (success) in
-                        if success {
-                            print("YAYYYYY")
-                            
-                        }
-                    })
-                    
-                    self.dismiss(animated: true, completion: nil)
-                    
-                case .failure(let error):
-                    
-                    print("Failed to sign in with email:", error)
-//                    self.loader.stopAnimating()
-//                    self.messageLabel.text = "La contraseña no es válida."
-                    return
-                }
+        AuthService.instance.signupUser(fullname: fullname, email: email, password: password) { (success) in
+            if success {
+                self.dismiss(animated: true, completion: nil)
             }
-            
-        } else { // Invalid email
-//            self.loader.stopAnimating()
-//            self.messageLabel.text = "Introduce un correo válido por favor."
-            
         }
-        
-        
-        
-    }
-    
-    func updateUserLoggedInFlag() {
-        // Update the NSUserDefaults flag
-        let defaults = UserDefaults.standard
-        defaults.set("loggedIn", forKey: "userLoggedIn")
-        defaults.synchronize()
-    }
-    
-    func saveApiTokenInKeychain(tokenString: String, idInt: Int, nameString: String, emailString: String, avatarString: String) {
-        // save API AuthToken in Keychain
-        do {
-            try Locksmith.saveData(data: ["authenticationToken": tokenString], forUserAccount: "AuthToken")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["id": idInt], forUserAccount: "currentUserId")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["name": nameString], forUserAccount: "currentUserName")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["email": emailString], forUserAccount: "currentUserEmail")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["avatar": avatarString], forUserAccount: "currentUserAvatar")
-        } catch {
-            
-        }
-        
-        print("AuthToken recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "AuthToken")!)")
-        print("currentUserId recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserId")!)")
-        print("currentUserName recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserName")!)")
-        print("currentUserEmail recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserEmail")!)")
-        print("currentUserAvatar recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserAvatar")!)")
-        
     }
     
     let alreadyHaveAccountButton: UIButton = {
@@ -200,30 +121,6 @@ class SignUpController: UIViewController, UINavigationControllerDelegate {
     
     @objc func handleAlreadyHaveAccount() {
         _ = navigationController?.popViewController(animated: true)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.addSubview(alreadyHaveAccountButton)
-        alreadyHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
-        
-        view.backgroundColor = .white
-        
-        
-        
-        setupInputFields()
-    }
-    
-    fileprivate func setupInputFields() {
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, fullnameTextField, passwordTextField, signUpButton])
-        stackView.distribution = .fillEqually
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
-        
-        stackView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 200)
     }
     
 }

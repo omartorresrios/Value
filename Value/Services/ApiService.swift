@@ -57,6 +57,40 @@ class ApiService: NSObject {
         }
     }
     
+    func fetchAllUsers(completion: @escaping (User) -> ()) {
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
+            
+            let authToken = userToken["authenticationToken"] as! String
+            
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            Alamofire.request(GET_ALL_USERS_URL, method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+                switch response.result {
+                case .success(let JSON):
+                    
+                    let dataArray = JSON as! NSArray
+                    
+                    dataArray.forEach({ (value) in
+                        guard let userDictionary = value as? [String: Any] else { return }
+                        
+                        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainIdAccount) else { return }
+                        
+                        let userId = userIdFromKeyChain["id"] as! Int
+                        
+                        if userDictionary["id"] as! Int == userId {
+                            print("Found myself, omit from list")
+                            return
+                        }
+                        let user = User(uid: userDictionary["id"] as! Int, dictionary: userDictionary)
+                        completion(user)
+                    })
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
     func fetchUserProfileInfo(userId: Int, completion: @escaping (User) -> ()) {
         // Retreieve Auth_Token from Keychain
         if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {

@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import Locksmith
+import Firebase
 
 class AuthService {
     
@@ -85,6 +86,54 @@ class AuthService {
             completion(false)
             print("Invalid email")
         }
+    }
+    
+    func signupUser(fullname: String, email: String, password: String, completion: @escaping Callback) {
+        
+        guard let fcmToken = Messaging.messaging().fcmToken else { return }
+        
+        let parameters = ["fullname": fullname, "email": email, "fcm_token": fcmToken, "password": password]
+        
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        
+        if emailTest.evaluate(with: email) == true {
+            
+            Alamofire.request(SIGNUP_URL, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
+                switch response.result {
+                case .success:
+                    
+                    self.updateLoggedInFlag(isEmployee: true)
+                    
+                    if let JSON = response.result.value as? NSDictionary {
+                        let authToken = JSON["authentication_token"] as! String
+                        let userId = JSON["id"] as! Int
+                        let userName = JSON["fullname"] as! String
+                        let userEmail = JSON["email"] as! String
+                        let avatarUrl = JSON["avatar_url"] as? String ?? ""
+                        
+                        self.saveApiTokenInKeychain(isEmployee: true, tokenString: authToken, idInt: userId, nameString: userName, emailString: userEmail, avatarString: avatarUrl)
+                        
+                    }
+                    
+                    guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
+                    
+                    mainTabBarController.setupViewControllers(completion: { (success) in
+                        if success {
+                            completion(true)
+                        }
+                    })
+                    
+                case .failure(let error):
+                    completion(false)
+                    return
+                }
+            }
+            
+        } else {
+            
+        }
+        
     }
     
     func updateLoggedInFlag(isEmployee: Bool) {

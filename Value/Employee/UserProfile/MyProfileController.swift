@@ -12,72 +12,45 @@ import Alamofire
 
 class MyProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
-    var notificationReviewId: Int!
-    var senderFullname: String!
-    
-    var reviewSelected: Review!
-    var isFrom: Bool!
-    
     var user = [User]()
     var receivedReviews = [Review]()
     var sentReviews = [Review]()
+    var reviewSelected: Review!
     
     let userProfileCellId = "userProfileCellId"
+    let userHeaderId = "headerId"
     let reviewCellId = "reviewCellId"
     
+    var isFrom: Bool!
     var isReceiverView = true
     var isComingFromNotification = false
+    
+    var notificationReviewId: Int!
+    var senderFullname: String!
     var loggedUserId: Int!
     var reviewNotificationPaintedCounter: Int = 0
-    
-    func didChangeToReceiverView() {
-        isReceiverView = true
-        collectionView?.reloadData()
-    }
-    
-    func didChangeToSenderView() {
-        isReceiverView = false
-        collectionView?.reloadData()
-    }
-    
-    func didTapToWriteController() {
-        
-    }
-    
-    func didTapToEditProfileController() {
-        let editProfileController = EditProfileController()
-        
-        let navController = UINavigationController(rootViewController: editProfileController)
-        present(navController, animated: true, completion: nil)
-    }
     var indexPointed = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = .white
-        
-        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-        loggedUserId = userIdFromKeyChain["id"] as? Int
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: updateUserHeaderInfo, object: nil)
-        
-        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: "headerId")
-        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
+        setupCollectionView()
+        getLoggedUserId()
         fetchUser()
         
         getAllReceivedReviews { (success) in
-//            if self.isComingFromNotification {
-                self.collectionView?.performBatchUpdates(nil, completion: { (result) in
-                    if let reviewIndex = self.receivedReviews.index(where: { $0.id == 131 }) {
-                        self.indexPointed = reviewIndex
-                        print("reviewIndex: ", reviewIndex)
-                        let indexPath = IndexPath(item: reviewIndex, section: 1)
-                        self.collectionView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-                        
-                    }
-                })
-//        }
+            //            if self.isComingFromNotification {
+            self.collectionView?.performBatchUpdates(nil, completion: { (result) in
+                if let reviewIndex = self.receivedReviews.index(where: { $0.id == 131 }) {
+                    self.indexPointed = reviewIndex
+                    print("reviewIndex: ", reviewIndex)
+                    let indexPath = IndexPath(item: reviewIndex, section: 1)
+                    self.collectionView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                    
+                }
+            })
+            //        }
         }
-
+        
         getAllSentReviews()
     }
     
@@ -85,9 +58,17 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         NotificationCenter.default.removeObserver(self, name: updateUserHeaderInfo, object: nil)
     }
     
-    @objc func handleUpdateUserHeaderInfo(notification: Notification) {
-        user.removeAll()
-        fetchUser()
+    func setupCollectionView() {
+        collectionView?.backgroundColor = .white
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: updateUserHeaderInfo, object: nil)
+        
+        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: userHeaderId)
+        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
+    }
+    
+    func getLoggedUserId() {
+        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
+        loggedUserId = userIdFromKeyChain["id"] as? Int
     }
     
     func fetchUser() {
@@ -109,6 +90,32 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
             self.sentReviews.append(review)
             self.collectionView?.reloadData()
         }
+    }
+    
+    @objc func handleUpdateUserHeaderInfo(notification: Notification) {
+        user.removeAll()
+        fetchUser()
+    }
+    
+    func didChangeToReceiverView() {
+        isReceiverView = true
+        collectionView?.reloadData()
+    }
+    
+    func didChangeToSenderView() {
+        isReceiverView = false
+        collectionView?.reloadData()
+    }
+    
+    func didTapToWriteController() {
+        
+    }
+    
+    func didTapToEditProfileController() {
+        let editProfileController = EditProfileController()
+        
+        let navController = UINavigationController(rootViewController: editProfileController)
+        present(navController, animated: true, completion: nil)
     }
     
     @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
@@ -155,6 +162,10 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         navigationController?.pushViewController(userProfileController, animated: true)
     }
     
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return user.count
@@ -167,14 +178,10 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         }
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            let header = collectionView.dequeueReusableCell(withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
+            let header = collectionView.dequeueReusableCell(withReuseIdentifier: userHeaderId, for: indexPath) as! UserProfileHeader
             header.backgroundColor = .yellow
             header.user = self.user[indexPath.item]
             header.delegate = self

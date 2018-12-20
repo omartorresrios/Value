@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Locksmith
 
 class Helpers {
     
@@ -184,5 +185,31 @@ class Helpers {
             return CGSize(width: view.frame.width, height: fullnameEstimatedFrame.height + emailEstimatedFrame.height + positionEstimatedFrame.height + departmentEstimatedFrame.height + 187 + 4) // 4 for fix the excess space
         }
         
+    }
+    
+    func logoutUser(completion: @escaping (Bool) -> ()) {
+        clearLoggedinFlagInUserDefaults()
+        clearAPITokensFromKeyChain()
+        
+        DispatchQueue.main.async {
+            completion(true)
+        }
+    }
+    
+    // Clear the NSUserDefaults flag
+    func clearLoggedinFlagInUserDefaults() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "userLoggedIn")
+        defaults.synchronize()
+    }
+    
+    // Clear API Auth token from Keychain
+    func clearAPITokensFromKeyChain() {
+        // clear API Auth Token
+        try! Locksmith.deleteDataForUserAccount(userAccount: "AuthToken")
+        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserId")
+        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserName")
+        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserEmail")
+        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserAvatar")
     }
 }

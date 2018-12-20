@@ -37,27 +37,6 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
-    func setupEditWriteButton() {
-        guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-        let currentUserId = userIdToKeyChain["id"] as! Int
-        
-        guard let userId = user?.id else { return }
-        
-        if currentUserId == userId {
-            writeReviewButton.setTitle("Editar perfil", for: .normal)
-        } else {
-            writeReviewButton.setTitle("Dejar reseña", for: .normal)
-        }
-    }
-    
-    @objc func handleShowWriteEditProfile() {
-        if writeReviewButton.titleLabel?.text == "Dejar reseña" {
-            delegate?.didTapToWriteController()
-        } else {
-            delegate?.didTapToEditProfileController()
-        }
-    }
-    
     let profileImageView: CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
@@ -130,12 +109,6 @@ class UserProfileHeader: UICollectionViewCell {
         return button
     }()
     
-    fileprivate func setupEditWriteStyle() {
-        
-    }
-    
-    
-    
     lazy var receiverButton: UIButton = {
         let button = UIButton(type: .system)
 //        button.setImage(#imageLiteral(resourceName: "ranking_unselected"), for: .normal)
@@ -145,6 +118,27 @@ class UserProfileHeader: UICollectionViewCell {
         button.addTarget(self, action: #selector(handleChangeToReceiverView), for: .touchUpInside)
         return button
     }()
+    
+    func setupEditWriteButton() {
+        guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainIdAccount) else { return }
+        let currentUserId = userIdToKeyChain["id"] as! Int
+        
+        guard let userId = user?.id else { return }
+        
+        if currentUserId == userId {
+            writeReviewButton.setTitle("Editar perfil", for: .normal)
+        } else {
+            writeReviewButton.setTitle("Dejar reseña", for: .normal)
+        }
+    }
+    
+    @objc func handleShowWriteEditProfile() {
+        if writeReviewButton.titleLabel?.text == "Dejar reseña" {
+            delegate?.didTapToWriteController()
+        } else {
+            delegate?.didTapToEditProfileController()
+        }
+    }
     
     @objc func handleChangeToReceiverView() {
         print("Changing to receiver view")

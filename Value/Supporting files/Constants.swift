@@ -48,11 +48,13 @@ let updateUserProfileFeedNotificationName = Notification.Name("UpdateUserProfile
 // Fetch all reviews url
 let GET_ALL_REVIEWS_URL = "\(BASE_URL)/all_reviews"
 
-// Login url
+// Login/Signup urls
 let SIGNIN_URL = "\(BASE_URL)/users/signin"
+let SIGNUP_URL = "\(BASE_URL)/users/signup"
 
 // Get all users url
 let GET_ALL_USERS_URL = "\(BASE_URL)/all_users"
+
 
 
 

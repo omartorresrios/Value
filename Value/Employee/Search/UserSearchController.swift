@@ -12,9 +12,6 @@ import Alamofire
 
 class UserSearchController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
-    var filteredUsers = [User]()
-    var users = [User]()
-    
     lazy var searchBar: UISearchBar = {
         let sb = UISearchBar()
         sb.placeholder = "Busca"
@@ -25,8 +22,18 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
         return sb
     }()
     
+    var filteredUsers = [User]()
+    var users = [User]()
+    
+    let cellId = "cellId"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupCollectionView()
+        fetchAllUsers()
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         if searchText.isEmpty {
             filteredUsers = users
         } else {
@@ -34,29 +41,21 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
                 return user.fullname.lowercased().contains(searchText.lowercased())
             }
         }
-
         self.collectionView?.reloadData()
-        
     }
     
-    let cellId = "cellId"
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func setupCollectionView() {
         collectionView?.backgroundColor = .white
         
         navigationController?.navigationBar.addSubview(searchBar)
         
         let navBar = navigationController?.navigationBar
-        
         searchBar.anchor(top: navBar?.topAnchor, left: navBar?.leftAnchor, bottom: navBar?.bottomAnchor, right: navBar?.rightAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
         
         collectionView?.register(UserSearchCell.self, forCellWithReuseIdentifier: cellId)
         
         collectionView?.alwaysBounceVertical = true
         collectionView?.keyboardDismissMode = .onDrag
-        
-        fetchAllUsers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,64 +64,27 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
     }
     
     func fetchAllUsers() {
-        // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
-            
-            let authToken = userToken["authenticationToken"] as! String
-            
-            print("Token: \(userToken)")
-            
-            // Set Authorization header
-            let header = ["Authorization": "Token token=\(authToken)"]
-            
-            print("THE HEADER: \(header)")
-            
-            Alamofire.request(GET_ALL_USERS_URL, method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let JSON):
-                    print("THE ALL USERS JSON: \(JSON)")
-                    
-//                    let jsonArray = JSON as! NSDictionary
-//
-                    let dataArray = JSON as! NSArray
-//
-                    dataArray.forEach({ (value) in
-                        guard let userDictionary = value as? [String: Any] else { return }
-                        print("this is userDictionary: \(userDictionary)")
-
-                        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
-
-                        let userId = userIdFromKeyChain["id"] as! Int
-
-                        if userDictionary["id"] as! Int == userId {
-                            print("Found myself, omit from list")
-//                            self.currentUserDic = userDictionary
-                            return
-                        }
-                        let user = User(uid: userDictionary["id"] as! Int, dictionary: userDictionary)
-                        self.users.append(user)
-
-                    })
-//
-                    self.users.sort(by: { (u1, u2) -> Bool in
-
-                        return u1.fullname.compare(u2.fullname) == .orderedAscending
-
-                    })
-
-                    self.filteredUsers = self.users
-                    self.collectionView?.reloadData()
-                    
-                case .failure(let error):
-                    print(error)
-                    
-                }
-            }
+        ApiService.shared.fetchAllUsers { (user) in
+            self.users.append(user)
+            self.users.sort(by: { (u1, u2) -> Bool in
+                return u1.fullname.compare(u2.fullname) == .orderedAscending
+            })
+            self.filteredUsers = self.users
+            self.collectionView?.reloadData()
         }
     }
     
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return filteredUsers.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserSearchCell
+        cell.user = filteredUsers[indexPath.item]
+        return cell
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         searchBar.isHidden = true
         searchBar.resignFirstResponder()
         
@@ -134,18 +96,6 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
         userProfileController.userFullname = user.fullname
         userProfileController.userImageUrl = user.profileImageUrl
         navigationController?.pushViewController(userProfileController, animated: true)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return filteredUsers.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserSearchCell
-        
-        cell.user = filteredUsers[indexPath.item]
-        
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

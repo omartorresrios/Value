@@ -115,6 +115,19 @@ class EditProfileController: UIViewController, UITextViewDelegate {
         textview4.delegate = self
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func updateInfo() {
+        ApiService.shared.updateInfo(position: textview1.text, job_description: textview2.text) { (success) in
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         self.activeTextView = textView
         return true
@@ -147,20 +160,7 @@ class EditProfileController: UIViewController, UITextViewDelegate {
             self.scrollView.scrollIndicatorInsets = contentInsets
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
     @objc func cancelView() {
         dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func updateInfo() {
-        ApiService.shared.updateInfo(position: textview1.text, job_description: textview2.text) { (success) in
-            if success {
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
     }
 }

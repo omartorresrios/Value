@@ -12,27 +12,31 @@ import Locksmith
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
-    let reviewCell = "reviewCell"
-    var reviews = [Review]()
-    var reviewSelected: Review!
-    var isFrom: Bool!
-    
     let logoutButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("logout", for: .normal)
         return button
     }()
     
+    let reviewCell = "reviewCell"
+    
+    var reviews = [Review]()
+    var reviewSelected: Review!
+    
+    var isFrom: Bool!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCollectionView()
+        getAllReviews()
+    }
+    
+    func setupCollectionView() {
         collectionView?.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "logout", style: .done, target: self, action: #selector(handleLogout))
         
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCell)
-        
-        getAllReviews()
-        
     }
     
     func getAllReviews() {
@@ -90,39 +94,21 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func handleLogout() {
-        clearLoggedinFlagInUserDefaults()
-        clearAPITokensFromKeyChain()
-        
-        DispatchQueue.main.async {
-            let loginController = LoginController()
-            let navController = UINavigationController(rootViewController: loginController)
-            self.present(navController, animated: true, completion: nil)
+        Helpers.shared.logoutUser { (success) in
+            if success {
+                let loginController = LoginController()
+                let navController = UINavigationController(rootViewController: loginController)
+                self.present(navController, animated: true, completion: nil)
+            }
         }
-    }
-    
-    // Clear the NSUserDefaults flag
-    func clearLoggedinFlagInUserDefaults() {
-        let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: "userLoggedIn")
-        defaults.synchronize()
-    }
-    
-    // Clear API Auth token from Keychain
-    func clearAPITokensFromKeyChain() {
-        // clear API Auth Token
-        try! Locksmith.deleteDataForUserAccount(userAccount: "AuthToken")
-        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserId")
-        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserName")
-        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserEmail")
-        try! Locksmith.deleteDataForUserAccount(userAccount: "currentUserAvatar")
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return reviews.count
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return reviews.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
