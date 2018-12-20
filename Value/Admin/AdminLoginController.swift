@@ -108,48 +108,7 @@ class AdminLoginController: UIViewController {
         }
     }
     
-    func updateUserLoggedInFlag() {
-        // Update the NSUserDefaults flag
-        let defaults = UserDefaults.standard
-        defaults.set("AdminLoggedIn", forKey: "adminLoggedIn")
-        defaults.synchronize()
-    }
     
-    func saveApiTokenInKeychain(tokenString: String, idInt: Int, nameString: String, emailString: String, avatarString: String) {
-        // save API AuthToken in Keychain
-        do {
-            try Locksmith.saveData(data: ["adminAuthenticationToken": tokenString], forUserAccount: "AdminAuthToken")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["id": idInt], forUserAccount: "currentAdminId")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["name": nameString], forUserAccount: "currentAdminName")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["email": emailString], forUserAccount: "currentAdminEmail")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["avatar": avatarString], forUserAccount: "currentAdminAvatar")
-        } catch {
-            
-        }
-        
-        print("AdminAuthToken recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "AdminAuthToken")!)")
-        print("currentAdminId recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminId")!)")
-        print("currentAdminName recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminName")!)")
-        print("currentAdminEmail recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminEmail")!)")
-        print("currentAdminAvatar recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentAdminAvatar")!)")
-        
-    }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
@@ -159,74 +118,18 @@ class AdminLoginController: UIViewController {
         view.endEditing(true)
         loader.startAnimating()
         
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
         // Check for internet connection
         if (reachability?.isReachable)! {
             
-            guard let email = emailTextField.text else { return }
-            let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
-            
-            guard let password = passwordTextField.text else { return }
-            
-            let parameters = ["email": finalEmail, "password": password]
-            
-            let url = "\(BASE_URL)/users/signin"
-            
-            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-            let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-            
-            if emailTest.evaluate(with: email) == true { // Valid email
-                
-                Alamofire.request(url, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
-                    switch response.result {
-                    case .success:
-                        
-                        self.updateUserLoggedInFlag()
-                        //                        print("THE USER DATA: ", response)
-                        
-                        if let JSON = response.result.value as? NSDictionary {
-                            let adminAuthToken = JSON["authentication_token"] as! String
-                            let adminId = JSON["id"] as! Int
-                            let adminName = JSON["fullname"] as! String
-                            let adminEmail = JSON["email"] as! String
-                            let adminAvatarUrl = JSON["avatar_url"] as? String ?? ""
-                            let adminIsAdminCondition = JSON["is_admin"] as! Int
-                            print("userJSON: \(JSON)")
-                            
-                            if adminIsAdminCondition == 1 {
-                                self.saveApiTokenInKeychain(tokenString: adminAuthToken, idInt: adminId, nameString: adminName, emailString: adminEmail, avatarString: adminAvatarUrl)
-                                
-                                print("adminAuthToken: \(adminAuthToken)")
-                                print("adminId: \(adminId)")
-                                
-                                let adminMainViewController = AdminMainViewController(collectionViewLayout: UICollectionViewFlowLayout())
-                                let navController = UINavigationController(rootViewController: adminMainViewController)
-                                
-                                UIApplication.shared.keyWindow?.rootViewController = navController
-                                
-                                self.dismiss(animated: true, completion: nil)
-                            } else {
-                                self.loader.stopAnimating()
-                                self.messageLabel.text = "So Sorry!!!!! you are not the admin."
-                                
-                            }
-                            
-                        }
-                        
-                        
-                        
-                    case .failure(let error):
-                        
-                        print("Failed to sign in with email:", error)
-                        self.loader.stopAnimating()
-                        self.messageLabel.text = "La contraseña no es válida."
-                        return
-                    }
+            AuthService.instance.signinUser(isEmployee: false, email: email, password: password) { (success) in
+                if success {
+                    self.dismiss(animated: true, completion: nil) 
                 }
-                
-            } else { // Invalid email
-                self.loader.stopAnimating()
-                self.messageLabel.text = "Introduce un correo válido por favor."
             }
+            
         } else {
             let alert = UIAlertController(title: "Error", message: "Tu conexión a internet está fallando. 🤔 Intenta de nuevo.", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))

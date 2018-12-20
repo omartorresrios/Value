@@ -159,48 +159,7 @@ class LoginController: UIViewController {
         }
     }
     
-    func updateUserLoggedInFlag() {
-        // Update the NSUserDefaults flag
-        let defaults = UserDefaults.standard
-        defaults.set("loggedIn", forKey: "userLoggedIn")
-        defaults.synchronize()
-    }
     
-    func saveApiTokenInKeychain(tokenString: String, idInt: Int, nameString: String, emailString: String, avatarString: String) {
-        // save API AuthToken in Keychain
-        do {
-            try Locksmith.saveData(data: ["authenticationToken": tokenString], forUserAccount: "AuthToken")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["id": idInt], forUserAccount: "currentUserId")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["name": nameString], forUserAccount: "currentUserName")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["email": emailString], forUserAccount: "currentUserEmail")
-        } catch {
-            
-        }
-        do {
-            try Locksmith.saveData(data: ["avatar": avatarString], forUserAccount: "currentUserAvatar")
-        } catch {
-            
-        }
-        
-        print("AuthToken recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "AuthToken")!)")
-        print("currentUserId recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserId")!)")
-        print("currentUserName recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserName")!)")
-        print("currentUserEmail recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserEmail")!)")
-        print("currentUserAvatar recién guardado: \(Locksmith.loadDataForUserAccount(userAccount: "currentUserAvatar")!)")
-        
-    }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
@@ -210,60 +169,17 @@ class LoginController: UIViewController {
         view.endEditing(true)
         loader.startAnimating()
         
-        // Check for internet connection
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
         if (reachability?.isReachable)! {
             
-            guard let email = emailTextField.text else { return }
-            let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
-            
-            guard let password = passwordTextField.text else { return }
-            
-            let parameters = ["email": finalEmail, "password": password]
-            
-            let url = "\(BASE_URL)/users/signin"
-            
-            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-            let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-            
-            if emailTest.evaluate(with: email) == true { // Valid email
-                
-                Alamofire.request(url, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
-                    switch response.result {
-                    case .success:
-                        
-                        self.updateUserLoggedInFlag()
-                        
-                        if let JSON = response.result.value as? NSDictionary {
-                            let authToken = JSON["authentication_token"] as! String
-                            let userId = JSON["id"] as! Int
-                            let userName = JSON["fullname"] as! String
-                            let userEmail = JSON["email"] as! String
-                            let avatarUrl = JSON["avatar_url"] as? String ?? ""
-                            print("userJSON: \(JSON)")
-                            
-                            self.saveApiTokenInKeychain(tokenString: authToken, idInt: userId, nameString: userName, emailString: userEmail, avatarString: avatarUrl)
-                            
-                            print("authToken: \(authToken)")
-                            print("userId: \(userId)")
-                        }
-                        
-                        UIApplication.shared.keyWindow?.rootViewController = MainTabBarController()
-                        
-                        self.dismiss(animated: true, completion: nil)
-                        
-                    case .failure(let error):
-                        
-                        print("Failed to sign in with email:", error)
-                        self.loader.stopAnimating()
-                        self.messageLabel.text = "La contraseña no es válida."
-                        return
-                    }
+            AuthService.instance.signinUser(isEmployee: true, email: email, password: password) { (success) in
+                if success {
+                    self.dismiss(animated: true, completion: nil)
                 }
-                
-            } else { // Invalid email
-                self.loader.stopAnimating()
-                self.messageLabel.text = "Introduce un correo válido por favor."
             }
+            
         } else {
             let alert = UIAlertController(title: "Error", message: "Tu conexión a internet está fallando. 🤔 Intenta de nuevo.", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))

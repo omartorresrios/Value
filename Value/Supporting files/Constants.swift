@@ -12,13 +12,34 @@ let API_AUTH_NAME = "<YOUR_HEROKU_API_ADMIN_NAME>"
 let API_AUTH_PASSWORD = "<YOUR_HEROKU_API_PASSWORD>"
 let BASE_URL = "https://thawing-eyrie-63788.herokuapp.com/api"
 
-// Boolean auth UserDefaults keys
-let DEFAULTS_REGISTERED = "isRegistered"
-let DEFAULTS_AUTHENTICATED = "isAuthenticated"
+// Defaults values and keys
+let employeeDefaultsValue = "loggedIn"
+let employeeDefaultsKey = "userLoggedIn"
+let adminDefaultsValue = "AdminLoggedIn"
+let adminDefaultsKey = "adminLoggedIn"
 
-// Auth Email
-let DEFAULTS_EMAIL = "email"
-let DEFAULTS_TOKEN = "authToken"
+// Keychain values
+let employeeKeychainAuthData = "authenticationToken"
+let employeeKeychainAuthAccount = "AuthToken"
+let employeeKeychainIdData = "id"
+let employeeKeychainIdAccount = "currentUserId"
+let employeeKeychainNameData = "name"
+let employeeKeychainNameAccount = "currentUserName"
+let employeeKeychainEmailData = "email"
+let employeeKeychainEmailAccount = "currentUserEmail"
+let employeeKeychainAvatarData = "avatar"
+let employeeKeychainAvatarAccount = "currentUserAvatar"
+
+let adminKeychainAuthData = "adminAuthenticationToken"
+let adminKeychainAuthAccount = "AdminAuthToken"
+let adminKeychainIdData = "id"
+let adminKeychainIdAccount = "currentAdminId"
+let adminKeychainNameData = "name"
+let adminKeychainNameAccount = "currentAdminName"
+let adminKeychainEmailData = "email"
+let adminKeychainEmailAccount = "currentAdminEmail"
+let adminKeychainAvatarData = "avatar"
+let adminKeychainAvatarAccount = "currentAdminAvatar"
 
 // Register url
 let POST_REGISTER_ACCT = "\(BASE_URL)/users/signup"

@@ -15,20 +15,16 @@ class ApiService: NSObject {
     static let shared = ApiService()
     
     static let updateUserHeaderInfo = Notification.Name("UpdateUserHeaderInfo")
-    static let updateUserProfileFeedNotificationName = Notification.Name("UpdateUserHeaderInfo")
+    static let updateUserProfileFeedNotificationName = Notification.Name("UpdateUserProfileFeedNotificationName")
     
     func fetchUserProfileInfo(userId: Int, completion: @escaping (User) -> ()) {
         // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
             
             let authToken = userToken["authenticationToken"] as! String
             
-            print("Token: \(userToken)")
-            
             // Set Authorization header
             let header = ["Authorization": "Token token=\(authToken)"]
-            
-            print("THE HEADER: \(header)")
             
             Alamofire.request("\(BASE_URL)/\(userId)/profile", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
                 switch response.result {
@@ -55,19 +51,13 @@ class ApiService: NSObject {
             
             let authToken = userToken["authenticationToken"] as! String
             
-            print("Token: \(userToken)")
-            
             // Set Authorization header
             let header = ["Authorization": "Token token=\(authToken)"]
-            
-            print("THE HEADER: \(header)")
             
             Alamofire.request("\(BASE_URL)/\(userId)/received_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
                 switch response.result {
                 case .success(let JSON):
-                    
-                    print("THE USER RECEIVED REVIEWS: \(JSON)")
-                    
+            
                     let jsonArray = JSON as! NSArray
                     
                     jsonArray.forEach({ (value) in
@@ -87,23 +77,17 @@ class ApiService: NSObject {
     }
     
     func fetchUserSentReviews(userId: Int, completion: @escaping (Review) -> ()) {
-        // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+        
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
             
             let authToken = userToken["authenticationToken"] as! String
-            
-            print("Token: \(userToken)")
             
             // Set Authorization header
             let header = ["Authorization": "Token token=\(authToken)"]
             
-            print("THE HEADER: \(header)")
-            
             Alamofire.request("\(BASE_URL)/\(userId)/sent_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
                 switch response.result {
                 case .success(let JSON):
-                    
-                    print("THE USER SENT REVIEWS: \(JSON)")
                     
                     let jsonArray = JSON as! NSArray
                     
@@ -124,12 +108,9 @@ class ApiService: NSObject {
     }
     
     func fetchAllReviews(completion: @escaping (Review) -> ()) {
-        // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
             
             let authToken = userToken["authenticationToken"] as! String
-            
-            print("the current user token: \(userToken)")
             
             // Set Authorization header
             let header = ["Authorization": "Token token=\(authToken)"]
@@ -145,8 +126,6 @@ class ApiService: NSObject {
                 
                 switch response.result {
                 case .success(let JSON):
-                    print("THE ALL REVIEWS JSON: \(JSON)")
-                    
                     let dataArray = JSON as! NSArray
                     
                     dataArray.forEach({ (value) in
@@ -169,7 +148,6 @@ class ApiService: NSObject {
     }
     
     func sendReview(authToken: String, userId: Int, reviewText: String, value: String, completion: @escaping (Bool) -> ()) {
-        // Set Authorization header
         let header = ["Authorization": "Token token=\(authToken)"]
         
         let parameters = ["body": reviewText, "value": value]
@@ -179,7 +157,6 @@ class ApiService: NSObject {
         Alamofire.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON { response in
             switch response.result {
             case .success:
-                print("response review: ", response)
                 NotificationCenter.default.post(name: ApiService.updateUserProfileFeedNotificationName, object: nil)
                 completion(true)
                 
@@ -194,7 +171,7 @@ class ApiService: NSObject {
     
     func updateInfo(position: String, job_description: String, completion: @escaping (Bool) -> ()) {
        
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
             
             let authToken = userToken["authenticationToken"] as! String
             print("the current user token: \(authToken)")

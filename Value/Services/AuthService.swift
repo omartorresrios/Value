@@ -7,196 +7,117 @@
 //
 
 import UIKit
+import Alamofire
+import Locksmith
 
 class AuthService {
+    
     static let instance = AuthService()
     
-    let defaults = UserDefaults.standard
-    
-    var isRegistered: Bool? {
-        get {
-            return defaults.bool(forKey: DEFAULTS_REGISTERED) == true
-        }
-        set {
-            defaults.set(newValue, forKey: DEFAULTS_REGISTERED)
+    func signinUser(isEmployee: Bool, email: String, password: String, completion: @escaping Callback) {
+        
+        let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
+        let parameters = ["email": finalEmail, "password": password]
+        
+        let url = "\(BASE_URL)/users/signin"
+        
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        
+        if emailTest.evaluate(with: email) == true {
+            
+            Alamofire.request(url, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
+                switch response.result {
+                case .success:
+                    
+                    if isEmployee {
+                        self.updateLoggedInFlag(isEmployee: true)
+                        
+                        if let JSON = response.result.value as? NSDictionary {
+                            let authToken = JSON["authentication_token"] as! String
+                            let userId = JSON["id"] as! Int
+                            let userName = JSON["fullname"] as! String
+                            let userEmail = JSON["email"] as! String
+                            let avatarUrl = JSON["avatar_url"] as? String ?? ""
+                            print("userJSON: \(JSON)")
+                            
+                            self.saveApiTokenInKeychain(isEmployee: true, tokenString: authToken, idInt: userId, nameString: userName, emailString: userEmail, avatarString: avatarUrl)
+                            
+                            print("authToken: \(authToken)")
+                            print("userId: \(userId)")
+                        }
+                        
+                        UIApplication.shared.keyWindow?.rootViewController = MainTabBarController()
+                        completion(true)
+                        
+                    } else {
+                        
+                        self.updateLoggedInFlag(isEmployee: false)
+                        
+                        if let JSON = response.result.value as? NSDictionary {
+                            let adminAuthToken = JSON["authentication_token"] as! String
+                            let adminId = JSON["id"] as! Int
+                            let adminName = JSON["fullname"] as! String
+                            let adminEmail = JSON["email"] as! String
+                            let adminAvatarUrl = JSON["avatar_url"] as? String ?? ""
+                            let adminIsAdminCondition = JSON["is_admin"] as! Int
+                            
+                            if adminIsAdminCondition == 1 {
+                                
+                                self.saveApiTokenInKeychain(isEmployee: false, tokenString: adminAuthToken, idInt: adminId, nameString: adminName, emailString: adminEmail, avatarString: adminAvatarUrl)
+                                
+                                let adminMainViewController = AdminMainViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                                let navController = UINavigationController(rootViewController: adminMainViewController)
+                                UIApplication.shared.keyWindow?.rootViewController = navController
+                                completion(true)
+                            } else {
+                                //                            self.messageLabel.text = "So Sorry!!!!! you are not the admin."
+                            }
+                        }
+                    }
+                    
+                case .failure(let error):
+                    completion(false)
+                    print("Failed to sign in with email:", error)
+                    return
+                }
+            }
+            
+        } else {
+            completion(false)
+            print("Invalid email")
         }
     }
     
-    var isAuthenticated: Bool? {
-        get {
-            return defaults.bool(forKey: DEFAULTS_AUTHENTICATED) == true
-        }
-        set {
-            defaults.set(newValue, forKey: DEFAULTS_AUTHENTICATED)
-        }
-    }
-    
-    var email: String? {
-        get {
-            return defaults.value(forKey: DEFAULTS_EMAIL) as? String
-        }
-        set {
-            defaults.set(newValue, forKey: DEFAULTS_EMAIL)
-        }
-    }
-    
-    var authToken: String? {
-        get {
-            return defaults.value(forKey: DEFAULTS_TOKEN) as? String
-        }
-        set {
-            defaults.set(newValue, forKey: DEFAULTS_TOKEN)
-        }
-    }
-    
-    let httpHelper = HTTPHelper()
-    
-    
-    func updateUserLoggedInFlag() {
-        // Update the NSUserDefaults flag
+    func updateLoggedInFlag(isEmployee: Bool) {
         let defaults = UserDefaults.standard
-        defaults.set("loggedIn", forKey: "userLoggedIn")
+        
+        if isEmployee {
+            defaults.set(employeeDefaultsValue, forKey: employeeDefaultsKey)
+        } else {
+            defaults.set(adminDefaultsValue, forKey: adminDefaultsKey)
+        }
         defaults.synchronize()
     }
     
-    // Signup user
-    func makeSignUpRequest(_ fullName: String, userName:String, userEmail:String, userAvatar: String, userPassword:String, completion: @escaping Callback) {
-        
-        guard let URL = URL(string: "\(BASE_URL)/users/signin") else {
-            completion(false)
-            return
-        }
-        
-        
-        // Create the URL Request and set it's method and content type.
-        var request = NSMutableURLRequest(url: URL)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
-        // Create an dictionary of the info for our new project, including the selected images.
-        let encrypted_password = AESCrypt.encrypt(userPassword, password: HTTPHelper.API_AUTH_PASSWORD)
-        
-        let json = ["fullname": fullName, "username": userName, "email": userEmail, "avatar": userAvatar, "password": encrypted_password]
-        
+    func saveApiTokenInKeychain(isEmployee: Bool, tokenString: String, idInt: Int, nameString: String, emailString: String, avatarString: String) {
         do {
-            // Convert our dictionary to JSON and NSData
-            let newProjectJSONData = try JSONSerialization.data(withJSONObject: json, options: [])
-            
-            // Assign the request body
-            request.httpBody = newProjectJSONData
-            
-            URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                if (error == nil) {
-                    // Success
-                    let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
-                    
-                    // Print out response string
-                    let responseString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-                    print("Response String = \(responseString!)")
-                    
-                    // Check for status 200 or 409
-                    if statusCode != 200 && statusCode != 409 {
-                        
-                        completion(false)
-                        return
-                    } else {
-                        
-                        completion(true)
-                    }
-                } else {
-                    // Failure
-                    print("URL Session Task Failed: \(error?.localizedDescription)")
-                    completion(false)
-                }
-            }).resume()
-            
-            
-        } catch let error {
-            print(error)
+            if isEmployee {
+                try Locksmith.saveData(data: [employeeKeychainAuthData: tokenString], forUserAccount: employeeKeychainAuthAccount)
+                try Locksmith.saveData(data: [employeeKeychainIdData: idInt], forUserAccount: employeeKeychainIdAccount)
+                try Locksmith.saveData(data: [employeeKeychainNameData: nameString], forUserAccount: employeeKeychainNameAccount)
+                try Locksmith.saveData(data: [employeeKeychainEmailData: emailString], forUserAccount: employeeKeychainEmailAccount)
+                try Locksmith.saveData(data: [employeeKeychainAvatarData: avatarString], forUserAccount: employeeKeychainAvatarAccount)
+            } else {
+                try Locksmith.saveData(data: [adminKeychainAuthData: tokenString], forUserAccount: adminKeychainAuthAccount)
+                try Locksmith.saveData(data: [adminKeychainIdData: idInt], forUserAccount: adminKeychainIdAccount)
+                try Locksmith.saveData(data: [adminKeychainNameData: nameString], forUserAccount: adminKeychainNameAccount)
+                try Locksmith.saveData(data: [adminKeychainEmailData: emailString], forUserAccount: adminKeychainEmailAccount)
+                try Locksmith.saveData(data: [adminKeychainAvatarData: avatarString], forUserAccount: adminKeychainAvatarAccount)
+            }
+        } catch {
+            print("Can't save values to Keychain")
         }
-    }
-    
-    
-    func makeSignInRequest(_ userEmail: String, userPassword:String, completion: @escaping Callback) {
-        
-        // Create HTTP request and set request Body
-        let httpRequest = httpHelper.buildRequest(path: "users/signin", method: "POST", authType: HTTPRequestAuthType.HTTPBasicAuth)
-        
-        let encrypted_password = AESCrypt.encrypt(userPassword, password: HTTPHelper.API_AUTH_PASSWORD)
-        
-        let json = ["email": userEmail, "password": encrypted_password!] as [String : Any]
-        //        httpRequest.httpBody = "email=\(userEmail)&password=\(encrypted_password)".data(using: String.Encoding.utf8);
-        
-        do {
-            // Convert our dictionary to JSON and NSData
-            let newProjectJSONData = try JSONSerialization.data(withJSONObject: json, options: [])
-            
-            // Assign the request body
-            httpRequest.httpBody = newProjectJSONData
-            
-            // 4. Send the request
-            
-            URLSession.shared.dataTask(with: httpRequest as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                
-                if error == nil {
-                    // Success
-                    let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
-                    if statusCode != 200 {
-                        // Failed
-                        print("There's no a 200 status in LoginController. Failed")
-                        completion(false)
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        guard let data = data else {
-                            completion(false)
-                            return
-                        }
-                        
-                        do {
-                            let json = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary
-                            
-                            guard json != nil else {
-                                print("Error while parsing")
-                                completion(false)
-                                return
-                            }
-                            
-                            // Print out response string
-                            let responseString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                            print("Response String = \(responseString!)")
-                            
-                            if let userDic = json?["user"] as? NSDictionary {
-                                print("dataArray: \(userDic["authenticationToken"] as! String)")
-                                self.authToken = userDic["authenticationToken"] as? String
-                                completion(true)
-                                print("this is the authToken: \(self.authToken)")
-                            } else {
-                                completion(false)
-                            }
-                            
-                            // Updatge userLoggedInFlag
-                            self.updateUserLoggedInFlag()
-                            
-                        } catch {
-                            completion(false)
-                            print("Caught an error: \(error)")
-                        }
-                    }
-                    
-                } else {
-                    // Failure
-                    print("URL Session Task Failed: \(error!.localizedDescription)")
-                    completion(false)
-                    return
-                }
-            }).resume()
-            
-        } catch let err {
-            print(err)
-        }
-        
     }
     
 }
