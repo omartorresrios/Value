@@ -58,7 +58,7 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
         guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
         loggedUserId = userIdFromKeyChain["id"] as? Int
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: ApiService.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: "headerId")
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
@@ -82,7 +82,7 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: ApiService.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.removeObserver(self, name: updateUserHeaderInfo, object: nil)
     }
     
     @objc func handleUpdateUserHeaderInfo(notification: Notification) {
@@ -98,15 +98,14 @@ class MyProfileController: UICollectionViewController, UICollectionViewDelegateF
     }
     
     func getAllReceivedReviews(completion: @escaping Callback) {
-        ApiService.shared.fetchUserReceivedReviews(userId: loggedUserId) { (review) in
+        ApiService.shared.fetchReceivedReviews(userId: loggedUserId) { (review) in
             self.receivedReviews.append(review)
             self.collectionView?.reloadData()
-            completion(true)
         }
     }
     
     func getAllSentReviews() {
-        ApiService.shared.fetchUserSentReviews(userId: loggedUserId) { (review) in
+        ApiService.shared.fetchSentReviews(userId: loggedUserId) { (review) in
             self.sentReviews.append(review)
             self.collectionView?.reloadData()
         }

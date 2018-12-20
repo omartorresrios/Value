@@ -14,8 +14,48 @@ class ApiService: NSObject {
     
     static let shared = ApiService()
     
-    static let updateUserHeaderInfo = Notification.Name("UpdateUserHeaderInfo")
-    static let updateUserProfileFeedNotificationName = Notification.Name("UpdateUserProfileFeedNotificationName")
+    func fetchReceivedReviews(userId: Int, completion: @escaping (Review) -> ()) {
+        fetchReviews(urlString: "\(BASE_URL)/\(userId)/received_reviews", completion: completion)
+    }
+    
+    func fetchSentReviews(userId: Int, completion: @escaping (Review) -> ()) {
+        fetchReviews(urlString: "\(BASE_URL)/\(userId)/sent_reviews", completion: completion)
+    }
+    
+    func fetchAllReviews(completion: @escaping (Review) -> ()) {
+        fetchReviews(urlString: GET_ALL_REVIEWS_URL, completion: completion)
+    }
+    
+    func fetchReviews(urlString: String, completion: @escaping (Review) -> ()) {
+        // Retreieve Auth_Token from Keychain
+        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
+            
+            let authToken = userToken["authenticationToken"] as! String
+            
+            // Set Authorization header
+            let header = ["Authorization": "Token token=\(authToken)"]
+            
+            Alamofire.request(urlString, method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+                switch response.result {
+                case .success(let JSON):
+                    
+                    let jsonArray = JSON as! NSArray
+                    
+                    jsonArray.forEach({ (value) in
+                        guard let reviewDictionary = value as? [String: Any] else { return }
+                        print("reviewDictionary: \(reviewDictionary)")
+                        let newReview = Review(reviewDictionary: reviewDictionary)
+                        DispatchQueue.main.async {
+                            completion(newReview)
+                        }
+                    })
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
     
     func fetchUserProfileInfo(userId: Int, completion: @escaping (User) -> ()) {
         // Retreieve Auth_Token from Keychain
@@ -45,108 +85,6 @@ class ApiService: NSObject {
         }
     }
     
-    func fetchUserReceivedReviews(userId: Int, completion: @escaping (Review) -> ()) {
-        // Retreieve Auth_Token from Keychain
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: "AuthToken") {
-            
-            let authToken = userToken["authenticationToken"] as! String
-            
-            // Set Authorization header
-            let header = ["Authorization": "Token token=\(authToken)"]
-            
-            Alamofire.request("\(BASE_URL)/\(userId)/received_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let JSON):
-            
-                    let jsonArray = JSON as! NSArray
-                    
-                    jsonArray.forEach({ (value) in
-                        guard let reviewDictionary = value as? [String: Any] else { return }
-                        print("reviewDictionary: \(reviewDictionary)")
-                        let newReview = Review(reviewDictionary: reviewDictionary)
-                        DispatchQueue.main.async {
-                            completion(newReview)
-                        }
-                    })
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    func fetchUserSentReviews(userId: Int, completion: @escaping (Review) -> ()) {
-        
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
-            
-            let authToken = userToken["authenticationToken"] as! String
-            
-            // Set Authorization header
-            let header = ["Authorization": "Token token=\(authToken)"]
-            
-            Alamofire.request("\(BASE_URL)/\(userId)/sent_reviews", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let JSON):
-                    
-                    let jsonArray = JSON as! NSArray
-                    
-                    jsonArray.forEach({ (value) in
-                        guard let reviewDictionary = value as? [String: Any] else { return }
-                        print("reviewDictionary: \(reviewDictionary)")
-                        let newReview = Review(reviewDictionary: reviewDictionary)
-                        DispatchQueue.main.async {
-                            completion(newReview)
-                        }
-                    })
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    func fetchAllReviews(completion: @escaping (Review) -> ()) {
-        if let userToken = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainAuthAccount) {
-            
-            let authToken = userToken["authenticationToken"] as! String
-            
-            // Set Authorization header
-            let header = ["Authorization": "Token token=\(authToken)"]
-            
-            let url = URL(string: "\(BASE_URL)/all_reviews")!
-            
-            Alamofire.request(url, headers: header).responseJSON { response in
-                
-                print("request: \(response.request!)") // original URL request
-                print("response: \(response.response!)") // URL response
-                print("response data: \(response.data!)") // server data
-                print("result: \(response.result)") // result of response serialization
-                
-                switch response.result {
-                case .success(let JSON):
-                    let dataArray = JSON as! NSArray
-                    
-                    dataArray.forEach({ (value) in
-                        guard let reviewDictionary = value as? [String: Any] else { return }
-                        print("this is reviewDictionary: \(reviewDictionary)")
-                        
-                        let newReview = Review(reviewDictionary: reviewDictionary)
-                        
-                        completion(newReview)
-                        
-                    })
-                    
-                    
-                case .failure(let error):
-                    print(error)
-                }
-                
-            }
-        }
-    }
-    
     func sendReview(authToken: String, userId: Int, reviewText: String, value: String, completion: @escaping (Bool) -> ()) {
         let header = ["Authorization": "Token token=\(authToken)"]
         
@@ -157,7 +95,7 @@ class ApiService: NSObject {
         Alamofire.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON { response in
             switch response.result {
             case .success:
-                NotificationCenter.default.post(name: ApiService.updateUserProfileFeedNotificationName, object: nil)
+                NotificationCenter.default.post(name: updateUserProfileFeedNotificationName, object: nil)
                 completion(true)
                 
             case .failure(let error):
@@ -189,7 +127,7 @@ class ApiService: NSObject {
                 switch response.result {
                 case .success(let JSON):
                     print("response user info: ", JSON)
-                    NotificationCenter.default.post(name: ApiService.updateUserHeaderInfo, object: nil, userInfo: nil)
+                    NotificationCenter.default.post(name: updateUserHeaderInfo, object: nil, userInfo: nil)
                     completion(true)
                 case .failure(let error):
                     completion(false)

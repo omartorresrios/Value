@@ -19,14 +19,12 @@ class AuthService {
         let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
         let parameters = ["email": finalEmail, "password": password]
         
-        let url = "\(BASE_URL)/users/signin"
-        
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
         let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         
         if emailTest.evaluate(with: email) == true {
             
-            Alamofire.request(url, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
+            Alamofire.request(SIGNIN_URL, method:.post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
                 switch response.result {
                 case .success:
                     

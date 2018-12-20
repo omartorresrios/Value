@@ -77,7 +77,7 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
             
             print("THE HEADER: \(header)")
             
-            Alamofire.request("\(BASE_URL)/all_users", method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
+            Alamofire.request(GET_ALL_USERS_URL, method: .get, parameters: nil, encoding: URLEncoding.default, headers: header).responseJSON { (response) in
                 switch response.result {
                 case .success(let JSON):
                     print("THE ALL USERS JSON: \(JSON)")

@@ -68,9 +68,9 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         super.viewDidLoad()
         collectionView?.backgroundColor = .white
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: ApiService.updateUserProfileFeedNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: updateUserProfileFeedNotificationName, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: ApiService.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: updateUserHeaderInfo, object: nil)
         
         collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: headerId)
         collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCell)
@@ -81,8 +81,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: ApiService.updateUserProfileFeedNotificationName, object: nil)
-        NotificationCenter.default.removeObserver(self, name: ApiService.updateUserHeaderInfo, object: nil)
+        NotificationCenter.default.removeObserver(self, name: updateUserProfileFeedNotificationName, object: nil)
+        NotificationCenter.default.removeObserver(self, name: updateUserHeaderInfo, object: nil)
     }
     
     func fetchUser() {
@@ -109,12 +109,12 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func getAllReviews() {
-        ApiService.shared.fetchUserReceivedReviews(userId: userId!) { (review) in
+        ApiService.shared.fetchReceivedReviews(userId: userId!) { (review) in
             self.receivedReviews.append(review)
             self.collectionView?.reloadData()
         }
         
-        ApiService.shared.fetchUserSentReviews(userId: userId!) { (review) in
+        ApiService.shared.fetchSentReviews(userId: userId!) { (review) in
             self.sentReviews.append(review)
             self.collectionView?.reloadData()
         }

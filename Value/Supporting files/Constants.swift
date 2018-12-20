@@ -41,12 +41,22 @@ let adminKeychainEmailAccount = "currentAdminEmail"
 let adminKeychainAvatarData = "avatar"
 let adminKeychainAvatarAccount = "currentAdminAvatar"
 
-// Register url
-let POST_REGISTER_ACCT = "\(BASE_URL)/users/signup"
+// Notifications name
+let updateUserHeaderInfo = Notification.Name("UpdateUserHeaderInfo")
+let updateUserProfileFeedNotificationName = Notification.Name("UpdateUserProfileFeedNotificationName")
+
+// Fetch all reviews url
+let GET_ALL_REVIEWS_URL = "\(BASE_URL)/all_reviews"
 
 // Login url
-let POST_LOGIN_ACCT = "\(BASE_URL)/users/signin"
+let SIGNIN_URL = "\(BASE_URL)/users/signin"
 
 // Get all users url
-let GET_ALL_USERS = "\(BASE_URL)/all_users"
+let GET_ALL_USERS_URL = "\(BASE_URL)/all_users"
+
+
+
+
+
+
 
