@@ -96,33 +96,19 @@ class LoginController: UIViewController {
         return button
     }()
     
-    @objc func handleShowSignUp() {
-        let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController, animated: true)
-    }
-    
-    @objc func handleShowLoginAdmin() {
-        let adminLoginController = AdminLoginController()
-        navigationController?.pushViewController(adminLoginController, animated: true)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // General properties of the view
+        setupView()
+        setupInputFields()
+    }
+    
+    func setupView() {
         view.backgroundColor = .white
         
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
         navigationController?.navigationBar.isHidden = true
-        UIApplication.shared.isStatusBarHidden = true
-        
-        // Others configurations
-        emailTextField.becomeFirstResponder()
-        
-        // Initialize functions
-        setupInputFields()
         
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         singleTap.numberOfTapsRequired = 1
@@ -133,11 +119,39 @@ class LoginController: UIViewController {
         
         view.addSubview(loginAdminButton)
         loginAdminButton.anchor(top: nil, left: view.leftAnchor, bottom: dontHaveAccountButton.topAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 8, paddingRight: 0, width: 0, height: 50)
-        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        UIApplication.shared.isStatusBarHidden = false
+    fileprivate func setupInputFields() {
+        view.addSubview(titleLabel)
+        titleLabel.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 35, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, loginButton])
+        emailTextField.becomeFirstResponder()
+        
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        
+        view.addSubview(stackView)
+        stackView.anchor(top: titleLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 140)
+        
+        view.addSubview(loader)
+        loader.anchor(top: stackView.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 8, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 10, height: 10)
+        loader.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
+        
+        view.addSubview(messageLabel)
+        messageLabel.anchor(top: stackView.bottomAnchor, left: stackView.leftAnchor, bottom: nil, right: stackView.rightAnchor, paddingTop: 8, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+    }
+    
+    @objc func handleShowSignUp() {
+        let signUpController = SignUpController()
+        navigationController?.pushViewController(signUpController, animated: true)
+    }
+    
+    @objc func handleShowLoginAdmin() {
+        let adminLoginController = AdminLoginController()
+        navigationController?.pushViewController(adminLoginController, animated: true)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -148,7 +162,7 @@ class LoginController: UIViewController {
         messageLabel.text = ""
         loader.stopAnimating()
         
-        let isFormValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.characters.count ?? 0 > 0
+        let isFormValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.count ?? 0 > 0
         
         if isFormValid {
             loginButton.isEnabled = true
@@ -158,8 +172,6 @@ class LoginController: UIViewController {
             loginButton.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
         }
     }
-    
-    
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
@@ -193,31 +205,5 @@ class LoginController: UIViewController {
         _ = navigationController?.popViewController(animated: true)
     }
     
-    fileprivate func setupInputFields() {
-        
-        
-        
-        view.addSubview(titleLabel)
-        
-        titleLabel.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 35, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, loginButton])
-        
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        
-        view.addSubview(stackView)
-        stackView.anchor(top: titleLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 140)
-        
-        view.addSubview(loader)
-        
-        loader.anchor(top: stackView.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 8, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 10, height: 10)
-        loader.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
-        
-        view.addSubview(messageLabel)
-        
-        messageLabel.anchor(top: stackView.bottomAnchor, left: stackView.leftAnchor, bottom: nil, right: stackView.rightAnchor, paddingTop: 8, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-    }
+    
 }
