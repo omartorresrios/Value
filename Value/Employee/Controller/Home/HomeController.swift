@@ -20,8 +20,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     let reviewCell = "reviewCell"
     
-    var reviews = [Review]()
-    var reviewSelected: Review!
+    var reviewViewModels = [ReviewViewModel]()
+    var reviewSelected: ReviewViewModel!
     
     var isFrom: Bool!
     
@@ -41,8 +41,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func getAllReviews() {
         ApiService.shared.fetchAllReviews { (review) in
-            self.reviews.append(review)
-            self.reviews.sort(by: { (p1, p2) -> Bool in
+            
+            let finalReview = ReviewViewModel(review: review)
+            
+            self.reviewViewModels.append(finalReview)
+            self.reviewViewModels.sort(by: { (p1, p2) -> Bool in
                 return p1.creationDate.compare(p2.creationDate) == .orderedDescending
             })
             self.collectionView?.reloadData()
@@ -51,7 +54,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
-        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: true, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: true) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: true, sender: sender, collectionView: collectionView!, reviews: reviewViewModels, isUserProfileImage: true) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -59,7 +62,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func senderFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
-        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: true, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: false) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: true, sender: sender, collectionView: collectionView!, reviews: reviewViewModels, isUserProfileImage: false) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -67,7 +70,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func receiverProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
-        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: false, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: true) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: false, sender: sender, collectionView: collectionView!, reviews: reviewViewModels, isUserProfileImage: true) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -75,7 +78,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func receiverFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
-        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: false, sender: sender, collectionView: collectionView!, reviews: reviews, isUserProfileImage: false) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: true, isFrom: false, sender: sender, collectionView: collectionView!, reviews: reviewViewModels, isUserProfileImage: false) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -108,12 +111,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return reviews.count
+        return reviewViewModels.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCell, for: indexPath) as! ReviewCell
-        cell.review = reviews[indexPath.item]
+        cell.reviewViewModel = reviewViewModels[indexPath.item]
         
         let senderProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(senderProfileImageHighlightWhentapped(_:)))
         senderProfileImageTap.minimumPressDuration = 0
@@ -139,7 +142,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let review = reviews[indexPath.item]
+        let review = reviewViewModels[indexPath.item]
         return Helpers.shared.calculateCellSize(review: review, view: view)
     }
     

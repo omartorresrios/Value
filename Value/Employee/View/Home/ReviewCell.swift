@@ -10,24 +10,22 @@ import UIKit
 
 class ReviewCell: UICollectionViewCell {
     
-    var review: Review? {
+    var reviewViewModel: ReviewViewModel! {
         didSet {
             
-            valueLabel.text = review?.value
+            valueLabel.text = reviewViewModel.value
             
-            guard let senderProfileImageUrl = review?.fromProfileImageUrl else { return }
-            senderProfileImageView.loadImage(urlString: senderProfileImageUrl)
+            senderProfileImageView.loadImage(urlString: reviewViewModel.fromProfileImageUrl)
             
-            senderFullnameLabel.text = review?.fromFullname
-            senderEmailLabel.text = review?.fromEmail
+            senderFullnameLabel.text = reviewViewModel.fromFullname
+            senderEmailLabel.text = reviewViewModel.fromEmail
             
-            messageLabel.text = review?.body
+            messageLabel.text = reviewViewModel.body
             
-            guard let receiverProfileImageUrl = review?.toProfileImageUrl else { return }
-            receiverProfileImageView.loadImage(urlString: receiverProfileImageUrl)
+            receiverProfileImageView.loadImage(urlString: reviewViewModel.toProfileImageUrl)
             
-            receiverEmailLabel.text = review?.toEmail
-            receiverFullnameLabel.text = review?.toFullname
+            receiverEmailLabel.text = reviewViewModel.toEmail
+            receiverFullnameLabel.text = reviewViewModel.toFullname
         }
     }
     

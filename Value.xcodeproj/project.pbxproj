@@ -22,6 +22,8 @@
 		A0066A98218DFE040019EFF8 /* KeyChainAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A97218DFE040019EFF8 /* KeyChainAccess.swift */; };
 		A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A99218DFE730019EFF8 /* Constants.swift */; };
 		A0066A9C218E0B030019EFF8 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0066A9B218E0B030019EFF8 /* LoginController.swift */; };
+		A02B250021CC4CE400819FB7 /* ReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02B24FF21CC4CE400819FB7 /* ReviewViewModel.swift */; };
+		A02B250221CC65A000819FB7 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02B250121CC65A000819FB7 /* UserViewModel.swift */; };
 		A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B612192388C00AB6EB6 /* MyProfileController.swift */; };
 		A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B63219247D900AB6EB6 /* UserSearchCell.swift */; };
 		A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B662192953200AB6EB6 /* UserProfileController.swift */; };
@@ -124,6 +126,8 @@
 		A0066A97218DFE040019EFF8 /* KeyChainAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAccess.swift; sourceTree = "<group>"; };
 		A0066A99218DFE730019EFF8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A0066A9B218E0B030019EFF8 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		A02B24FF21CC4CE400819FB7 /* ReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewModel.swift; sourceTree = "<group>"; };
+		A02B250121CC65A000819FB7 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		A0318B612192388C00AB6EB6 /* MyProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileController.swift; sourceTree = "<group>"; };
 		A0318B63219247D900AB6EB6 /* UserSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchCell.swift; sourceTree = "<group>"; };
 		A0318B662192953200AB6EB6 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
@@ -256,12 +260,12 @@
 		A0066A5C218CDDA30019EFF8 /* Value */ = {
 			isa = PBXGroup;
 			children = (
+				A02B24FE21CC4CD100819FB7 /* ViewModel */,
 				A045B55C219F53D4002B16FA /* Value.entitlements */,
 				A0066A69218CDDA80019EFF8 /* Info.plist */,
 				A074587821BC384200D3E483 /* Admin */,
 				A074587721BC383300D3E483 /* Employee */,
 				A0066A92218DFD730019EFF8 /* Services */,
-				A0066A8D218D414F0019EFF8 /* Models */,
 				A0066A6F218CDFD20019EFF8 /* Supporting files */,
 				A0066A61218CDDA30019EFF8 /* Main.storyboard */,
 				A0066A64218CDDA80019EFF8 /* Assets.xcassets */,
@@ -298,15 +302,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		A0066A8D218D414F0019EFF8 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				A0066A8E218D41610019EFF8 /* Review.swift */,
-				A0066A90218D41760019EFF8 /* User.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		A0066A92218DFD730019EFF8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,41 +311,111 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		A0318B652192480800AB6EB6 /* Search */ = {
+		A02B24F321CC4BB600819FB7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A02B24FB21CC4C6200819FB7 /* Home */,
+				A02B24FA21CC4C4A00819FB7 /* UserProfile */,
+				A02B24F721CC4BFA00819FB7 /* Search */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A02B24F421CC4BC500819FB7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A0066A8E218D41610019EFF8 /* Review.swift */,
+				A0066A90218D41760019EFF8 /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A02B24F521CC4BCA00819FB7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A02B24FD21CC4CAC00819FB7 /* Write */,
+				A02B24FC21CC4C7700819FB7 /* Signin_Signup */,
+				A02B24F921CC4C3800819FB7 /* UserProfile */,
+				A02B24F821CC4C2500819FB7 /* Home */,
+				A02B24F621CC4BEF00819FB7 /* Search */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		A02B24F621CC4BEF00819FB7 /* Search */ = {
 			isa = PBXGroup;
 			children = (
 				A0066A82218D01770019EFF8 /* UserSearchController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		A02B24F721CC4BFA00819FB7 /* Search */ = {
+			isa = PBXGroup;
+			children = (
 				A0318B63219247D900AB6EB6 /* UserSearchCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
 		};
-		A0318B6C21949B7000AB6EB6 /* UserProfile */ = {
-			isa = PBXGroup;
-			children = (
-				A0318B662192953200AB6EB6 /* UserProfileController.swift */,
-				A0318B612192388C00AB6EB6 /* MyProfileController.swift */,
-				A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */,
-				A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */,
-				A045B56121A1DA62002B16FA /* EditProfileController.swift */,
-			);
-			path = UserProfile;
-			sourceTree = "<group>";
-		};
-		A0318B732197A48D00AB6EB6 /* WriteReview */ = {
-			isa = PBXGroup;
-			children = (
-				A0318B6821937A9500AB6EB6 /* WriteReviewController.swift */,
-			);
-			path = WriteReview;
-			sourceTree = "<group>";
-		};
-		A045B4E4219CC01A002B16FA /* Home */ = {
+		A02B24F821CC4C2500819FB7 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				A045B4E2219CBFF4002B16FA /* HomeController.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		A02B24F921CC4C3800819FB7 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				A0318B662192953200AB6EB6 /* UserProfileController.swift */,
+				A0318B612192388C00AB6EB6 /* MyProfileController.swift */,
+				A045B56121A1DA62002B16FA /* EditProfileController.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		A02B24FA21CC4C4A00819FB7 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				A0318B6A21949A4E00AB6EB6 /* UserProfileHeader.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		A02B24FB21CC4C6200819FB7 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A0318B6D21951A5C00AB6EB6 /* ReviewCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A02B24FC21CC4C7700819FB7 /* Signin_Signup */ = {
+			isa = PBXGroup;
+			children = (
+				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
+				A045B55F21A05D35002B16FA /* SignUpController.swift */,
+			);
+			path = Signin_Signup;
+			sourceTree = "<group>";
+		};
+		A02B24FD21CC4CAC00819FB7 /* Write */ = {
+			isa = PBXGroup;
+			children = (
+				A0318B6821937A9500AB6EB6 /* WriteReviewController.swift */,
+			);
+			path = Write;
+			sourceTree = "<group>";
+		};
+		A02B24FE21CC4CD100819FB7 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				A02B24FF21CC4CE400819FB7 /* ReviewViewModel.swift */,
+				A02B250121CC65A000819FB7 /* UserViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		A045B4E5219CEEAE002B16FA /* Fonts */ = {
@@ -446,13 +511,10 @@
 		A074587721BC383300D3E483 /* Employee */ = {
 			isa = PBXGroup;
 			children = (
+				A02B24F521CC4BCA00819FB7 /* Controller */,
+				A02B24F421CC4BC500819FB7 /* Model */,
+				A02B24F321CC4BB600819FB7 /* View */,
 				A0066A7E218D002D0019EFF8 /* MainTabBarController.swift */,
-				A0318B652192480800AB6EB6 /* Search */,
-				A0066A9B218E0B030019EFF8 /* LoginController.swift */,
-				A045B4E4219CC01A002B16FA /* Home */,
-				A0318B6C21949B7000AB6EB6 /* UserProfile */,
-				A0318B732197A48D00AB6EB6 /* WriteReview */,
-				A045B55F21A05D35002B16FA /* SignUpController.swift */,
 			);
 			path = Employee;
 			sourceTree = "<group>";
@@ -690,6 +752,7 @@
 				A0066A5E218CDDA30019EFF8 /* AppDelegate.swift in Sources */,
 				A0066A94218DFD7F0019EFF8 /* AuthService.swift in Sources */,
 				A045B57821A78756002B16FA /* NSString+Base64.m in Sources */,
+				A02B250021CC4CE400819FB7 /* ReviewViewModel.swift in Sources */,
 				A045B56021A05D35002B16FA /* SignUpController.swift in Sources */,
 				A0318B672192953200AB6EB6 /* UserProfileController.swift in Sources */,
 				A0066A83218D01770019EFF8 /* UserSearchController.swift in Sources */,
@@ -700,6 +763,7 @@
 				A0066A9A218DFE730019EFF8 /* Constants.swift in Sources */,
 				A0318B64219247D900AB6EB6 /* UserSearchCell.swift in Sources */,
 				A074587C21BC5A0500D3E483 /* AdminMainViewController.swift in Sources */,
+				A02B250221CC65A000819FB7 /* UserViewModel.swift in Sources */,
 				A0318B622192388D00AB6EB6 /* MyProfileController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

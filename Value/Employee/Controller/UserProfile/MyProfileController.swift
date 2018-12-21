@@ -1,5 +1,5 @@
 //
-//  UserProfileController.swift
+//  MyProfileController.swift
 //  Value
 //
 //  Created by Omar Torres on 11/6/18.
@@ -7,80 +7,92 @@
 //
 
 import UIKit
-import Alamofire
 import Locksmith
+import Alamofire
 
-class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
+class MyProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
-    lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "back_button"), for: .normal)
-        button.backgroundColor = UIColor.mainBlue()
-        button.addTarget(self, action: #selector(backToRootVC), for: .touchUpInside)
-        return button
-    }()
+    var user = [UserViewModel]()
+    var receivedReviews = [ReviewViewModel]()
+    var sentReviews = [ReviewViewModel]()
+    var reviewSelected: ReviewViewModel!
     
-    let reviewCell = "reviewCell"
-    let headerId = "headerId"
-    
-    var user = [User]()
-    var receivedReviews = [Review]()
-    var sentReviews = [Review]()
-    var reviewSelected: Review!
+    let userProfileCellId = "userProfileCellId"
+    let userHeaderId = "headerId"
+    let reviewCellId = "reviewCellId"
     
     var isFrom: Bool!
     var isReceiverView = true
+    var isComingFromNotification = false
     
-    var userId: Int?
-    var userFullname: String?
-    var userImageUrl: String?
+    var notificationReviewId: Int!
+    var senderFullname: String!
+    var loggedUserId: Int!
+    var reviewNotificationPaintedCounter: Int = 0
+    var indexPointed = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchUser()
         setupCollectionView()
-        getAllReviews()
+        getLoggedUserId()
+        fetchUser()
+        
+        getAllReceivedReviews { (success) in
+            //            if self.isComingFromNotification {
+            self.collectionView?.performBatchUpdates(nil, completion: { (result) in
+                if let reviewIndex = self.receivedReviews.index(where: { $0.id == 131 }) {
+                    self.indexPointed = reviewIndex
+                    print("reviewIndex: ", reviewIndex)
+                    let indexPath = IndexPath(item: reviewIndex, section: 1)
+                    self.collectionView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                    
+                }
+            })
+            //        }
+        }
+        
+        getAllSentReviews()
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: updateUserProfileFeedNotificationName, object: nil)
         NotificationCenter.default.removeObserver(self, name: updateUserHeaderInfo, object: nil)
-    }
-    
-    func fetchUser() {
-        ApiService.shared.fetchUserProfileInfo(userId: userId!) { (user) in
-            self.user.append(user)
-            self.userFullname = user.fullname
-            self.userImageUrl = user.profileImageUrl
-            self.collectionView?.reloadData()
-        }
     }
     
     func setupCollectionView() {
         collectionView?.backgroundColor = .white
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserProfileFeed), name: updateUserProfileFeedNotificationName, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateUserHeaderInfo(notification:)), name: updateUserHeaderInfo, object: nil)
         
-        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: headerId)
-        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCell)
+        collectionView?.register(UserProfileHeader.self, forCellWithReuseIdentifier: userHeaderId)
+        collectionView?.register(ReviewCell.self, forCellWithReuseIdentifier: reviewCellId)
     }
     
-    func getAllReviews() {
-        ApiService.shared.fetchReceivedReviews(userId: userId!) { (review) in
-            self.receivedReviews.append(review)
-            self.collectionView?.reloadData()
-        }
-        
-        ApiService.shared.fetchSentReviews(userId: userId!) { (review) in
-            self.sentReviews.append(review)
+    func getLoggedUserId() {
+        guard let userIdFromKeyChain = Locksmith.loadDataForUserAccount(userAccount: "currentUserId") else { return }
+        loggedUserId = userIdFromKeyChain["id"] as? Int
+    }
+    
+    func fetchUser() {
+        ApiService.shared.fetchUserProfileInfo(userId: loggedUserId) { (user) in
+            let finalUser = UserViewModel(user: user)
+            self.user.append(finalUser)
             self.collectionView?.reloadData()
         }
     }
     
-    @objc func handleUpdateUserProfileFeed() {
-        receivedReviews.removeAll()
-        getAllReviews()
+    func getAllReceivedReviews(completion: @escaping Callback) {
+        ApiService.shared.fetchReceivedReviews(userId: loggedUserId) { (review) in
+            let finalReview = ReviewViewModel(review: review)
+            self.receivedReviews.append(finalReview)
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    func getAllSentReviews() {
+        ApiService.shared.fetchSentReviews(userId: loggedUserId) { (review) in
+            let finalReview = ReviewViewModel(review: review)
+            self.sentReviews.append(finalReview)
+            self.collectionView?.reloadData()
+        }
     }
     
     @objc func handleUpdateUserHeaderInfo(notification: Notification) {
@@ -99,14 +111,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func didTapToWriteController() {
-        let writeReviewController = WriteReviewController()
         
-        writeReviewController.userReceiverId = userId
-        writeReviewController.userReceiverFullname = userFullname
-        writeReviewController.userReceiverImageUrl = userImageUrl
-        
-        let navController = UINavigationController(rootViewController: writeReviewController)
-        present(navController, animated: true, completion: nil)
     }
     
     func didTapToEditProfileController() {
@@ -118,7 +123,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func senderProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
-        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: userId!, isFrom: true, sender: sender, collectionView: self.collectionView!, receivedReviews: receivedReviews, isUserProfileImage: true) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: loggedUserId, isFrom: true, sender: sender, collectionView: self.collectionView!, receivedReviews: receivedReviews, isUserProfileImage: true) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -126,7 +131,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func senderFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = true
-        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: userId!, isFrom: true, sender: sender, collectionView: self.collectionView!, receivedReviews: receivedReviews, isUserProfileImage: false) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: loggedUserId, isFrom: true, sender: sender, collectionView: self.collectionView!, receivedReviews: receivedReviews, isUserProfileImage: false) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -134,7 +139,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func receiverProfileImageHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
-        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: userId!, isFrom: false, sender: sender, collectionView: self.collectionView!, sentReviews: sentReviews, isUserProfileImage: true) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: loggedUserId, isFrom: false, sender: sender, collectionView: self.collectionView!, sentReviews: sentReviews, isUserProfileImage: true) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -142,7 +147,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func receiverFullnameHighlightWhentapped(_ sender: UITapGestureRecognizer) {
         isFrom = false
-        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: userId!, isFrom: false, sender: sender, collectionView: self.collectionView!, sentReviews: sentReviews, isUserProfileImage: false) { (review) in
+        Helpers.shared.highlightItemWhenTapped(isFromHome: false, userId: loggedUserId, isFrom: false, sender: sender, collectionView: self.collectionView!, sentReviews: sentReviews, isUserProfileImage: false) { (review) in
             self.reviewSelected = review
             self.showUserProfile()
         }
@@ -158,10 +163,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         }
         
         navigationController?.pushViewController(userProfileController, animated: true)
-    }
-    
-    @objc func backToRootVC() {
-        _ = navigationController?.popToRootViewController(animated: true)
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -183,15 +184,33 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            let header = collectionView.dequeueReusableCell(withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
-            header.user = self.user[indexPath.item]
+            let header = collectionView.dequeueReusableCell(withReuseIdentifier: userHeaderId, for: indexPath) as! UserProfileHeader
             header.backgroundColor = .yellow
+            header.userViewModel = self.user[indexPath.item]
             header.delegate = self
             return header
         } else {
             if isReceiverView {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCell, for: indexPath) as! ReviewCell
-                cell.review = receivedReviews[indexPath.item]
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
+                
+                if reviewNotificationPaintedCounter == 0 {
+                    DispatchQueue.main.async {
+                        if self.indexPointed == indexPath.item {
+                            self.reviewNotificationPaintedCounter += 1
+                            UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseOut, animations: {
+                                cell.contentView.backgroundColor = UIColor.mainGreen()
+                                cell.isSelected = true
+                            }, completion: { (finished) in
+                                UIView.animate(withDuration: 2.0, delay: 0, options: .curveEaseIn, animations: {
+                                    cell.contentView.backgroundColor = .white
+                                    cell.isSelected = false
+                                }, completion: nil)
+                            })
+                        }
+                    }
+                }
+                
+                cell.reviewViewModel = receivedReviews[indexPath.item]
                 
                 let senderProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(senderProfileImageHighlightWhentapped(_:)))
                 senderProfileImageTap.minimumPressDuration = 0
@@ -208,8 +227,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
                 
                 return cell
             } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCell, for: indexPath) as! ReviewCell
-                cell.review = sentReviews[indexPath.item]
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reviewCellId, for: indexPath) as! ReviewCell
+                cell.reviewViewModel = sentReviews[indexPath.item]
                 
                 let receiverProfileImageTap = UILongPressGestureRecognizer(target: self, action: #selector(receiverProfileImageHighlightWhentapped(_:)))
                 receiverProfileImageTap.minimumPressDuration = 0
@@ -227,10 +246,10 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
                 return cell
             }
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         if indexPath.section == 0 {
             let user = self.user[indexPath.item]
             return Helpers.shared.calculateHeaderSize(user: user, view: view)
@@ -252,4 +271,5 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
 }

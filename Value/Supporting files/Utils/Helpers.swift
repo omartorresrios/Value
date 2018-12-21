@@ -13,7 +13,7 @@ class Helpers {
     
     static let shared = Helpers()
     
-    func highlightItemWhenTapped(isFromHome: Bool, userId: Int? = nil, isFrom: Bool, sender: UITapGestureRecognizer, collectionView: UICollectionView, reviews: [Review]? = nil, receivedReviews: [Review]? = nil, sentReviews: [Review]? = nil, isUserProfileImage: Bool, completion: @escaping (Review) -> ()) {
+    func highlightItemWhenTapped(isFromHome: Bool, userId: Int? = nil, isFrom: Bool, sender: UITapGestureRecognizer, collectionView: UICollectionView, reviews: [ReviewViewModel]? = nil, receivedReviews: [ReviewViewModel]? = nil, sentReviews: [ReviewViewModel]? = nil, isUserProfileImage: Bool, completion: @escaping (ReviewViewModel) -> ()) {
         
         let position = sender.location(in: collectionView)
         guard let index = collectionView.indexPathForItem(at: position) else {
@@ -22,7 +22,7 @@ class Helpers {
         }
         
         if isFrom {
-            let tappedReview: Review!
+            let tappedReview: ReviewViewModel!
             if isFromHome {
                 tappedReview = reviews?[index.item]
             } else {
@@ -78,7 +78,7 @@ class Helpers {
             
         } else {
             
-            let tappedReview: Review!
+            let tappedReview: ReviewViewModel!
             if isFromHome {
                 tappedReview = reviews?[index.item]
             } else {
@@ -134,7 +134,7 @@ class Helpers {
         }
     }
     
-    func calculateCellSize(review: Review, view: UIView) -> CGSize {
+    func calculateCellSize(review: ReviewViewModel, view: UIView) -> CGSize {
         
         let aproximateWidthOfLabel = view.frame.width - 72
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
@@ -155,7 +155,7 @@ class Helpers {
         
     }
     
-    func calculateHeaderSize(user: User, view: UIView) -> CGSize {
+    func calculateHeaderSize(user: UserViewModel, view: UIView) -> CGSize {
         let aproximateWidthOfLabel = view.frame.width - 16 - 16
         let size = CGSize(width: aproximateWidthOfLabel, height: 1000)
         

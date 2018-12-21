@@ -22,8 +22,8 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
         return sb
     }()
     
-    var filteredUsers = [User]()
-    var users = [User]()
+    var filteredUsers = [UserViewModel]()
+    var users = [UserViewModel]()
     
     let cellId = "cellId"
     
@@ -65,7 +65,8 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
     
     func fetchAllUsers() {
         ApiService.shared.fetchAllUsers { (user) in
-            self.users.append(user)
+            let finalUser = UserViewModel(user: user)
+            self.users.append(finalUser)
             self.users.sort(by: { (u1, u2) -> Bool in
                 return u1.fullname.compare(u2.fullname) == .orderedAscending
             })
@@ -80,7 +81,7 @@ class UserSearchController: UICollectionViewController, UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserSearchCell
-        cell.user = filteredUsers[indexPath.item]
+        cell.userViewModel = filteredUsers[indexPath.item]
         return cell
     }
     

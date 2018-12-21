@@ -10,22 +10,20 @@ import UIKit
 
 class UserSearchCell: UICollectionViewCell {
     
-    var user: User? {
+    var userViewModel: UserViewModel! {
         didSet {
             
             guard let fullnameFont = UIFont(name: "SFUIDisplay-Semibold", size: 13) else { return }
             guard let emailFont = UIFont(name: "SFUIDisplay-Regular", size: 13) else { return }
             
-            let attributedText = NSMutableAttributedString(string: user?.fullname ?? "", attributes: [NSAttributedStringKey.font: fullnameFont, NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 22, green: 22, blue: 22)])
+            let attributedText = NSMutableAttributedString(string: userViewModel.fullname, attributes: [NSAttributedStringKey.font: fullnameFont, NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 22, green: 22, blue: 22)])
             
-            let userEmail = user?.email ?? ""
+            let userEmail = userViewModel.email
             attributedText.append(NSAttributedString(string: "\n\(userEmail)", attributes: [NSAttributedStringKey.font: emailFont, NSAttributedStringKey.foregroundColor: UIColor.gray]))
             
             userNameEmailLabel.attributedText = attributedText
             
-            guard let profileImageUrl = user?.profileImageUrl else { return }
-            
-            profileImageView.loadImage(urlString: profileImageUrl)
+            profileImageView.loadImage(urlString: userViewModel.profileImageUrl)
         }
     }
     

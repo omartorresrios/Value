@@ -20,16 +20,15 @@ class UserProfileHeader: UICollectionViewCell {
 
     var delegate: UserProfileHeaderDelegate?
 
-    var user: User? {
+    var userViewModel: UserViewModel! {
         didSet {
-            guard let profileImageUrl = user?.profileImageUrl else { return }
-            profileImageView.loadImage(urlString: profileImageUrl)
+            profileImageView.loadImage(urlString: userViewModel.profileImageUrl)
             
-            fullnameLabel.text = user?.fullname
-            jobDescriptionLabel.text = user?.job_description
-            emailLabel.text = user?.email
-            positionLabel.text = user?.position
-            departmentLabel.text = user?.departmentName
+            fullnameLabel.text = userViewModel.fullname
+            jobDescriptionLabel.text = userViewModel.job_description
+            emailLabel.text = userViewModel.email
+            positionLabel.text = userViewModel.position
+            departmentLabel.text = userViewModel.departmentName
             
             setupEditWriteButton()
             
@@ -123,7 +122,7 @@ class UserProfileHeader: UICollectionViewCell {
         guard let userIdToKeyChain = Locksmith.loadDataForUserAccount(userAccount: employeeKeychainIdAccount) else { return }
         let currentUserId = userIdToKeyChain["id"] as! Int
         
-        guard let userId = user?.id else { return }
+        guard let userId = userViewModel?.id else { return }
         
         if currentUserId == userId {
             writeReviewButton.setTitle("Editar perfil", for: .normal)
